@@ -7,8 +7,8 @@
 
 #include <utility> // std::move
 
-#include "lightsky/script/scriptFactory.h"
-#include "lightsky/script/scriptFunctor.h"
+#include "lightsky/script/ScriptFactory.h"
+#include "lightsky/script/ScriptFunctor.h"
 
 namespace ls {
 namespace script {
@@ -19,15 +19,15 @@ namespace script {
 /*-------------------------------------
     Destructor
 -------------------------------------*/
-functor::~functor() {
+Functor::~Functor() {
 }
 
 /*-------------------------------------
     Constructor
 -------------------------------------*/
-functor::functor(variable** const pArguments, func_ref_t pFunc) :
-    scriptable{},
-    nextFunc{nullptr},
+Functor::Functor(Variable** const pArguments, FuncRef_t pFunc) :
+    Scriptable{},
+    pNextFunc{nullptr},
     pFunction{pFunc},
     pArgs{pArguments}
 {}
@@ -35,13 +35,13 @@ functor::functor(variable** const pArguments, func_ref_t pFunc) :
 /*-------------------------------------
     Copy Operator
 -------------------------------------*/
-functor& functor::operator =(const functor& f) {
-    scriptable::operator=(f);
+Functor& Functor::operator =(const Functor& f) {
+    Scriptable::operator=(f);
     
-    for (unsigned i = 0; i < f.getNumArgs(); ++i) {
+    for (unsigned i = 0; i < f.get_num_args(); ++i) {
         pArgs[i] = f.pArgs[i];
     }
-    nextFunc = f.nextFunc;
+    pNextFunc = f.pNextFunc;
     
     return *this;
 }
@@ -49,16 +49,16 @@ functor& functor::operator =(const functor& f) {
 /*-------------------------------------
     Move Operator
 -------------------------------------*/
-functor& functor::operator =(functor&& f) {
-    scriptable::operator=(std::move(f));
+Functor& Functor::operator =(Functor&& f) {
+    Scriptable::operator=(std::move(f));
     
-    for (unsigned i = 0; i < f.getNumArgs(); ++i) {
+    for (unsigned i = 0; i < f.get_num_args(); ++i) {
         pArgs[i] = f.pArgs[i];
         f.pArgs[i] = nullptr;
     }
     
-    nextFunc = f.nextFunc;
-    f.nextFunc = nullptr;
+    pNextFunc = f.pNextFunc;
+    f.pNextFunc = nullptr;
     
     return *this;
 }
@@ -66,17 +66,17 @@ functor& functor::operator =(functor&& f) {
 /*-------------------------------------
     Loading a functor from an input stream
 -------------------------------------*/
-bool functor::load(std::istream& istr, variableMap_t&, functorMap_t& flm) {
+bool Functor::load(std::istream& istr, VariableMap_t&, FunctorMap_t& flm) {
     hash_t nextType = 0;
-    functor* ptr = nullptr;
+    Functor* ptr = nullptr;
 
     istr >> nextType >> (void*&)ptr;
 
-    nextFunc = flm.count(ptr) ? flm[ptr].get() : nullptr;
+    pNextFunc = flm.count(ptr) ? flm[ptr].get() : nullptr;
 
     // Return false if no instance of a "valid" variable was contained in the
     // import map.
-    if (nextFunc == nullptr && ptr != nullptr) {
+    if (pNextFunc == nullptr && ptr != nullptr) {
         return false;
     }
 
@@ -86,12 +86,12 @@ bool functor::load(std::istream& istr, variableMap_t&, functorMap_t& flm) {
 /*-------------------------------------
     Saving a functor to an output stream
 -------------------------------------*/
-bool functor::save(std::ostream& ostr) const {
-    if (nextFunc == nullptr) {
+bool Functor::save(std::ostream& ostr) const {
+    if (pNextFunc == nullptr) {
         ostr << 0 << ' ' << 0;
     }
     else {
-        ostr << nextFunc->getScriptSubType() << ' ' << (void*)nextFunc;
+        ostr << pNextFunc->get_script_subtype() << ' ' << (void*)pNextFunc;
     }
     
     return ostr.good();
@@ -100,88 +100,88 @@ bool functor::save(std::ostream& ostr) const {
 /*-----------------------------------------------------------------------------
     NULL Functor Template Type.
 -----------------------------------------------------------------------------*/
-func_ref_t functor_t<0, void>::functionImpl = *[](variable** const)->void {    
+FuncRef_t Functor_t<0, void>::func_impl = *[](Variable** const)->void {    
 };
 
 /*-------------------------------------
     Destructor
 -------------------------------------*/
-functor_t<0, void>::~functor_t() {
+Functor_t<0, void>::~Functor_t() {
 }
 
 /*-------------------------------------
     Constructor
 -------------------------------------*/
-functor_t<0, void>::functor_t() :
-    functor{nullptr, functionImpl}
+Functor_t<0, void>::Functor_t() :
+    Functor{nullptr, func_impl}
 {}
 
 /*-------------------------------------
     Copy Constructor
 -------------------------------------*/
-functor_t<0, void>::functor_t(const functor_t& f) :
-    functor{nullptr, functionImpl}
+Functor_t<0, void>::Functor_t(const Functor_t& f) :
+    Functor{nullptr, func_impl}
 {
-    functor::operator=(f);
+    Functor::operator=(f);
 }
 
 /*-------------------------------------
     Move Constructor
 -------------------------------------*/
-functor_t<0, void>::functor_t(functor_t&& f) :
-    functor{nullptr, functionImpl}
+Functor_t<0, void>::Functor_t(Functor_t&& f) :
+    Functor{nullptr, func_impl}
 {
-    functor::operator=(std::move(f));
+    Functor::operator=(std::move(f));
 }
 
 /*-------------------------------------
     Copy Assignment
 -------------------------------------*/
-functor_t<0, void>& functor_t<0, void>::operator =(const functor_t& f) {
-    functor::operator=(f);
+Functor_t<0, void>& Functor_t<0, void>::operator =(const Functor_t& f) {
+    Functor::operator=(f);
     return *this;
 }
 
 /*-------------------------------------
     Move Assignment
 -------------------------------------*/
-functor_t<0, void>& functor_t<0, void>::operator =(functor_t&& f) {
-    functor::operator=(std::move(f));
+Functor_t<0, void>& Functor_t<0, void>::operator =(Functor_t&& f) {
+    Functor::operator=(std::move(f));
     return *this;
 }
 
 /*-------------------------------------
     RTTI
 -------------------------------------*/
-hash_t functor_t<0, void>::getScriptSubType() const {
+hash_t Functor_t<0, void>::get_script_subtype() const {
     return 0;
 }
 
 /*-------------------------------------
     Argument Count Retrieval
 -------------------------------------*/
-unsigned functor_t<0, void>::getNumArgs() const {
+unsigned Functor_t<0, void>::get_num_args() const {
     return 0;
 }
 
 /*-------------------------------------
     Load from an Input Stream
 -------------------------------------*/
-bool functor_t<0, void>::load(std::istream& istr, variableMap_t& vlm, functorMap_t& flm) {
-    return functor::load(istr, vlm, flm);
+bool Functor_t<0, void>::load(std::istream& istr, VariableMap_t& vlm, FunctorMap_t& flm) {
+    return Functor::load(istr, vlm, flm);
 }
 
 /*-------------------------------------
     Save to an Output Stream
 -------------------------------------*/
-bool functor_t<0, void>::save(std::ostream& ostr) const {
-    return functor::save(ostr);
+bool Functor_t<0, void>::save(std::ostream& ostr) const {
+    return Functor::save(ostr);
 }
 
 /*-------------------------------------
     Argument Verification/Compilation
 -------------------------------------*/
-bool functor_t<0, void>::compile() {
+bool Functor_t<0, void>::compile() {
     return true;
 }
 

@@ -5,7 +5,7 @@
  * Created on April 13, 2014, 9:05 PM
  */
 
-#include "lightsky/script/scriptVariable.h"
+#include "lightsky/script/ScriptVariable.h"
 
 /*-----------------------------------------------------------------------------
     Non-Templated Class Definitions
@@ -16,28 +16,28 @@ namespace script {
 /*-------------------------------------
     Variable Object Destructor
 -------------------------------------*/
-variable::~variable() {
+Variable::~Variable() {
 }
 
 /*-------------------------------------
     Variable Object Constructor
 -------------------------------------*/
-variable::variable() :
-    scriptable{}
+Variable::Variable() :
+    Scriptable{}
 {}
 
 /*-------------------------------------
     Variable Object Copy Constructor
 -------------------------------------*/
-variable::variable(const variable& v) :
-    scriptable{v}
+Variable::Variable(const Variable& v) :
+    Scriptable{v}
 {}
 
 /*-------------------------------------
     Variable Object Move Constructor
 -------------------------------------*/
-variable::variable(variable&& v) :
-    scriptable{std::move(v)}
+Variable::Variable(Variable&& v) :
+    Scriptable{std::move(v)}
 {}
 
 } // end script namespace

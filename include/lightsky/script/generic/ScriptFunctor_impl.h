@@ -9,23 +9,23 @@ namespace script {
     Retrieve the next function to run
 -------------------------------------*/
 inline
-functor* functor::getNextFunc() {
-    return nextFunc;
+Functor* Functor::get_next_func() {
+    return pNextFunc;
 }
 
 /*-------------------------------------
     Set the next function to run.
 -------------------------------------*/
 inline
-void functor::setNextFunc(functor* const f) {
-    nextFunc = f;
+void Functor::set_next_func(Functor* const f) {
+    pNextFunc = f;
 }
 
 /*-------------------------------------
     Get the scriptable type.
 -------------------------------------*/
 inline
-script_base_t functor::getScriptType() const {
+script_base_t Functor::get_script_type() const {
     return script_base_t::FUNCTOR;
 }
 
@@ -33,8 +33,8 @@ script_base_t functor::getScriptType() const {
     Get a functor argument
 -------------------------------------*/
 inline
-variable* functor::getArg(unsigned index) const {
-    LS_DEBUG_ASSERT(index < this->getNumArgs());
+Variable* Functor::get_arg(unsigned index) const {
+    LS_DEBUG_ASSERT(index < this->get_num_args());
     return pArgs[index];
 }
 
@@ -42,8 +42,8 @@ variable* functor::getArg(unsigned index) const {
     Set a functor argument
 -------------------------------------*/
 inline
-void functor::setArg(unsigned index, variable* v) {
-    LS_DEBUG_ASSERT(index < this->getNumArgs());
+void Functor::set_arg(unsigned index, Variable* v) {
+    LS_DEBUG_ASSERT(index < this->get_num_args());
     pArgs[index] = v;
 }
         
@@ -51,31 +51,31 @@ void functor::setArg(unsigned index, variable* v) {
     Functor parameter type-checking for a single argument.
 -------------------------------------*/
 template <typename arg_t>
-bool functor::checkSingleArg(const functor& f, unsigned i, arg_t* t) {
-    if (i >= f.getNumArgs()) {
+bool Functor::check_single_arg(const Functor& f, unsigned i, arg_t* t) {
+    if (i >= f.get_num_args()) {
         std::cerr
             << "Error: Incorrect number of arguments being compiled: "
-            << "\n\tFunction:   " << (void*)&f << '-' << f.getScriptSubType()
-            << "\n\tParameter:  " << i << '/' << f.getNumArgs()
+            << "\n\tFunction:   " << (void*)&f << '-' << f.get_script_subtype()
+            << "\n\tParameter:  " << i << '/' << f.get_num_args()
             << std::endl;
         return false;
     }
     
-    if (f.getArg(i) == nullptr) {
+    if (f.get_arg(i) == nullptr) {
         std::cerr
             << "Error: Function contains a null parameter: "
-            << "\n\tFunction:    " << (void*)&f << '-' << f.getScriptSubType()
-            << "\n\tParameter:   " << i << '/' << f.getNumArgs()
+            << "\n\tFunction:    " << (void*)&f << '-' << f.get_script_subtype()
+            << "\n\tParameter:   " << i << '/' << f.get_num_args()
             << std::endl;
         return false;
     }
 
-    if (dynamic_cast<const arg_t*>(f.getArg(i)) == nullptr) {
+    if (dynamic_cast<const arg_t*>(f.get_arg(i)) == nullptr) {
         std::cerr
             << "Error: TypeID of function argument does not match the type " \
             " declared in its parent function."
-            << "\n\tFunction:    " << (void*)&f << '-' << f.getScriptSubType()
-            << "\n\tInput type:  " << typeid(f.getArg(i)).name()
+            << "\n\tFunction:    " << (void*)&f << '-' << f.get_script_subtype()
+            << "\n\tInput type:  " << typeid(f.get_arg(i)).name()
             << "\n\tActual type: " << typeid(t).name()
             << std::endl;
             return false;
@@ -87,7 +87,7 @@ bool functor::checkSingleArg(const functor& f, unsigned i, arg_t* t) {
     Run a functor
 -------------------------------------*/
 inline
-void functor::run() {
+void Functor::run() {
     pFunction(pArgs);
 }
 
@@ -95,17 +95,17 @@ void functor::run() {
     Functor parameter type-checking (Recursive)
 -------------------------------------*/
 template <typename arg_t, typename... args_t> inline
-bool functor::checkArgs(const functor& f, unsigned i, arg_t* t, args_t*...) {
-    return checkSingleArg<arg_t>(f, i, t)
-    && checkArgs<args_t...>(f, i+1, ((args_t*)nullptr)...);
+bool Functor::check_args(const Functor& f, unsigned i, arg_t* t, args_t*...) {
+    return check_single_arg<arg_t>(f, i, t)
+    && check_args<args_t...>(f, i+1, ((args_t*)nullptr)...);
 }
 
 /*-------------------------------------
     Functor parameter type-checking (Sentinel)
 -------------------------------------*/
 template <typename arg_t> inline
-bool functor::checkArgs(const functor& f, unsigned i, arg_t* t) {
-    return checkSingleArg<arg_t>(f, i, t);
+bool Functor::check_args(const Functor& f, unsigned i, arg_t* t) {
+    return check_single_arg<arg_t>(f, i, t);
 }
 
 /*-----------------------------------------------------------------------------
@@ -115,43 +115,43 @@ bool functor::checkArgs(const functor& f, unsigned i, arg_t* t) {
     Destructor
 -------------------------------------*/
 template <hash_t hashId, typename... args_t>
-functor_t<hashId, args_t...>::~functor_t() {
+Functor_t<hashId, args_t...>::~Functor_t() {
 }
 
 /*-------------------------------------
     Constructor
 -------------------------------------*/
 template <hash_t hashId, typename... args_t>
-functor_t<hashId, args_t...>::functor_t() :
-    functor{parameters, functionImpl}
+Functor_t<hashId, args_t...>::Functor_t() :
+    Functor{parameters, func_impl}
 {}
 
 /*-------------------------------------
     Copy Constructor
 -------------------------------------*/
 template <hash_t hashId, typename... args_t>
-functor_t<hashId, args_t...>::functor_t(const functor_t& f) :
-    functor{parameters, functionImpl}
+Functor_t<hashId, args_t...>::Functor_t(const Functor_t& f) :
+    Functor{parameters, func_impl}
 {
-    functor::operator=(f);
+    Functor::operator=(f);
 }
 
 /*-------------------------------------
     Move Constructor
 -------------------------------------*/
 template <hash_t hashId, typename... args_t>
-functor_t<hashId, args_t...>::functor_t(functor_t&& f) :
-    functor{parameters, functionImpl}
+Functor_t<hashId, args_t...>::Functor_t(Functor_t&& f) :
+    Functor{parameters, func_impl}
 {
-    functor::operator=(std::move(f));
+    Functor::operator=(std::move(f));
 }
 
 /*-------------------------------------
     Copy Assignment
 -------------------------------------*/
 template <hash_t hashId, typename... args_t>
-functor_t<hashId, args_t...>& functor_t<hashId, args_t...>::operator =(const functor_t& f) {
-    functor::operator=(f);
+Functor_t<hashId, args_t...>& Functor_t<hashId, args_t...>::operator =(const Functor_t& f) {
+    Functor::operator=(f);
     return *this;
 }
 
@@ -159,8 +159,8 @@ functor_t<hashId, args_t...>& functor_t<hashId, args_t...>::operator =(const fun
     Move Assignment
 -------------------------------------*/
 template <hash_t hashId, typename... args_t>
-functor_t<hashId, args_t...>& functor_t<hashId, args_t...>::operator =(functor_t&& f) {
-    functor::operator=(std::move(f));
+Functor_t<hashId, args_t...>& Functor_t<hashId, args_t...>::operator =(Functor_t&& f) {
+    Functor::operator=(std::move(f));
     return *this;
 }
 
@@ -168,7 +168,7 @@ functor_t<hashId, args_t...>& functor_t<hashId, args_t...>::operator =(functor_t
     RTTI
 -------------------------------------*/
 template <hash_t hashId, typename... args_t> inline
-hash_t functor_t<hashId, args_t...>::getScriptSubType() const {
+hash_t Functor_t<hashId, args_t...>::get_script_subtype() const {
     return hashId;
 }
 
@@ -176,7 +176,7 @@ hash_t functor_t<hashId, args_t...>::getScriptSubType() const {
     Argument Count Retrieval
 -------------------------------------*/
 template <hash_t hashId, typename... args_t> inline
-unsigned functor_t<hashId, args_t...>::getNumArgs() const {
+unsigned Functor_t<hashId, args_t...>::get_num_args() const {
     return sizeof...(args_t);
 }
 
@@ -184,11 +184,11 @@ unsigned functor_t<hashId, args_t...>::getNumArgs() const {
     Load from an Input Stream
 -------------------------------------*/
 template <hash_t hashId, typename... args_t>
-bool functor_t<hashId, args_t...>::load(std::istream& istr, variableMap_t& vlm, functorMap_t& flm) {
-    functor::load(istr, vlm, flm);
+bool Functor_t<hashId, args_t...>::load(std::istream& istr, VariableMap_t& vlm, FunctorMap_t& flm) {
+    Functor::load(istr, vlm, flm);
 
     for (unsigned i = 0; i < sizeof...(args_t); ++i) {
-        variable* ptr = nullptr;
+        Variable* ptr = nullptr;
         istr >> (void*&)ptr;
         pArgs[i] = ptr ? vlm.at(ptr).get() : nullptr;
     }
@@ -200,8 +200,8 @@ bool functor_t<hashId, args_t...>::load(std::istream& istr, variableMap_t& vlm, 
     Save to an Output Stream
 -------------------------------------*/
 template <hash_t hashId, typename... args_t>
-bool functor_t<hashId, args_t...>::save(std::ostream& ostr) const {
-    functor::save(ostr);
+bool Functor_t<hashId, args_t...>::save(std::ostream& ostr) const {
+    Functor::save(ostr);
 
     for (unsigned i = 0; i < sizeof...(args_t); ++i) {
         ostr << ' ' << (void*)pArgs[i];
@@ -213,8 +213,8 @@ bool functor_t<hashId, args_t...>::save(std::ostream& ostr) const {
     Argument Verification/Compilation
 -------------------------------------*/
 template <hash_t hashId, typename... args_t> inline
-bool functor_t<hashId, args_t...>::compile() {
-    return functor::checkArgs(*this, 0, ((args_t*)nullptr)...);
+bool Functor_t<hashId, args_t...>::compile() {
+    return Functor::check_args(*this, 0, ((args_t*)nullptr)...);
 }
 
 /*-----------------------------------------------------------------------------
@@ -224,43 +224,43 @@ bool functor_t<hashId, args_t...>::compile() {
     Destructor
 -------------------------------------*/
 template <hash_t hashId>
-functor_t<hashId, void>::~functor_t() {
+Functor_t<hashId, void>::~Functor_t() {
 }
 
 /*-------------------------------------
     Constructor
 -------------------------------------*/
 template <hash_t hashId>
-functor_t<hashId, void>::functor_t() :
-    functor{nullptr, functionImpl}
+Functor_t<hashId, void>::Functor_t() :
+    Functor{nullptr, func_impl}
 {}
 
 /*-------------------------------------
     Copy Constructor
 -------------------------------------*/
 template <hash_t hashId>
-functor_t<hashId, void>::functor_t(const functor_t& f) :
-    functor{nullptr, functionImpl}
+Functor_t<hashId, void>::Functor_t(const Functor_t& f) :
+    Functor{nullptr, func_impl}
 {
-    functor::operator=(f);
+    Functor::operator=(f);
 }
 
 /*-------------------------------------
     Move Constructor
 -------------------------------------*/
 template <hash_t hashId>
-functor_t<hashId, void>::functor_t(functor_t&& f) :
-    functor{nullptr, functionImpl}
+Functor_t<hashId, void>::Functor_t(Functor_t&& f) :
+    Functor{nullptr, func_impl}
 {
-    functor::operator=(std::move(f));
+    Functor::operator=(std::move(f));
 }
 
 /*-------------------------------------
     Copy Assignment
 -------------------------------------*/
 template <hash_t hashId>
-functor_t<hashId, void>& functor_t<hashId, void>::operator =(const functor_t& f) {
-    functor::operator=(f);
+Functor_t<hashId, void>& Functor_t<hashId, void>::operator =(const Functor_t& f) {
+    Functor::operator=(f);
     return *this;
 }
 
@@ -268,8 +268,8 @@ functor_t<hashId, void>& functor_t<hashId, void>::operator =(const functor_t& f)
     Move Assignment
 -------------------------------------*/
 template <hash_t hashId>
-functor_t<hashId, void>& functor_t<hashId, void>::operator =(functor_t&& f) {
-    functor::operator=(std::move(f));
+Functor_t<hashId, void>& Functor_t<hashId, void>::operator =(Functor_t&& f) {
+    Functor::operator=(std::move(f));
     return *this;
 }
 
@@ -277,7 +277,7 @@ functor_t<hashId, void>& functor_t<hashId, void>::operator =(functor_t&& f) {
     RTTI
 -------------------------------------*/
 template <hash_t hashId> inline
-hash_t functor_t<hashId, void>::getScriptSubType() const {
+hash_t Functor_t<hashId, void>::get_script_subtype() const {
     return hashId;
 }
 
@@ -285,7 +285,7 @@ hash_t functor_t<hashId, void>::getScriptSubType() const {
     Argument Count Retrieval
 -------------------------------------*/
 template <hash_t hashId> inline
-unsigned functor_t<hashId, void>::getNumArgs() const {
+unsigned Functor_t<hashId, void>::get_num_args() const {
     return 0;
 }
 
@@ -293,23 +293,23 @@ unsigned functor_t<hashId, void>::getNumArgs() const {
     Load from an Input Stream
 -------------------------------------*/
 template <hash_t hashId>
-bool functor_t<hashId, void>::load(std::istream& istr, variableMap_t& vlm, functorMap_t& flm) {
-    return functor::load(istr, vlm, flm);
+bool Functor_t<hashId, void>::load(std::istream& istr, VariableMap_t& vlm, FunctorMap_t& flm) {
+    return Functor::load(istr, vlm, flm);
 }
 
 /*-------------------------------------
     Save to an Output Stream
 -------------------------------------*/
 template <hash_t hashId>
-bool functor_t<hashId, void>::save(std::ostream& ostr) const {
-    return functor::save(ostr);
+bool Functor_t<hashId, void>::save(std::ostream& ostr) const {
+    return Functor::save(ostr);
 }
 
 /*-------------------------------------
     Argument Verification/Compilation
 -------------------------------------*/
 template <hash_t hashId> inline
-bool functor_t<hashId, void>::compile() {
+bool Functor_t<hashId, void>::compile() {
     return true;
 }
 

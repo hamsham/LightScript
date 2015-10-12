@@ -9,55 +9,52 @@ set(OUTPUT_NAME lsscript)
 
 
 # -------------------------------------
-# Compiler Options
-# -------------------------------------
-if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU"
-    OR
-    "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang"
-)
-    set(warnings "-Wall -Werror -Wextra -pedantic -pedantic-errors")
-
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 ${warnings}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${warnings}")
-
-    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG} -std=c99 ${warnings}")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} -std=c++11 ${warnings}")
-
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE} -std=c99 ${warnings}")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 ${warnings}")
-else()
-    message(FATAL_ERROR "Your compiler is currently unsupported.")
-endif()
-
-
-
-# -------------------------------------
 # Source Paths
 # -------------------------------------
 include_directories("include")
+
+set(LS_SCRIPT_SOURCES
+    "src/script/ScriptBasicVar.cpp"
+    "src/script/ScriptFactory.cpp"
+    "src/script/ScriptFunctor.cpp"
+    "src/script/ScriptIO.cpp"
+    "src/script/ScriptMath.cpp"
+    "src/script/ScriptRunner.cpp"
+    "src/script/ScriptSerializer.cpp"
+    "src/script/ScriptVariable.cpp"
+    "src/script/Scriptable.cpp"
+    "src/script/Setup.cpp"
+)
 
 
 
 # -------------------------------------
 # Library Setup
 # -------------------------------------
-add_library("${OUTPUT_NAME}" STATIC
-            "src/script/scriptBasicVar.cpp"
-            "src/script/scriptFactory.cpp"
-            "src/script/scriptFunctor.cpp"
-            "src/script/scriptIO.cpp"
-            "src/script/scriptMath.cpp"
-            "src/script/scriptRunner.cpp"
-            "src/script/scriptSerializer.cpp"
-            "src/script/scriptVariable.cpp"
-            "src/script/scriptable.cpp"
-            "src/script/setup.cpp"
+add_library("${OUTPUT_NAME}" SHARED "${LS_SCRIPT_SOURCES}")
+
+
+# -------------------------------------
+# Dependency Setup
+# -------------------------------------
+set(LS_SCRIPT_DEPS
+    "${LIBRARY_OUTPUT_PATH}/${LS_STATIC_LIB_PREFIX}lssetup${LS_STATIC_LIB_SUFFIX}"
+    "${LIBRARY_OUTPUT_PATH}/${LS_STATIC_LIB_PREFIX}lsutils${LS_STATIC_LIB_SUFFIX}"
+    "${LIBRARY_OUTPUT_PATH}/${LS_STATIC_LIB_PREFIX}lsmath${LS_STATIC_LIB_SUFFIX}"
 )
+
+target_link_libraries("${OUTPUT_NAME}" ${LS_SCRIPT_DEPS})
+
+
+
+# -------------------------------------
+# Library Setup
+# -------------------------------------
+add_dependencies("${OUTPUT_NAME}" lssetup lsutils lsmath)
 
 
 
 # -------------------------------------
 # Library Installation Setup
 # -------------------------------------
-install(TARGETS "${OUTPUT_NAME}" ARCHIVE DESTINATION lib)
-install(DIRECTORY include/lightsky/script DESTINATION include/lightsky)
+install(TARGETS "${OUTPUT_NAME}" LIBRARY DESTINATION lib)

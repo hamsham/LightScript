@@ -9,8 +9,8 @@
 
 #include "lightsky/setup/macros.h"
 
-#include "lightsky/script/scriptFunctor.h"
-#include "lightsky/script/scriptRunner.h"
+#include "lightsky/script/ScriptFunctor.h"
+#include "lightsky/script/ScriptRunner.h"
 
 namespace ls {
 namespace script {
@@ -18,57 +18,57 @@ namespace script {
 /*-------------------------------------
  * Destructor
 -------------------------------------*/
-scriptRunner::~scriptRunner() {
+ScriptRunner::~ScriptRunner() {
 }
 
 /*-------------------------------------
  * Run Constructor
 -------------------------------------*/
-scriptRunner::scriptRunner(functor* const pEntryFunction, const functor* const pSentinel) {
+ScriptRunner::ScriptRunner(Functor* const pEntryFunction, const Functor* const pSentinel) {
     run(pEntryFunction, pSentinel);
 }
 
 /*-------------------------------------
  * Basic Constructor
 -------------------------------------*/
-scriptRunner::scriptRunner() {
+ScriptRunner::ScriptRunner() {
 }
 
 /*-------------------------------------
  * Copy Constructor
 -------------------------------------*/
-scriptRunner::scriptRunner(const scriptRunner&) {
+ScriptRunner::ScriptRunner(const ScriptRunner&) {
 }
 
 /*-------------------------------------
  * Move Constructor
 -------------------------------------*/
-scriptRunner::scriptRunner(scriptRunner&&) {
+ScriptRunner::ScriptRunner(ScriptRunner&&) {
 }
 
 /*-------------------------------------
  * Copy Constructor
 -------------------------------------*/
-scriptRunner& scriptRunner::operator=(const scriptRunner&) {
+ScriptRunner& ScriptRunner::operator=(const ScriptRunner&) {
     return *this;
 }
 
 /*-------------------------------------
  * Move Constructor
 -------------------------------------*/
-scriptRunner& scriptRunner::operator=(scriptRunner&&) {
+ScriptRunner& ScriptRunner::operator=(ScriptRunner&&) {
     return *this;
 }
 
 /*-------------------------------------
  * Script Running
 -------------------------------------*/
-bool scriptRunner::run(functor* const pEntryFunction, const functor* const pSentinel) {
-    functor* pFunc = pEntryFunction;
+bool ScriptRunner::run(Functor* const pEntryFunction, const Functor* const pSentinel) {
+    Functor* pFunc = pEntryFunction;
     
     while (pFunc != pSentinel) {
         pFunc->run();
-        pFunc = pFunc->getNextFunc();
+        pFunc = pFunc->get_next_func();
     }
     
     return true;

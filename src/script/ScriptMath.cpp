@@ -7,8 +7,8 @@
 
 #include <cmath>
 
-#include "lightsky/script/scriptFactory.h"
-#include "lightsky/script/scriptMath.h"
+#include "lightsky/script/ScriptFactory.h"
+#include "lightsky/script/ScriptMath.h"
 
 /*-----------------------------------------------------------------------------
     Built-In Math Types
@@ -133,35 +133,35 @@ LS_SCRIPT_LOAD_VECTOR(math::quat)
 /*
  * Addition
  */
-LS_SCRIPT_DEFINE_FUNC(addInts, scriptVar_int, scriptVar_int, scriptVar_int) {
+LS_SCRIPT_DEFINE_FUNC(AddInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
     LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) + LS_SCRIPT_PARAM(2, int);
 };
 
 /*
  * Subtraction
  */
-LS_SCRIPT_DEFINE_FUNC(subInts, scriptVar_int, scriptVar_int, scriptVar_int) {
+LS_SCRIPT_DEFINE_FUNC(SubInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
     LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) - LS_SCRIPT_PARAM(2, int);
 };
 
 /*
  * Multiplication
  */
-LS_SCRIPT_DEFINE_FUNC(mulInts, scriptVar_int, scriptVar_int, scriptVar_int) {
+LS_SCRIPT_DEFINE_FUNC(MulInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
     LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) * LS_SCRIPT_PARAM(2, int);
 };
 
 /*
  * Division
  */
-LS_SCRIPT_DEFINE_FUNC(divInts, scriptVar_int, scriptVar_int, scriptVar_int) {
+LS_SCRIPT_DEFINE_FUNC(DivInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
     LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) / LS_SCRIPT_PARAM(2, int);
 };
 
 /*
  * Modulus
  */
-LS_SCRIPT_DEFINE_FUNC(modInts, scriptVar_int, scriptVar_int, scriptVar_int) {
+LS_SCRIPT_DEFINE_FUNC(ModInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
     LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) % LS_SCRIPT_PARAM(2, int);
 };
 
@@ -171,35 +171,35 @@ LS_SCRIPT_DEFINE_FUNC(modInts, scriptVar_int, scriptVar_int, scriptVar_int) {
 /*
  * Addition
  */
-LS_SCRIPT_DEFINE_FUNC(addFloats, scriptVar_float, scriptVar_float, scriptVar_float) {
+LS_SCRIPT_DEFINE_FUNC(AddFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
     LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) + LS_SCRIPT_PARAM(2, float);
 };
 
 /*
  * Subtraction
  */
-LS_SCRIPT_DEFINE_FUNC(subFloats, scriptVar_float, scriptVar_float, scriptVar_float) {
+LS_SCRIPT_DEFINE_FUNC(SubFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
     LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) - LS_SCRIPT_PARAM(2, float);
 };
 
 /*
  * Multiplication
  */
-LS_SCRIPT_DEFINE_FUNC(mulFloats, scriptVar_float, scriptVar_float, scriptVar_float) {
+LS_SCRIPT_DEFINE_FUNC(MulFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
     LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) * LS_SCRIPT_PARAM(2, float);
 };
 
 /*
  * Division
  */
-LS_SCRIPT_DEFINE_FUNC(divFloats, scriptVar_float, scriptVar_float, scriptVar_float) {
+LS_SCRIPT_DEFINE_FUNC(DivFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
     LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) / LS_SCRIPT_PARAM(2, float);
 };
 
 /*
  * Modulus
  */
-LS_SCRIPT_DEFINE_FUNC(modFloats, scriptVar_float, scriptVar_float, scriptVar_float) {
+LS_SCRIPT_DEFINE_FUNC(ModFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
     LS_SCRIPT_PARAM(0, float) = std::fmod(LS_SCRIPT_PARAM(1, float), LS_SCRIPT_PARAM(2, float));
 };
 

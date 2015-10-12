@@ -1,5 +1,5 @@
 
-#include "lightsky/script/scriptable.h"
+#include "lightsky/script/Scriptable.h"
 
 namespace ls {
 namespace script {
@@ -7,38 +7,38 @@ namespace script {
 /*-------------------------------------
     Destructor
 -------------------------------------*/
-scriptable::~scriptable() {
+Scriptable::~Scriptable() {
 }
 
 /*-------------------------------------
     Constructor
 -------------------------------------*/
-scriptable::scriptable() {
+Scriptable::Scriptable() {
 }
 
 /*-------------------------------------
     Copy Constructor
 -------------------------------------*/
-scriptable::scriptable(const scriptable&) {
+Scriptable::Scriptable(const Scriptable&) {
 }
 
 /*-------------------------------------
     Move Constructor
 -------------------------------------*/
-scriptable::scriptable(scriptable&&) {
+Scriptable::Scriptable(Scriptable&&) {
 }
 
 /*-------------------------------------
     Copy Operator
 -------------------------------------*/
-scriptable& scriptable::operator=(const scriptable&) {
+Scriptable& Scriptable::operator=(const Scriptable&) {
     return *this;
 }
 
 /*-------------------------------------
     Move Operator
 -------------------------------------*/
-scriptable& scriptable::operator=(scriptable&&) {
+Scriptable& Scriptable::operator=(Scriptable&&) {
     return *this;
 }
 

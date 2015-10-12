@@ -10,13 +10,13 @@
 
 #include "lightsky/utils/string_utils.h"
 
-#include "lightsky/script/setup.h"
+#include "lightsky/script/Setup.h"
 
 namespace ls {
 namespace script {
 
-class variable;
-class functor;
+class Variable;
+class Functor;
 
 /**
  * @brief Load a file
@@ -35,10 +35,10 @@ class functor;
  * 
  * @return true if the file was successfully loaded. False if not.
  */
-bool loadScriptFile(
+LS_API bool LS_CALL load_script_file(
     const std::string& filename,
-    variableMap_t& outVarMap,
-    functorMap_t& outFuncMap
+    VariableMap_t& outVarMap,
+    FunctorMap_t& outFuncMap
 );
 
 /**
@@ -61,11 +61,9 @@ bool loadScriptFile(
  * 
  * @return true if the file was successfully loaded. False if not.
  */
-bool loadScriptFile(
-    const std::wstring& filename,
-    variableMap_t& outVarMap,
-    functorMap_t& outFuncMap
-);
+inline LS_API bool load_script_file(const std::wstring& filename, VariableMap_t& varList, FunctorMap_t& funcList) {
+    return load_script_file(utils::wide_to_mb_string(filename), varList, funcList);
+}
 
 /**
  * @brief Remap the keys of a variable and functor map which had recently been
@@ -83,7 +81,7 @@ bool loadScriptFile(
  * A reference to an iteratable container object which will hold a set of
  * scriptable functor objects.
  */
-void remapScriptKeys(variableMap_t& outVarMap, functorMap_t& outFuncMap);
+LS_API void LS_CALL remap_script_keys(VariableMap_t& outVarMap, FunctorMap_t& outFuncMap);
 
 /**
  * @brief Save a file
@@ -105,10 +103,10 @@ void remapScriptKeys(variableMap_t& outVarMap, functorMap_t& outFuncMap);
  * 
  * @return true if the file was successfully saved. False if not.
  */
-bool saveScriptFile(
+LS_API bool LS_CALL save_script_file(
     const std::string& filename,
-    const variableMap_t& inVarList,
-    const functorMap_t& inFuncList
+    const VariableMap_t& inVarList,
+    const FunctorMap_t& inFuncList
 );
 
 /**
@@ -131,15 +129,15 @@ bool saveScriptFile(
  * 
  * @return true if the file was successfully saved. False if not.
  */
-bool saveScriptFile(
+inline LS_API bool save_script_file(
     const std::wstring& filename,
-    const variableMap_t& inVarList,
-    const functorMap_t& inFuncList
-);
+    const VariableMap_t& inVarList,
+    const FunctorMap_t& inFuncList
+) {
+    return save_script_file(utils::wide_to_mb_string(filename), inVarList, inFuncList);
+}
 
 } // end script namespace
 } // end ls namespace
-
-#include "lightsky/script/generic/scriptSerializer_impl.h"
 
 #endif	/* __LS_SCRIPT_SERIALIZER_H__ */

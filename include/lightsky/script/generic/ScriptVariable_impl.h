@@ -9,8 +9,8 @@ namespace script {
     Variable Object Copy Assignment
 -------------------------------------*/
 inline
-variable& variable::operator =(const variable& v) {
-    scriptable::operator =(v);
+Variable& Variable::operator =(const Variable& v) {
+    Scriptable::operator =(v);
     return *this;
 }
 
@@ -18,8 +18,8 @@ variable& variable::operator =(const variable& v) {
     Variable Object Move Assignment
 -------------------------------------*/
 inline
-variable& variable::operator =(variable&& v) {
-    scriptable::operator =(std::move(v));
+Variable& Variable::operator =(Variable&& v) {
+    Scriptable::operator =(std::move(v));
     return *this;
 }
 
@@ -27,7 +27,7 @@ variable& variable::operator =(variable&& v) {
     Variable Object Base Type Query
 -------------------------------------*/
 inline
-script_base_t variable::getScriptType() const {
+script_base_t Variable::get_script_type() const {
     return script_base_t::VARIABLE;
 }
 
@@ -38,15 +38,15 @@ script_base_t variable::getScriptType() const {
     Variable Object Type Destructor
 -------------------------------------*/
 template <hash_t hashId, typename type>
-variable_t<hashId, type>::~variable_t() {
+Variable_t<hashId, type>::~Variable_t() {
 }
 
 /*-------------------------------------
     Variable Object Type Constructor
 -------------------------------------*/
 template <hash_t hashId, typename type>
-variable_t<hashId, type>::variable_t() :
-    variable{},
+Variable_t<hashId, type>::Variable_t() :
+    Variable{},
     data{}
 {}
 
@@ -54,8 +54,8 @@ variable_t<hashId, type>::variable_t() :
     Variable Object Type Copy Constructor
 -------------------------------------*/
 template <hash_t hashId, typename type>
-variable_t<hashId, type>::variable_t(const variable_t& v) :
-    variable{v},
+Variable_t<hashId, type>::Variable_t(const Variable_t& v) :
+    Variable{v},
     data{v.data}
 {}
 
@@ -63,8 +63,8 @@ variable_t<hashId, type>::variable_t(const variable_t& v) :
     Variable Object Type Move Constructor
 -------------------------------------*/
 template <hash_t hashId, typename type>
-variable_t<hashId, type>::variable_t(variable_t&& v) :
-    variable{std::move(v)},
+Variable_t<hashId, type>::Variable_t(Variable_t&& v) :
+    Variable{std::move(v)},
     data{std::move(v.data)}
 {}
 
@@ -72,8 +72,8 @@ variable_t<hashId, type>::variable_t(variable_t&& v) :
     Variable Object Type Copy Assignment
 -------------------------------------*/
 template <hash_t hashId, typename type>
-variable_t<hashId, type>& variable_t<hashId, type>::operator =(const variable_t& v) {
-    variable::operator =(v);
+Variable_t<hashId, type>& Variable_t<hashId, type>::operator =(const Variable_t& v) {
+    Variable::operator =(v);
     data = v.data;
     return *this;
 }
@@ -82,8 +82,8 @@ variable_t<hashId, type>& variable_t<hashId, type>::operator =(const variable_t&
     Variable Object Type Move Assignment
 -------------------------------------*/
 template <hash_t hashId, typename type>
-variable_t<hashId, type>& variable_t<hashId, type>::operator =(variable_t&& v) {
-    variable::operator =(std::move(v));
+Variable_t<hashId, type>& Variable_t<hashId, type>::operator =(Variable_t&& v) {
+    Variable::operator =(std::move(v));
     data = std::move(v.data);
     return *this;
 }
@@ -92,7 +92,7 @@ variable_t<hashId, type>& variable_t<hashId, type>::operator =(variable_t&& v) {
     Variable Object Type Data Loading
 -------------------------------------*/
 template <hash_t hashId, typename type>
-bool variable_t<hashId, type>::load(std::istream& istr, variableMap_t&, functorMap_t&) {
+bool Variable_t<hashId, type>::load(std::istream& istr, VariableMap_t&, FunctorMap_t&) {
     istr >> data;
     return istr.good() || istr.eof();
 }
@@ -101,7 +101,7 @@ bool variable_t<hashId, type>::load(std::istream& istr, variableMap_t&, functorM
     Variable Object Type Data Saving
 -------------------------------------*/
 template <hash_t hashId, typename type> inline
-bool variable_t<hashId, type>::save(std::ostream& ostr) const {
+bool Variable_t<hashId, type>::save(std::ostream& ostr) const {
     ostr << data;
     return ostr.good();
 }
@@ -110,7 +110,7 @@ bool variable_t<hashId, type>::save(std::ostream& ostr) const {
     Variable Object Type RTTI
 -------------------------------------*/
 template <hash_t hashId, typename type> inline
-hash_t variable_t<hashId, type>::getScriptSubType() const {
+hash_t Variable_t<hashId, type>::get_script_subtype() const {
     return hashId;
 }
 

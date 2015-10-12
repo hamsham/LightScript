@@ -8,10 +8,12 @@
 #ifndef __LS_SCRIPT_RUNNER_H__
 #define	__LS_SCRIPT_RUNNER_H__
 
+#include "lightsky/setup/api.h"
+
 namespace ls {
 namespace script {
 
-class functor;
+class Functor;
 
 /**
  * @brief The Base class for running script functions.
@@ -29,12 +31,12 @@ class functor;
  * running them through a scriptRunner in order to catch any potential errors
  * which may cause the program to crash.
  */
-class scriptRunner {
+class LS_API ScriptRunner {
     public:
         /**
          * @brief Destructor
          */
-        virtual ~scriptRunner();
+        virtual ~ScriptRunner();
         
         /**
          * @brief Run Constructor
@@ -52,12 +54,12 @@ class scriptRunner {
          * the script sequence. Since this functor is not run at all, it can be
          * left as NULL.
          */
-        scriptRunner(functor* const pEntryFunction, const functor* const pSentinel = nullptr);
+        ScriptRunner(Functor* const pEntryFunction, const Functor* const pSentinel = nullptr);
         
         /**
          * @brief Constructor
          */
-        scriptRunner();
+        ScriptRunner();
         
         /**
          * @brief Copy Constructor
@@ -68,7 +70,7 @@ class scriptRunner {
          * A constant reference to another scriptRunner, who's data will be
          * copied into *this.
          */
-        scriptRunner(const scriptRunner& s);
+        ScriptRunner(const ScriptRunner& s);
         
         /**
          * @brief Move Constructor
@@ -80,7 +82,7 @@ class scriptRunner {
          * An r-value reference to another scriptRunner, who's data will be
          * moved into *this.
          */
-        scriptRunner(scriptRunner&& s);
+        ScriptRunner(ScriptRunner&& s);
         
         /**
          * @brief Copy Operator
@@ -94,7 +96,7 @@ class scriptRunner {
          * @return
          * A reference to *this.
          */
-        scriptRunner& operator=(const scriptRunner& s);
+        ScriptRunner& operator=(const ScriptRunner& s);
         
         /**
          * @brief Move Constructor
@@ -109,7 +111,7 @@ class scriptRunner {
          * @return
          * A reference to *this.
          */
-        scriptRunner& operator=(scriptRunner&& s);
+        ScriptRunner& operator=(ScriptRunner&& s);
         
         /**
          * 
@@ -129,7 +131,7 @@ class scriptRunner {
          * @return TRUE if the sequence was successfully run, or FALSE if an
          * error occurred.
          */
-        virtual bool run(functor* const pEntryFunction, const functor* const pSentinel = nullptr);
+        virtual bool run(Functor* const pEntryFunction, const Functor* const pSentinel = nullptr);
 };
 
 } // end script namespace

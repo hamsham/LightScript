@@ -5,7 +5,7 @@
  * Created on March 24, 2015, 8:48 PM
  */
 
-#include "lightsky/script/scriptIO.h"
+#include "lightsky/script/ScriptIO.h"
 
 /*-----------------------------------------------------------------------------
  Data Input/Output
@@ -16,7 +16,7 @@ namespace script {
 /*-------------------------------------
  * Standard Output
 -------------------------------------*/
-LS_SCRIPT_DEFINE_VAR(stdPrint, void*);
+LS_SCRIPT_DEFINE_VAR(StdPrint, void*);
 
 /*-----------------------------------------------------------------------------
  * Print functions for basic data types
@@ -25,7 +25,7 @@ LS_SCRIPT_DEFINE_VAR(stdPrint, void*);
  * Because this library needs more macros.
 -------------------------------------*/
 #define LS_SCRIPT_DEFINE_VAR_PRINT(formalName, basicName, dataType) \
-    LS_SCRIPT_DEFINE_FUNC(stdPrint##formalName, scriptVar_stdPrint, scriptVar_##basicName) { \
+    LS_SCRIPT_DEFINE_FUNC(StdPrint##formalName, ScriptVar_StdPrint, ScriptVar_##basicName) { \
         (void)pArgs; \
         std::cout << LS_SCRIPT_PARAM(1, dataType); \
     }

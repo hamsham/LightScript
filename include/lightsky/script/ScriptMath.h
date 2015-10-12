@@ -16,10 +16,10 @@
 #include "lightsky/math/mat4.h"
 #include "lightsky/math/quat.h"
 
-#include "lightsky/script/scriptVariable.h"
-#include "lightsky/script/scriptFunctor.h"
+#include "lightsky/script/ScriptVariable.h"
+#include "lightsky/script/ScriptFunctor.h"
 
-#include "lightsky/script/scriptBasicVar.h"
+#include "lightsky/script/ScriptBasicVar.h"
 
 /*-----------------------------------------------------------------------------
     Built-In Math Types
@@ -74,27 +74,27 @@ LS_SCRIPT_DECLARE_VAR(quat, math::quat);
 /*
  * Addition
  */
-LS_SCRIPT_DECLARE_FUNC(addInts, scriptVar_int, scriptVar_int, scriptVar_int);
+LS_SCRIPT_DECLARE_FUNC(AddInts, ScriptVar_int, ScriptVar_int, ScriptVar_int);
 
 /*
  * Subtraction
  */
-LS_SCRIPT_DECLARE_FUNC(subInts, scriptVar_int, scriptVar_int, scriptVar_int);
+LS_SCRIPT_DECLARE_FUNC(SubInts, ScriptVar_int, ScriptVar_int, ScriptVar_int);
 
 /*
  * Multiplication
  */
-LS_SCRIPT_DECLARE_FUNC(mulInts, scriptVar_int, scriptVar_int, scriptVar_int);
+LS_SCRIPT_DECLARE_FUNC(MulInts, ScriptVar_int, ScriptVar_int, ScriptVar_int);
 
 /*
  * Division
  */
-LS_SCRIPT_DECLARE_FUNC(divInts, scriptVar_int, scriptVar_int, scriptVar_int);
+LS_SCRIPT_DECLARE_FUNC(DivInts, ScriptVar_int, ScriptVar_int, ScriptVar_int);
 
 /*
  * Modulus
  */
-LS_SCRIPT_DECLARE_FUNC(modInts, scriptVar_int, scriptVar_int, scriptVar_int);
+LS_SCRIPT_DECLARE_FUNC(ModInts, ScriptVar_int, ScriptVar_int, ScriptVar_int);
 
 /*-----------------------------------------------------------------------------
  Floating-Point Numbers
@@ -102,27 +102,27 @@ LS_SCRIPT_DECLARE_FUNC(modInts, scriptVar_int, scriptVar_int, scriptVar_int);
 /*
  * Addition
  */
-LS_SCRIPT_DECLARE_FUNC(addFloats, scriptVar_float, scriptVar_float, scriptVar_float);
+LS_SCRIPT_DECLARE_FUNC(AddFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float);
 
 /*
  * Subtraction
  */
-LS_SCRIPT_DECLARE_FUNC(subFloats, scriptVar_float, scriptVar_float, scriptVar_float);
+LS_SCRIPT_DECLARE_FUNC(SubFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float);
 
 /*
  * Multiplication
  */
-LS_SCRIPT_DECLARE_FUNC(mulFloats, scriptVar_float, scriptVar_float, scriptVar_float);
+LS_SCRIPT_DECLARE_FUNC(MulFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float);
 
 /*
  * Division
  */
-LS_SCRIPT_DECLARE_FUNC(divFloats, scriptVar_float, scriptVar_float, scriptVar_float);
+LS_SCRIPT_DECLARE_FUNC(DivFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float);
 
 /*
  * Modulus
  */
-LS_SCRIPT_DECLARE_FUNC(modFloats, scriptVar_float, scriptVar_float, scriptVar_float);
+LS_SCRIPT_DECLARE_FUNC(ModFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float);
 
 } // end script namespace
 } // end ls namespace

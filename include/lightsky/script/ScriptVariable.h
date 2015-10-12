@@ -11,8 +11,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "lightsky/script/setup.h"
-#include "lightsky/script/scriptable.h"
+#include "lightsky/script/Setup.h"
+#include "lightsky/script/Scriptable.h"
 
 namespace ls {
 namespace script {
@@ -22,18 +22,18 @@ namespace script {
     
     The Variable base object is used as an interface for scriptable data types.
 -----------------------------------------------------------------------------*/
-class variable : public scriptable {
+class LS_API Variable : public Scriptable {
     public:
         /**
          *  @brief 
          */
-        virtual ~variable() = 0;
+        virtual ~Variable() = 0;
 
         /**
          *  @brief Constructor
          *  Constructs *this and the 'scriptable' base class.
          */
-        variable();
+        Variable();
 
         /**
          *  @brief Copy Constructor
@@ -42,7 +42,7 @@ class variable : public scriptable {
          *  @param v
          *  A constant reference to a variable base object.
          */
-        variable(const variable& v);
+        Variable(const Variable& v);
 
         /**
          *  @brief Move Constructor
@@ -52,7 +52,7 @@ class variable : public scriptable {
          *  @param v
          *  An r-value reference to a variable base object.
          */
-        variable(variable&& v);
+        Variable(Variable&& v);
         
         /**
          *  @brief Copy Constructor
@@ -64,7 +64,7 @@ class variable : public scriptable {
          *  @return
          *  A reference to *this.
          */
-        variable& operator =(const variable& v);
+        Variable& operator =(const Variable& v);
         
         /**
          *  @brief Move Operator
@@ -77,7 +77,7 @@ class variable : public scriptable {
          *  @return
          *  A reference to *this.
          */
-        variable& operator =(variable&& v);
+        Variable& operator =(Variable&& v);
 
         /**
          *  @brief getScriptType
@@ -85,19 +85,19 @@ class variable : public scriptable {
          *  
          *  @return ls::script::script_base_t::SCRIPT_VAR
          */
-        script_base_t getScriptType() const final;
+        script_base_t get_script_type() const final;
         
         /**
          *  @brief 
          */
-        virtual hash_t getScriptSubType() const = 0;
+        virtual hash_t get_script_subtype() const = 0;
 };
 
 /**----------------------------------------------------------------------------
     Extended Variable Template Type
 -----------------------------------------------------------------------------*/
 template <hash_t hashId, typename type>
-class variable_t final : public variable {
+class LS_API Variable_t final : public Variable {
     public:
         /**
          *  @brief Data Member
@@ -113,14 +113,14 @@ class variable_t final : public variable {
          *  
          *  Cleans up any resources used by the parent classes.
          */
-        virtual ~variable_t();
+        virtual ~Variable_t();
         
         /**
          *  @brief Constructor
          *  
          *  Initializes all base classes and data members.
          */
-        variable_t();
+        Variable_t();
 
         /**
          *  @brief Copy Constructor
@@ -131,7 +131,7 @@ class variable_t final : public variable {
          *  A constant reference to a scripting variable of the same type as
          *  *this.
          */
-        variable_t(const variable_t& v);
+        Variable_t(const Variable_t& v);
 
         /**
          *  @brief Move Constructor
@@ -143,7 +143,7 @@ class variable_t final : public variable {
          *  An r-value reference to a scripting variable of the same type as
          *  *this.
          */
-        variable_t(variable_t&& v);
+        Variable_t(Variable_t&& v);
 
         /**
          *  @brief Copy Operator
@@ -156,7 +156,7 @@ class variable_t final : public variable {
          *  
          *  @return a reference to *this.
          */
-        variable_t& operator =(const variable_t& v);
+        Variable_t& operator =(const Variable_t& v);
         
         /**
          *  @brief Move Operator
@@ -170,7 +170,7 @@ class variable_t final : public variable {
          *  
          *  @return a reference to *this.
          */
-        variable_t& operator =(variable_t&& v);
+        Variable_t& operator =(Variable_t&& v);
 
         /**
          *  @brief Load Variable data from an std::istream
@@ -195,7 +195,7 @@ class variable_t final : public variable {
          *  @return a boolean value that will determine if data was
          *  successfully loaded into *this (TRUE) or not (FALSE).
          */
-        bool load(std::istream& istr, variableMap_t& vlm, functorMap_t& flm) override;
+        bool load(std::istream& istr, VariableMap_t& vlm, FunctorMap_t& flm) override;
 
         /**
          *  @brief Save all data from *this into an std::ostream.
@@ -217,13 +217,13 @@ class variable_t final : public variable {
          *  @return A portable hash code, representing the hashed lexical name
          *  of the data type stored in *this.
          */
-        hash_t getScriptSubType() const final;
+        hash_t get_script_subtype() const final;
 };
 
 } // end script namespace
 } // end ls namespace
 
-#include "lightsky/script/generic/scriptVariable_impl.h"
+#include "lightsky/script/generic/ScriptVariable_impl.h"
 
 /*-----------------------------------------------------------------------------
     Script Type Registration and Accessibility Macros
@@ -232,20 +232,20 @@ class variable_t final : public variable {
  *  @brief Script Variable Specifier
  *  
  *  This is simply a convenience macro that can be used to access a
- *  ls::script::variable_t by its data type, rather than specify it by its
+ *  ls::script::Variable_t by its data type, rather than specify it by its
  *  template parameters.
  *  
  *  For example, a variable of type 'int' can be accessed in on of three ways:
  *      
- *      ls::script::variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(int)), int>
+ *      ls::script::Variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(int)), int>
  *      
  *      LS_SCRIPT_VAR_TYPE(int)
  *      
- *      scriptVar_int (if registered using the LS_SCRIPT_DECLARE_VAR macro).
+ *      ScriptVar_int (if registered using the LS_SCRIPT_DECLARE_VAR macro).
  */
 #ifndef LS_SCRIPT_VAR_TYPE
     #define LS_SCRIPT_VAR_TYPE( varType ) \
-        ls::script::variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>
+        ls::script::Variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>
 #endif /* LS_SCRIPT_VAR_TYPE */
 
 /**
@@ -254,13 +254,13 @@ class variable_t final : public variable {
  *  This macro is intended to be used in the functor objects, but allows a
  *  scripted variable's data to be accessed in regular code.
  *  
- *  To access the integer member of a scriptVar_int, for example, one could
+ *  To access the integer member of a ScriptVar_int, for example, one could
  *  write the following:
  *      LS_SCRIPT_VAR_DATA(foo, int) = 42.
  */
 #ifndef LS_SCRIPT_VAR_DATA
     #define LS_SCRIPT_VAR_DATA( pVar, varName ) \
-        static_cast<ls::script::scriptVar_##varName*>((ls::script::variable*)pVar)->data
+        static_cast<ls::script::ScriptVar_##varName*>((ls::script::Variable*)pVar)->data
 #endif /* LS_SCRIPT_VAR_DATA */
 
 /**
@@ -277,21 +277,21 @@ class variable_t final : public variable {
  *  
  *  Now that there are two registered data types, one can access the hash codes
  *  for these two variable like so:
- *      scriptHash_int
- *      scriptHash_string
- *      scriptHash_someClassType
+ *      ScriptHash_int
+ *      ScriptHash_string
+ *      ScriptHash_someClassType
  *  
  *  You could also create and modify registered variables:
  *  
- *      ls::script::variable* pVar = scriptFactory_int();
+ *      ls::script::variable* pVar = ScriptFactory_int();
  *      LS_SCRIPT_VAR_DATA(pVar, int) = 42;
  *      delete pVar;
  *      
- *      ls::script::variable* pVar = scriptFactory_string();
+ *      ls::script::variable* pVar = ScriptFactory_string();
  *      LS_SCRIPT_VAR_DATA(pVar, std::string) = "Hello World";
  *      delete pVar;
  *  
- *      ls::script::variable* pVar = scriptFactory_someClassType();
+ *      ls::script::variable* pVar = ScriptFactory_someClassType();
  *      LS_SCRIPT_VAR_DATA(pVar, someClass::someType).foo();
  *      delete pVar;
  *  
@@ -302,21 +302,21 @@ class variable_t final : public variable {
     #define LS_SCRIPT_DECLARE_VAR( varName, varType ) \
         \
         enum : ls::script::hash_t { \
-            scriptHash_##varName = LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)) \
+            ScriptHash_##varName = LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)) \
         }; \
         \
-        extern const ls::script::varFactory_t& scriptFactory_##varName; \
+        LS_API extern const ls::script::VarFactory_t& ScriptFactory_##varName; \
         \
-        typedef ls::script::variable_t<scriptHash_##varName, varType> scriptVar_##varName; \
+        typedef ls::script::Variable_t<ScriptHash_##varName, varType> ScriptVar_##varName; \
         \
-        extern template class ls::script::variable_t<scriptHash_##varName, varType>
+        extern template class LS_API ls::script::Variable_t<ScriptHash_##varName, varType>
 #endif /* LS_SCRIPT_DECLARE_VAR */
 
 /**
  *  @brief Variable Definition for Source Files
  *  
  *  This macro allows variable types to be defined in source compilation units.
- *  The macro explicitly instantiates the ls::script::variable_t<> class
+ *  The macro explicitly instantiates the ls::script::Variable_t<> class
  *  template, defines the variable's factory function, and adds the factory to
  *  the global factory map.
  *  
@@ -327,18 +327,18 @@ class variable_t final : public variable {
  *  
  *  In addition, the global scripting factory can then be used like so:
  *      ls::script::variable* pVar;
- *      pVar = ls::script::createScriptVar(scriptHash_int);
+ *      pVar = ls::script::createScriptVar(ScriptHash_int);
  *      ...
  *      delete pVar;
  */
 #ifndef LS_SCRIPT_DEFINE_VAR
     #define LS_SCRIPT_DEFINE_VAR( varName, varType ) \
         \
-        template class ls::script::variable_t<scriptHash_##varName, varType>; \
+        template class ls::script::Variable_t<ScriptHash_##varName, varType>; \
         \
-        const varFactory_t& scriptFactory_##varName = ls::script::registerVarFactory( \
-            scriptHash_##varName, []()->ls::script::pointer_t<ls::script::variable> { \
-                return ls::script::pointer_t<ls::script::variable>{new scriptVar_##varName{}}; \
+        const VarFactory_t& ScriptFactory_##varName = ls::script::register_var_factory( \
+            ScriptHash_##varName, []()->ls::script::Pointer_t<ls::script::Variable> { \
+                return ls::script::Pointer_t<ls::script::Variable>{new ScriptVar_##varName{}}; \
             } \
         )
 #endif /* LS_SCRIPT_DEFINE_VAR */
@@ -353,7 +353,7 @@ class variable_t final : public variable {
  * method.
  * 
  * The following variables will be made available in the override function:
- *      *this       - Refers to the scriptVar_##varName being overriden.
+ *      *this       - Refers to the ScriptVar_##varName being overriden.
  *      this->data  - The data represented by *this (of type "varType").
  *      istr        - An std::istream reference which should be used to read
  *                  - data (deserialize) back into *this.
@@ -369,10 +369,10 @@ class variable_t final : public variable {
     #define LS_SCRIPT_OVERRIDE_VAR_LOAD( varType ) \
     \
     template <> \
-    bool ls::script::variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>::load( \
+    LS_API bool ls::script::Variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>::load( \
         std::istream&       istr, \
-        variableMap_t&     varImporter, \
-        functorMap_t&    funcImporter \
+        VariableMap_t&     varImporter, \
+        FunctorMap_t&    funcImporter \
     )
 #endif /* LS_SCRIPT_OVERRIDE_VAR_LOAD */
 
@@ -386,7 +386,7 @@ class variable_t final : public variable {
  * method.
  * 
  * The following variables will be made available in the override function:
- *      *this       - Refers to the scriptVar_##varName being overriden.
+ *      *this       - Refers to the ScriptVar_##varName being overriden.
  *      this->data  - The data represented by *this (of type "varType").
  *      ostr        - An std::ostream reference which should be used to export
  *                  - or serialize the data in *this.
@@ -398,7 +398,7 @@ class variable_t final : public variable {
     #define LS_SCRIPT_OVERRIDE_VAR_SAVE( varType ) \
     \
     template <> \
-    bool ls::script::variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>::save(std::ostream& ostr) const
+    LS_API bool ls::script::Variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>::save(std::ostream& ostr) const
 #endif /* LS_SCRIPT_OVERRIDE_VAR_SAVE */
 
 #endif	/* __LS_SCRIPT_VARIABLE_H__ */

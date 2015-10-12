@@ -12,10 +12,10 @@
 
 #include "lightsky/utils/log.h"
 
-#include "lightsky/script/scriptVariable.h"
-#include "lightsky/script/scriptFunctor.h"
-#include "lightsky/script/scriptFactory.h"
-#include "lightsky/script/scriptSerializer.h"
+#include "lightsky/script/ScriptVariable.h"
+#include "lightsky/script/ScriptFunctor.h"
+#include "lightsky/script/ScriptFactory.h"
+#include "lightsky/script/ScriptSerializer.h"
 
 namespace ls {
 namespace script {
@@ -24,8 +24,8 @@ namespace script {
  * Perform an initial read to populate all script types.
 -------------------------------------*/
 bool initialRead(
-    variableMap_t& varList,
-    functorMap_t& funcList,
+    VariableMap_t& varList,
+    FunctorMap_t& funcList,
     std::istream& fin,
     const script_base_t baseType
 ) {
@@ -38,18 +38,18 @@ bool initialRead(
     LS_ASSERT(scriptBaseType == LS_ENUM_VAL(baseType));
 
     if (baseType == script_base_t::VARIABLE) {
-        pointer_t<variable>&& pVar = createVariable(scriptDataType);
+        Pointer_t<Variable>&& pVar = create_variable(scriptDataType);
 
         if (pVar) {
-            varList.emplace((variable*)pScript, std::move(pVar));
+            varList.emplace((Variable*)pScript, std::move(pVar));
             return true;
         }
     }
     else if (baseType == script_base_t::FUNCTOR) {
-        pointer_t<functor>&& pFunc = createFunctor(scriptDataType);
+        Pointer_t<Functor>&& pFunc = create_functor(scriptDataType);
 
         if (pFunc) {
-            funcList.emplace((functor*)pScript, std::move(pFunc));
+            funcList.emplace((Functor*)pScript, std::move(pFunc));
             return true;
         }
     }
@@ -69,8 +69,8 @@ bool initialRead(
  * Load a specific type of script
 -------------------------------------*/
 bool dataRead(
-    variableMap_t& varList,
-    functorMap_t& funcList,
+    VariableMap_t& varList,
+    FunctorMap_t& funcList,
     std::istream& istr,
     const script_base_t baseType
 ) {
@@ -79,13 +79,13 @@ bool dataRead(
     istr.get(); // discard extra whitespace inserted by the save() method
 
     if (baseType == script_base_t::VARIABLE) {
-        pointer_t<variable>& pScript = varList.at((variable*)inAddr);
+        Pointer_t<Variable>& pScript = varList.at((Variable*)inAddr);
         if (pScript && pScript->load(istr, varList, funcList)) {
             return true;
         }
     }
     else if (baseType == script_base_t::FUNCTOR) {
-        pointer_t<functor>& pScript = funcList.at((functor*)inAddr);
+        Pointer_t<Functor>& pScript = funcList.at((Functor*)inAddr);
         if (pScript && pScript->load(istr, varList, funcList)) {
             return true;
         }
@@ -103,7 +103,7 @@ bool dataRead(
 /*-------------------------------------
  * Load a list of variables.
 -------------------------------------*/
-bool loadScriptFile(const std::string& filename, variableMap_t& varList, functorMap_t& funcList) {
+bool load_script_file(const std::string& filename, VariableMap_t& varList, FunctorMap_t& funcList) {
     varList.clear();
     funcList.clear();
     
@@ -159,15 +159,15 @@ bool loadScriptFile(const std::string& filename, variableMap_t& varList, functor
 /*-------------------------------------
  * Ensure all mapped script keys actually point to valid data.
 -------------------------------------*/
-void remapScriptKeys(variableMap_t& inVarMap, functorMap_t& inFuncMap) {
-    variableMap_t tempVarMap{};
-    for (variableMap_t::value_type& inVar : inVarMap) {
+void remap_script_keys(VariableMap_t& inVarMap, FunctorMap_t& inFuncMap) {
+    VariableMap_t tempVarMap{};
+    for (VariableMap_t::value_type& inVar : inVarMap) {
         tempVarMap[inVar.second.get()] = std::move(inVar.second);
     }
     inVarMap = std::move(tempVarMap);
     
-    functorMap_t tempFuncMap{};
-    for (functorMap_t::value_type& inFunc : inFuncMap) {
+    FunctorMap_t tempFuncMap{};
+    for (FunctorMap_t::value_type& inFunc : inFuncMap) {
         tempFuncMap[inFunc.second.get()] = std::move(inFunc.second);
     }
     inFuncMap = std::move(tempFuncMap);
@@ -177,13 +177,13 @@ void remapScriptKeys(variableMap_t& inVarMap, functorMap_t& inFuncMap) {
  * Write an initial set of data for a script type
 -------------------------------------*/
 template <typename data_t>
-bool initialWrite(std::ostream& ostr, const pointer_t<data_t>& pScript) {
+bool initialWrite(std::ostream& ostr, const Pointer_t<data_t>& pScript) {
     if (!pScript) {
         return false;
     }
     
-    const script_base_t baseType = pScript->getScriptType();
-    const hash_t hashType = pScript->getScriptSubType();
+    const script_base_t baseType = pScript->get_script_type();
+    const hash_t hashType = pScript->get_script_subtype();
     
     ostr
         << '\n' << static_cast<typename std::underlying_type<decltype(baseType)>::type>(baseType)
@@ -196,10 +196,10 @@ bool initialWrite(std::ostream& ostr, const pointer_t<data_t>& pScript) {
 /*-------------------------------------
  * Save a list of variables and functors.
 -------------------------------------*/
-bool saveScriptFile(
+bool save_script_file(
     const std::string& filename,
-    const variableMap_t& inVarList,
-    const functorMap_t& inFuncList
+    const VariableMap_t& inVarList,
+    const FunctorMap_t& inFuncList
 ) {
     std::ofstream fout{filename, std::ios_base::binary | std::ios_base::out};
     
@@ -212,16 +212,16 @@ bool saveScriptFile(
     fout << inVarList.size() << ' ' << inFuncList.size();
     
     // write function to save all "scriptable" addresses
-    for (const variableMap_t::value_type& scriptIter : inVarList) {
-        if (!initialWrite<variable>(fout, scriptIter.second)) {
+    for (const VariableMap_t::value_type& scriptIter : inVarList) {
+        if (!initialWrite<Variable>(fout, scriptIter.second)) {
             fout.close();
             LS_LOG_ERR("Failed to save variable initialization data to : ", filename, '.');
             return false;
         }
     };
     
-    for (const functorMap_t::value_type& scriptIter : inFuncList) {
-        if (!initialWrite<functor>(fout, scriptIter.second)) {
+    for (const FunctorMap_t::value_type& scriptIter : inFuncList) {
+        if (!initialWrite<Functor>(fout, scriptIter.second)) {
             fout.close();
             LS_LOG_ERR("Failed to save functor initialization data to : ", filename, '.');
             return false;
@@ -235,14 +235,14 @@ bool saveScriptFile(
     }
     
     // all initial data has been saved, now serialize all scripts
-    for (const variableMap_t::value_type& pScript : inVarList) {
-        const pointer_t<variable>& pVar = pScript.second;
+    for (const VariableMap_t::value_type& pScript : inVarList) {
+        const Pointer_t<Variable>& pVar = pScript.second;
         fout << '\n' << (const void*)pVar << ' ';
         pVar->save(fout);
     }
     
-    for (const functorMap_t::value_type& pScript : inFuncList) {
-        const pointer_t<functor>& pFunc = pScript.second;
+    for (const FunctorMap_t::value_type& pScript : inFuncList) {
+        const Pointer_t<Functor>& pFunc = pScript.second;
         fout << '\n' << (const void*)pFunc << ' ';
         pFunc->save(fout);
     }

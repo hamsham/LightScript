@@ -10,7 +10,7 @@
 
 #include <unordered_map>
 
-#include "lightsky/script/setup.h"
+#include "lightsky/script/Setup.h"
 
 namespace ls {
 namespace script {
@@ -24,7 +24,7 @@ namespace script {
  * This type represents a pointer to a function which instantiates a particular
  * variable type.
  */
-typedef pointer_t<variable> (*varFactory_t)();
+typedef Pointer_t<Variable> (*VarFactory_t)();
 
 /**
  * @brief funcFactory_t
@@ -32,7 +32,7 @@ typedef pointer_t<variable> (*varFactory_t)();
  * This type represents a pointer to a function which instantiates a particular
  * function type.
  */
-typedef pointer_t<functor> (*funcFactory_t)();
+typedef Pointer_t<Functor> (*FuncFactory_t)();
 
 /*-----------------------------------------------------------------------------
  * Script Factory Maps
@@ -46,14 +46,14 @@ typedef pointer_t<functor> (*funcFactory_t)();
  * 
  * This type maps script variables to their factory functions.
  */
-typedef std::unordered_map<hash_t, varFactory_t> varFactoryMap_t;
+typedef std::unordered_map<hash_t, VarFactory_t> VarFactoryMap_t;
 
 /**
  * @brief varFactoryMap_t
  * 
  * This type maps script functors to their factory functions.
  */
-typedef std::unordered_map<hash_t, funcFactory_t> funcFactoryMap_t;
+typedef std::unordered_map<hash_t, FuncFactory_t> FuncFactoryMap_t;
 
 /*-----------------------------------------------------------------------------
  * Factory Method Registration
@@ -77,7 +77,7 @@ typedef std::unordered_map<hash_t, funcFactory_t> funcFactoryMap_t;
  * @return A constant reference to the global factory method responsible for
  * creating a variable object using the hash provided.
  */
-const varFactory_t& registerVarFactory(hash_t factoryId, const varFactory_t& pFactory);
+LS_API const VarFactory_t& LS_CALL register_var_factory(hash_t factoryId, const VarFactory_t& pFactory);
 
 /**
  * @brief Register a factory function for instantiating a functor type.
@@ -98,7 +98,7 @@ const varFactory_t& registerVarFactory(hash_t factoryId, const varFactory_t& pFa
  * @return A constant reference to the global factory method responsible for
  * creating a function object using the hash provided.
  */
-const funcFactory_t& registerFuncFactory(hash_t factoryId, const funcFactory_t& pFactory);
+LS_API const FuncFactory_t& LS_CALL register_func_factory(hash_t factoryId, const FuncFactory_t& pFactory);
 
 /*-----------------------------------------------------------------------------
  * Script Object Instantiation/Deletion
@@ -114,7 +114,7 @@ const funcFactory_t& registerFuncFactory(hash_t factoryId, const funcFactory_t& 
  * This function will return NULL if the variable requested could not be
  * instantiated.
  */
-pointer_t<variable> createVariable(hash_t factoryId);
+LS_API Pointer_t<Variable> LS_CALL create_variable(hash_t factoryId);
 
 /**
  * @brief Destroy/free an instance of a script variable object.
@@ -123,7 +123,7 @@ pointer_t<variable> createVariable(hash_t factoryId);
  * A reference to a pointer_t<> object which points to an instance of a
  * variable created using the "createVariable(...)" function.
  */
-void destroyVariable(pointer_t<variable>& pVariable);
+LS_API void LS_CALL destroy_variable(Pointer_t<Variable>& pVariable);
 
 /**
  * @brief Create a script function using the global functor factory
@@ -136,7 +136,7 @@ void destroyVariable(pointer_t<variable>& pVariable);
  * This function will return NULL if the functor requested could not be
  * instantiated.
  */
-pointer_t<functor> createFunctor(hash_t factoryId);
+LS_API Pointer_t<Functor> LS_CALL create_functor(hash_t factoryId);
 
 /**
  * @brief Destroy/free an instance of a script functor object.
@@ -145,7 +145,7 @@ pointer_t<functor> createFunctor(hash_t factoryId);
  * A reference to a pointer_t<> object which points to an instance of a
  * functor created using the "createVariable(...)" function.
  */
-void destroyFunctor(pointer_t<functor>& pFunc);
+LS_API void LS_CALL destroy_functor(Pointer_t<Functor>& pFunc);
 
 } // end script namespace
 } // end ls namespace

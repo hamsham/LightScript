@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "lightsky/utils/hash.h"
-#include "lightsky/script/setup.h"
+#include "lightsky/script/Setup.h"
 
 namespace ls {
 namespace script {
@@ -19,30 +19,30 @@ namespace script {
     
     Defines all common interfaces for derived types.
 -----------------------------------------------------------------------------*/
-class scriptable {
+class LS_API Scriptable {
     public:
         /**
          *  @brief 
          */
-        virtual ~scriptable() = 0;
+        virtual ~Scriptable() = 0;
 
         /**
          *  @brief Constructor
          *  Does nothing as there are no members in *this.
          */
-        scriptable();
+        Scriptable();
 
         /**
          *  @brief Copy Constructor
          *  Does nothing as there are no members in *this.
          */
-        scriptable(const scriptable&);
+        Scriptable(const Scriptable&);
 
         /**
          *  @brief Move Constructor
          *  Does nothing as there are no members in *this.
          */
-        scriptable(scriptable&&);
+        Scriptable(Scriptable&&);
 
         /**
          *  @brief Copy Operator
@@ -50,7 +50,7 @@ class scriptable {
          *  
          *  @return a reference to *this.
          */
-        scriptable& operator =(const scriptable&);
+        Scriptable& operator =(const Scriptable&);
 
         /**
          *  @brief Move Operator
@@ -58,7 +58,7 @@ class scriptable {
          *  
          *  @return a reference to *this.
          */
-        scriptable& operator =(scriptable&&);
+        Scriptable& operator =(Scriptable&&);
 
         /**
          *  @brief getScriptType
@@ -69,7 +69,7 @@ class scriptable {
          *  may return a hash code which determines that this is either a
          *  scripting variable or scripting function.
          */
-        virtual script_base_t getScriptType() const = 0;
+        virtual script_base_t get_script_type() const = 0;
         
         /**
          *  @brief getScriptSubType
@@ -80,7 +80,7 @@ class scriptable {
          *  A hash code that indicates the specific type of object that *this
          *  is at run-time.
          */
-        virtual hash_t getScriptSubType() const = 0;
+        virtual hash_t get_script_subtype() const = 0;
 
         /**
          *  @brief load
@@ -102,7 +102,7 @@ class scriptable {
          *  @return a boolean value that will determine if data was
          *  successfully loaded into *this (TRUE) or not (FALSE).
          */
-        virtual bool load(std::istream& istr, variableMap_t& varLoader, functorMap_t& funcLoader) = 0;
+        virtual bool load(std::istream& istr, VariableMap_t& varLoader, FunctorMap_t& funcLoader) = 0;
         
         /**
          *  @brief save

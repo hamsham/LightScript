@@ -10,6 +10,7 @@
 
 #include <unordered_map>
 
+#include "lightsky/setup/api.h"
 #include "lightsky/setup/macros.h"
 
 #include "lightsky/utils/hash.h"
@@ -29,7 +30,7 @@ using ls::utils::hash_t;
 /**
  * @brief Scripting function used internally for generating script IDs.
  */
-#define LS_SCRIPT_HASH_FUNC( str ) ls::utils::hashFNV1( str )
+#define LS_SCRIPT_HASH_FUNC( str ) ls::utils::hash_fnv1( str )
 
 /*-----------------------------------------------------------------------------
     Data Type information
@@ -42,9 +43,9 @@ enum class script_base_t : int {
 /*-----------------------------------------------------------------------------
  Forward Declarations
 -----------------------------------------------------------------------------*/
-class scriptable;
-class variable;
-class functor;
+class Scriptable;
+class Variable;
+class Functor;
 
 /*-----------------------------------------------------------------------------
  Dynamic Memory Types
@@ -52,15 +53,15 @@ class functor;
 /**------------------------------------
  * Dynamic Memory Management for script objects.
 ------------------------------------*/
-template <class data_t> using pointer_t = ls::utils::pointer<data_t>;
+template <class data_t> using Pointer_t = ls::utils::Pointer<data_t>;
 
 /*
  * Create an extern template for the dynamic pointer type.
  */
 } // end script namespace
 
-extern template class ls::utils::pointer<ls::script::variable>;
-extern template class ls::utils::pointer<ls::script::functor>;
+extern template class ls::utils::Pointer<ls::script::Variable>;
+extern template class ls::utils::Pointer<ls::script::Functor>;
 
 namespace script { // continue script namespace
 /*-----------------------------------------------------------------------------
@@ -69,12 +70,12 @@ namespace script { // continue script namespace
 /**
  * @brief File loading map for variable objects.
  */
-typedef std::unordered_map<variable*, pointer_t<variable>> variableMap_t;
+typedef std::unordered_map<Variable*, Pointer_t<Variable>> VariableMap_t;
 
 /**
  * @brief File loading map for functor objects.
  */
-typedef std::unordered_map<functor*, pointer_t<functor>> functorMap_t;
+typedef std::unordered_map<Functor*, Pointer_t<Functor>> FunctorMap_t;
 
 } // end script namespace
 } // end ls namespace
