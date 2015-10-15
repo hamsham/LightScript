@@ -1,10 +1,33 @@
-cmake_minimum_required(VERSION 2.8)
 
 # -------------------------------------
 # Project Setup
 # -------------------------------------
 project(LightScript CXX)
 set(OUTPUT_NAME lsscript)
+
+
+
+# -------------------------------------
+# Compiler Options
+# -------------------------------------
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU"
+    OR
+    CMAKE_CXX_COMPILER_ID MATCHES "Clang"
+)
+    set(LS_SCRIPT_COMPILER_FLAGS "-shared -Wl,--out-implib,${OUTPUT_NAME}.${LS_STATIC_LIB_SUFFIX}")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${LS_SCRIPT_COMPILER_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LS_SCRIPT_COMPILER_FLAGS}")
+    
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+
+    set(LS_SCRIPT_COMPILER_FLAGS "/DLL")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${LS_SCRIPT_COMPILER_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LS_SCRIPT_COMPILER_FLAGS}")
+
+else()
+
+    message(FATAL_ERROR "Your compiler is currently unsupported: ${CMAKE_CXX_COMPILER_ID}")
+endif()
 
 
 
@@ -57,4 +80,7 @@ add_dependencies("${OUTPUT_NAME}" lssetup lsutils lsmath)
 # -------------------------------------
 # Library Installation Setup
 # -------------------------------------
-install(TARGETS "${OUTPUT_NAME}" LIBRARY DESTINATION lib)
+install(TARGETS "${OUTPUT_NAME}"
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+)

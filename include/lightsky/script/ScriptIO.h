@@ -11,9 +11,7 @@
 #include <iostream>
 
 #include "lightsky/script/ScriptVariable.h"
-
 #include "lightsky/script/ScriptFunctor.h"
-
 #include "lightsky/script/ScriptBasicVar.h"
 
 /*-----------------------------------------------------------------------------
