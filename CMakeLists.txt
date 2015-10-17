@@ -91,3 +91,14 @@ install(TARGETS "${OUTPUT_NAME}"
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
 )
+
+
+
+# -------------------------------------
+# Library Tests
+# -------------------------------------
+set(LS_BUILD_SCRIPT_TESTS TRUE CACHE BOOL "Build tests for the LightScript library.")
+
+if(LS_BUILD_SCRIPT_TESTS)
+    add_subdirectory("tests")
+endif()
