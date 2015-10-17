@@ -14,10 +14,17 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU"
     OR
     CMAKE_CXX_COMPILER_ID MATCHES "Clang"
 )
-    set(LS_SCRIPT_COMPILER_FLAGS "-shared -Wl,--out-implib,${OUTPUT_NAME}.${LS_STATIC_LIB_SUFFIX}")
+    if(WIN32)
+        set(LS_SCRIPT_COMPILER_FLAGS "-shared -Wl,--out-implib,${OUTPUT_NAME}.${LS_STATIC_LIB_SUFFIX}")
+    else()
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+            set(LS_SCRIPT_COMPILER_FLAGS "-shared")
+        endif()
+    endif()
+
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${LS_SCRIPT_COMPILER_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LS_SCRIPT_COMPILER_FLAGS}")
-    
+
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 
     set(LS_SCRIPT_COMPILER_FLAGS "/DLL")
