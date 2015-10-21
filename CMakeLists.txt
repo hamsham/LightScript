@@ -15,10 +15,10 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU"
     CMAKE_CXX_COMPILER_ID MATCHES "Clang"
 )
     if(WIN32)
-        set(LS_SCRIPT_COMPILER_FLAGS "-shared -Wl,--out-implib,${OUTPUT_NAME}.${LS_STATIC_LIB_SUFFIX}")
+        set(LS_SCRIPT_COMPILER_FLAGS "-shared -Wl,--out-implib,lib${OUTPUT_NAME}.a")
     else()
         if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-            set(LS_SCRIPT_COMPILER_FLAGS "-shared")
+            set(LS_SCRIPT_COMPILER_FLAGS "-g -ggdb -shared -rdynamic -static-libgcc -static-libstdc++")
         endif()
     endif()
 
@@ -68,9 +68,9 @@ add_library("${OUTPUT_NAME}" SHARED "${LS_SCRIPT_SOURCES}")
 # Dependency Setup
 # -------------------------------------
 set(LS_SCRIPT_DEPS
-    "${LIBRARY_OUTPUT_PATH}/${LS_STATIC_LIB_PREFIX}lssetup${LS_STATIC_LIB_SUFFIX}"
-    "${LIBRARY_OUTPUT_PATH}/${LS_STATIC_LIB_PREFIX}lsutils${LS_STATIC_LIB_SUFFIX}"
-    "${LIBRARY_OUTPUT_PATH}/${LS_STATIC_LIB_PREFIX}lsmath${LS_STATIC_LIB_SUFFIX}"
+    lssetup
+    lsutils
+    lsmath
 )
 
 target_link_libraries("${OUTPUT_NAME}" ${LS_SCRIPT_DEPS})
