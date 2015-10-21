@@ -16,10 +16,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU"
 )
     if(WIN32)
         set(LS_SCRIPT_COMPILER_FLAGS "-shared -Wl,--out-implib,lib${OUTPUT_NAME}.a")
-    else()
-        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-            set(LS_SCRIPT_COMPILER_FLAGS "-g -ggdb -shared -rdynamic -static-libgcc -static-libstdc++")
-        endif()
     endif()
 
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${LS_SCRIPT_COMPILER_FLAGS}")
