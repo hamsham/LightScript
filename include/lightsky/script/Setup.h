@@ -10,11 +10,11 @@
 
 #include <unordered_map>
 
-#include "lightsky/setup/api.h"
-#include "lightsky/setup/macros.h"
+#include "lightsky/setup/Api.h"
+#include "lightsky/setup/Macros.h"
 
-#include "lightsky/utils/hash.h"
-#include "lightsky/utils/pointer.h"
+#include "lightsky/utils/Hash.h"
+#include "lightsky/utils/Pointer.h"
 
 namespace ls {
 namespace script {

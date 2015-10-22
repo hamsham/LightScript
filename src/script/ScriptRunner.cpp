@@ -7,7 +7,7 @@
 
 #include <utility> // std::move()
 
-#include "lightsky/setup/macros.h"
+#include "lightsky/setup/Macros.h"
 
 #include "lightsky/script/ScriptFunctor.h"
 #include "lightsky/script/ScriptRunner.h"

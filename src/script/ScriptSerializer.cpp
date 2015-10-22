@@ -10,7 +10,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "lightsky/utils/log.h"
+#include "lightsky/utils/Log.h"
 
 #include "lightsky/script/ScriptVariable.h"
 #include "lightsky/script/ScriptFunctor.h"

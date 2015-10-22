@@ -8,7 +8,7 @@
 #ifndef __LS_SCRIPT_SERIALIZER_H__
 #define	__LS_SCRIPT_SERIALIZER_H__
 
-#include "lightsky/utils/string_utils.h"
+#include "lightsky/utils/StringUtils.h"
 
 #include "lightsky/script/Setup.h"
 

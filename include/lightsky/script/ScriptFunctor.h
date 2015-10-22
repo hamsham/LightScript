@@ -12,7 +12,7 @@
 #include <utility> // std::move()
 #include <typeinfo> // typeid(x)
 
-#include "lightsky/utils/assertions.h" // LS_DEBUG_ASSERT
+#include "lightsky/utils/Assertions.h" // LS_DEBUG_ASSERT
 
 #include "lightsky/script/Setup.h"
 #include "lightsky/script/Scriptable.h"

@@ -8,8 +8,8 @@
 #include <utility> // std::make_pair<>(...)
 #include <unordered_map>
 
-#include "lightsky/utils/log.h"
-#include "lightsky/utils/assertions.h"
+#include "lightsky/utils/Log.h"
+#include "lightsky/utils/Assertions.h"
 
 #include "lightsky/script/Script.h"
 #include "lightsky/script/ScriptFactory.h"

@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include "lightsky/utils/hash.h"
+#include "lightsky/utils/Hash.h"
 #include "lightsky/script/Setup.h"
 
 namespace ls {
