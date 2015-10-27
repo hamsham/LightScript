@@ -10,6 +10,9 @@ set(OUTPUT_NAME lsscript)
 # -------------------------------------
 # Compiler Options
 # -------------------------------------
+set(LS_OLD_C_FLAGS "${CMAKE_C_FLAGS}")
+set(LS_OLD_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU"
     OR
     CMAKE_CXX_COMPILER_ID MATCHES "Clang"
@@ -93,6 +96,9 @@ install(TARGETS "${OUTPUT_NAME}"
 # -------------------------------------
 # Library Tests
 # -------------------------------------
+set(CMAKE_C_FLAGS "${LS_OLD_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${LS_OLD_CXX_FLAGS}")
+
 set(LS_BUILD_SCRIPT_TESTS TRUE CACHE BOOL "Build tests for the LightScript library.")
 
 if(LS_BUILD_SCRIPT_TESTS)
