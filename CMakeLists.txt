@@ -90,6 +90,7 @@ install(TARGETS "${OUTPUT_NAME}"
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
 )
+install(DIRECTORY include/lightsky/script DESTINATION include/lightsky)
 
 
 
