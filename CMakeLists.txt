@@ -87,6 +87,7 @@ add_dependencies("${OUTPUT_NAME}" lssetup lsutils lsmath)
 # Library Installation Setup
 # -------------------------------------
 install(TARGETS "${OUTPUT_NAME}"
+    RUNTIME DESTINATION bin
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
 )
