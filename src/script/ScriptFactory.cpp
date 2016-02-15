@@ -114,7 +114,7 @@ Pointer_t<script::Variable> script::create_variable(hash_t factoryId) {
  * Variable Deletion
 -------------------------------------*/
 void script::destroy_variable(Pointer_t<Variable>& pVariable) {
-    pVariable.release();
+    pVariable.reset();
 }
 
 /*-------------------------------------
@@ -134,7 +134,7 @@ Pointer_t<script::Functor> script::create_functor(hash_t factoryId) {
  * Functor Deletion
 -------------------------------------*/
 void script::destroy_functor(Pointer_t<Functor>& pFunc) {
-    pFunc.release();
+    pFunc.reset();
 }
 
 } // end ls namespace
