@@ -8,9 +8,9 @@
 #ifndef __LS_SCRIPT_SERIALIZER_H__
 #define __LS_SCRIPT_SERIALIZER_H__
 
-#include "ls/utils/StringUtils.h"
+#include "lightsky/utils/StringUtils.h"
 
-#include "ls/script/Setup.h"
+#include "lightsky/script/Setup.h"
 
 namespace ls {
 namespace script {

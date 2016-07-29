@@ -7,10 +7,10 @@
 
 #include <utility> // std::move()
 
-#include "ls/setup/Macros.h"
+#include "lightsky/setup/Macros.h"
 
-#include "ls/script/ScriptFunctor.h"
-#include "ls/script/ScriptRunner.h"
+#include "lightsky/script/ScriptFunctor.h"
+#include "lightsky/script/ScriptRunner.h"
 
 namespace ls {
 namespace script {

@@ -10,12 +10,12 @@
 #include <type_traits>
 #include <utility>
 
-#include "ls/utils/Log.h"
+#include "lightsky/utils/Log.h"
 
-#include "ls/script/ScriptVariable.h"
-#include "ls/script/ScriptFunctor.h"
-#include "ls/script/ScriptFactory.h"
-#include "ls/script/ScriptSerializer.h"
+#include "lightsky/script/ScriptVariable.h"
+#include "lightsky/script/ScriptFunctor.h"
+#include "lightsky/script/ScriptFactory.h"
+#include "lightsky/script/ScriptSerializer.h"
 
 namespace ls {
 namespace script {

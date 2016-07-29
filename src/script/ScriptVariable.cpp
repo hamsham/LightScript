@@ -5,7 +5,7 @@
  * Created on April 13, 2014, 9:05 PM
  */
 
-#include "ls/script/ScriptVariable.h"
+#include "lightsky/script/ScriptVariable.h"
 
 /*-----------------------------------------------------------------------------
     Non-Templated Class Definitions

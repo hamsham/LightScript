@@ -10,9 +10,9 @@
 
 #include <iostream>
 
-#include "ls/script/ScriptVariable.h"
-#include "ls/script/ScriptFunctor.h"
-#include "ls/script/ScriptBasicVar.h"
+#include "lightsky/script/ScriptVariable.h"
+#include "lightsky/script/ScriptFunctor.h"
+#include "lightsky/script/ScriptBasicVar.h"
 
 /*-----------------------------------------------------------------------------
  Data Input/Output

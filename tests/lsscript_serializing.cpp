@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "ls/script/Script.h"
+#include "lightsky/script/Script.h"
 
 /*-----------------------------------------------------------------------------
  * Test Script File

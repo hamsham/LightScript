@@ -11,8 +11,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "ls/script/Setup.h"
-#include "ls/script/Scriptable.h"
+#include "lightsky/script/Setup.h"
+#include "lightsky/script/Scriptable.h"
 
 namespace ls
 {
@@ -227,7 +227,7 @@ public:
 } // end script namespace
 } // end ls namespace
 
-#include "ls/script/generic/ScriptVariable_impl.h"
+#include "lightsky/script/generic/ScriptVariable_impl.h"
 
 /*-----------------------------------------------------------------------------
     Script Type Registration and Accessibility Macros

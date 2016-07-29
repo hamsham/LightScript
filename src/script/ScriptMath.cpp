@@ -7,8 +7,8 @@
 
 #include <cmath>
 
-#include "ls/script/ScriptFactory.h"
-#include "ls/script/ScriptMath.h"
+#include "lightsky/script/ScriptFactory.h"
+#include "lightsky/script/ScriptMath.h"
 
 /*-----------------------------------------------------------------------------
     Built-In Math Types

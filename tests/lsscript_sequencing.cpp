@@ -7,7 +7,7 @@
 
 #include <cassert>
 #include <iostream>
-#include "ls/script/Script.h"
+#include "lightsky/script/Script.h"
 
 template <class data_t> using lsPointer = ls::script::Pointer_t<data_t>;
 

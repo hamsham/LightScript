@@ -1,5 +1,5 @@
 
-#include "ls/script/Scriptable.h"
+#include "lightsky/script/Scriptable.h"
 
 namespace ls {
 namespace script {

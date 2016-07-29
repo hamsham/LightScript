@@ -8,19 +8,19 @@
 #ifndef __LS_SCRIPT_SCRIPT_H__
 #define __LS_SCRIPT_SCRIPT_H__
 
-#include "ls/script/Setup.h"
+#include "lightsky/script/Setup.h"
 
-#include "ls/script/Scriptable.h"
-#include "ls/script/ScriptVariable.h"
-#include "ls/script/ScriptFunctor.h"
+#include "lightsky/script/Scriptable.h"
+#include "lightsky/script/ScriptVariable.h"
+#include "lightsky/script/ScriptFunctor.h"
 
-#include "ls/script/ScriptFactory.h"
+#include "lightsky/script/ScriptFactory.h"
 
-#include "ls/script/ScriptRunner.h"
+#include "lightsky/script/ScriptRunner.h"
 
-#include "ls/script/ScriptBasicVar.h"
-#include "ls/script/ScriptMath.h"
+#include "lightsky/script/ScriptBasicVar.h"
+#include "lightsky/script/ScriptMath.h"
 
-#include "ls/script/ScriptSerializer.h"
+#include "lightsky/script/ScriptSerializer.h"
 
 #endif  /* __LS_SCRIPT_SCRIPT_H__ */

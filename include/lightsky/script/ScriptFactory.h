@@ -10,7 +10,7 @@
 
 #include <unordered_map>
 
-#include "ls/script/Setup.h"
+#include "lightsky/script/Setup.h"
 
 namespace ls {
 namespace script {

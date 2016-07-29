@@ -8,11 +8,11 @@
 #include <utility> // std::make_pair<>(...)
 #include <unordered_map>
 
-#include "ls/utils/Log.h"
-#include "ls/utils/Assertions.h"
+#include "lightsky/utils/Log.h"
+#include "lightsky/utils/Assertions.h"
 
-#include "ls/script/Script.h"
-#include "ls/script/ScriptFactory.h"
+#include "lightsky/script/Script.h"
+#include "lightsky/script/ScriptFactory.h"
 
 using ls::script::hash_t;
 using ls::script::VarFactory_t;

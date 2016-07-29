@@ -8,7 +8,7 @@
 #ifndef __LS_SCRIPT_BASIC_VARIABLE_H__
 #define __LS_SCRIPT_BASIC_VARIABLE_H__
 
-#include "ls/script/ScriptVariable.h"
+#include "lightsky/script/ScriptVariable.h"
 
 namespace ls {
 namespace script {

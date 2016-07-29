@@ -8,7 +8,7 @@
 #ifndef __LS_SCRIPT_RUNNER_H__
 #define __LS_SCRIPT_RUNNER_H__
 
-#include "ls/setup/Api.h"
+#include "lightsky/setup/Api.h"
 
 namespace ls {
 namespace script {

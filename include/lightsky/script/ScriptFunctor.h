@@ -12,12 +12,12 @@
 #include <utility> // std::move()
 #include <typeinfo> // typeid(x)
 
-#include "ls/utils/Assertions.h" // LS_DEBUG_ASSERT
+#include "lightsky/utils/Assertions.h" // LS_DEBUG_ASSERT
 
-#include "ls/script/Setup.h"
-#include "ls/script/Scriptable.h"
-#include "ls/script/ScriptVariable.h"
-#include "ls/script/ScriptFactory.h"
+#include "lightsky/script/Setup.h"
+#include "lightsky/script/Scriptable.h"
+#include "lightsky/script/ScriptVariable.h"
+#include "lightsky/script/ScriptFactory.h"
 
 namespace ls
 {
@@ -907,7 +907,7 @@ public:
 } // end script namespace
 } // end ls namespace
 
-#include "ls/script/generic/ScriptFunctor_impl.h"
+#include "lightsky/script/generic/ScriptFunctor_impl.h"
 
 /*-----------------------------------------------------------------------------
     Functor Utility Macros

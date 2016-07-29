@@ -8,8 +8,8 @@
 
 #include <iostream>
 
-#include "ls/utils/Hash.h"
-#include "ls/script/Setup.h"
+#include "lightsky/utils/Hash.h"
+#include "lightsky/script/Setup.h"
 
 namespace ls {
 namespace script {

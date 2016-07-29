@@ -5,8 +5,8 @@
  * Created on March 12, 2015, 12:52 AM
  */
 
-#include "ls/script/ScriptFactory.h"
-#include "ls/script/ScriptBasicVar.h"
+#include "lightsky/script/ScriptFactory.h"
+#include "lightsky/script/ScriptBasicVar.h"
 
 namespace ls {
 namespace script {

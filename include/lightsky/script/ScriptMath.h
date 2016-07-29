@@ -8,17 +8,17 @@
 #ifndef __LS_SCRIPT_MATH_H__
 #define __LS_SCRIPT_MATH_H__
 
-#include "ls/math/vec2.h"
-#include "ls/math/vec3.h"
-#include "ls/math/vec4.h"
-#include "ls/math/mat2.h"
-#include "ls/math/mat3.h"
-#include "ls/math/mat4.h"
-#include "ls/math/quat.h"
+#include "lightsky/math/vec2.h"
+#include "lightsky/math/vec3.h"
+#include "lightsky/math/vec4.h"
+#include "lightsky/math/mat2.h"
+#include "lightsky/math/mat3.h"
+#include "lightsky/math/mat4.h"
+#include "lightsky/math/quat.h"
 
-#include "ls/script/ScriptVariable.h"
-#include "ls/script/ScriptFunctor.h"
-#include "ls/script/ScriptBasicVar.h"
+#include "lightsky/script/ScriptVariable.h"
+#include "lightsky/script/ScriptFunctor.h"
+#include "lightsky/script/ScriptBasicVar.h"
 
 /*-----------------------------------------------------------------------------
     Built-In Math Types
