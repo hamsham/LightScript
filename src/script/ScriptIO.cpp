@@ -1,11 +1,11 @@
-/* 
+/*
  * File:   scriptIO.cpp
  * Author: Miles LAcey
- * 
+ *
  * Created on March 24, 2015, 8:48 PM
  */
 
-#include "lightsky/script/ScriptIO.h"
+#include "ls/script/ScriptIO.h"
 
 /*-----------------------------------------------------------------------------
  Data Input/Output

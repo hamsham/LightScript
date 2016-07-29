@@ -1,7 +1,7 @@
 
-#include "lightsky/script/Setup.h"
-#include "lightsky/script/ScriptVariable.h"
-#include "lightsky/script/ScriptFunctor.h"
+#include "ls/script/Setup.h"
+#include "ls/script/ScriptVariable.h"
+#include "ls/script/ScriptFunctor.h"
 
 template class ls::utils::Pointer<ls::script::Variable>;
 template class ls::utils::Pointer<ls::script::Functor>;

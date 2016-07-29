@@ -1,5 +1,5 @@
 
-#include "lightsky/script/Scriptable.h"
+#include "ls/script/Scriptable.h"
 
 namespace ls {
 namespace script {
@@ -31,14 +31,14 @@ Scriptable::Scriptable(Scriptable&&) {
 /*-------------------------------------
     Copy Operator
 -------------------------------------*/
-Scriptable& Scriptable::operator=(const Scriptable&) {
+Scriptable& Scriptable::operator =(const Scriptable&) {
     return *this;
 }
 
 /*-------------------------------------
     Move Operator
 -------------------------------------*/
-Scriptable& Scriptable::operator=(Scriptable&&) {
+Scriptable& Scriptable::operator =(Scriptable&&) {
     return *this;
 }
 

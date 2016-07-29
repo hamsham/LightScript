@@ -5,12 +5,13 @@ namespace script {
 /*-----------------------------------------------------------------------------
     Variable Base Type
 -----------------------------------------------------------------------------*/
+
 /*-------------------------------------
     Variable Object Copy Assignment
 -------------------------------------*/
 inline
-Variable& Variable::operator =(const Variable& v) {
-    Scriptable::operator =(v);
+Variable& Variable::operator=(const Variable& v) {
+    Scriptable::operator=(v);
     return *this;
 }
 
@@ -18,8 +19,8 @@ Variable& Variable::operator =(const Variable& v) {
     Variable Object Move Assignment
 -------------------------------------*/
 inline
-Variable& Variable::operator =(Variable&& v) {
-    Scriptable::operator =(std::move(v));
+Variable& Variable::operator=(Variable&& v) {
+    Scriptable::operator=(std::move(v));
     return *this;
 }
 
@@ -34,6 +35,7 @@ script_base_t Variable::get_script_type() const {
 /*-----------------------------------------------------------------------------
     Extended Variable Template Type
 -----------------------------------------------------------------------------*/
+
 /*-------------------------------------
     Variable Object Type Destructor
 -------------------------------------*/
@@ -47,8 +49,9 @@ Variable_t<hashId, type>::~Variable_t() {
 template <hash_t hashId, typename type>
 Variable_t<hashId, type>::Variable_t() :
     Variable{},
-    data{}
-{}
+data{}
+{
+}
 
 /*-------------------------------------
     Variable Object Type Copy Constructor
@@ -56,8 +59,9 @@ Variable_t<hashId, type>::Variable_t() :
 template <hash_t hashId, typename type>
 Variable_t<hashId, type>::Variable_t(const Variable_t& v) :
     Variable{v},
-    data{v.data}
-{}
+data{v.data}
+{
+}
 
 /*-------------------------------------
     Variable Object Type Move Constructor
@@ -65,15 +69,16 @@ Variable_t<hashId, type>::Variable_t(const Variable_t& v) :
 template <hash_t hashId, typename type>
 Variable_t<hashId, type>::Variable_t(Variable_t&& v) :
     Variable{std::move(v)},
-    data{std::move(v.data)}
-{}
+data{std::move(v.data)}
+{
+}
 
 /*-------------------------------------
     Variable Object Type Copy Assignment
 -------------------------------------*/
 template <hash_t hashId, typename type>
-Variable_t<hashId, type>& Variable_t<hashId, type>::operator =(const Variable_t& v) {
-    Variable::operator =(v);
+Variable_t<hashId, type>& Variable_t<hashId, type>::operator=(const Variable_t& v) {
+    Variable::operator=(v);
     data = v.data;
     return *this;
 }
@@ -82,8 +87,8 @@ Variable_t<hashId, type>& Variable_t<hashId, type>::operator =(const Variable_t&
     Variable Object Type Move Assignment
 -------------------------------------*/
 template <hash_t hashId, typename type>
-Variable_t<hashId, type>& Variable_t<hashId, type>::operator =(Variable_t&& v) {
-    Variable::operator =(std::move(v));
+Variable_t<hashId, type>& Variable_t<hashId, type>::operator=(Variable_t&& v) {
+    Variable::operator=(std::move(v));
     data = std::move(v.data);
     return *this;
 }

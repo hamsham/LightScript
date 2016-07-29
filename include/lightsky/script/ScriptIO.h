@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   scriptIO.h
  * Author: Miles LAcey
  *
@@ -6,13 +6,13 @@
  */
 
 #ifndef __LS_SCRIPT_IO_H__
-#define	__LS_SCRIPT_IO_H__
+#define __LS_SCRIPT_IO_H__
 
 #include <iostream>
 
-#include "lightsky/script/ScriptVariable.h"
-#include "lightsky/script/ScriptFunctor.h"
-#include "lightsky/script/ScriptBasicVar.h"
+#include "ls/script/ScriptVariable.h"
+#include "ls/script/ScriptFunctor.h"
+#include "ls/script/ScriptBasicVar.h"
 
 /*-----------------------------------------------------------------------------
  Data Input/Output
@@ -41,5 +41,4 @@ LS_SCRIPT_DECLARE_FUNC(StdPrintString, ScriptVar_StdPrint, ScriptVar_string);
 } // end script namespace
 } // end ls namespace
 
-#endif	/* __LS_SCRIPT_IO_H__ */
-
+#endif  /* __LS_SCRIPT_IO_H__ */

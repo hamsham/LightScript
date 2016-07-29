@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   setup.h
  * Author: Miles Lacey
  *
@@ -6,15 +6,15 @@
  */
 
 #ifndef __LS_SCRIPT_SETUP_H__
-#define	__LS_SCRIPT_SETUP_H__
+#define __LS_SCRIPT_SETUP_H__
 
 #include <unordered_map>
 
-#include "lightsky/setup/Api.h"
-#include "lightsky/setup/Macros.h"
+#include "ls/setup/Api.h"
+#include "ls/setup/Macros.h"
 
-#include "lightsky/utils/Hash.h"
-#include "lightsky/utils/Pointer.h"
+#include "ls/utils/Hash.h"
+#include "ls/utils/Pointer.h"
 
 namespace ls {
 namespace script {
@@ -30,7 +30,9 @@ using ls::utils::hash_t;
 /**
  * @brief Scripting function used internally for generating script IDs.
  */
-#define LS_SCRIPT_HASH_FUNC( str ) ls::utils::hash_fnv1( str )
+#define __LS_SCRIPT_H__ ASH_FUNC( str ) ls::utils::hash_fnv1( str )
+
+
 
 /*-----------------------------------------------------------------------------
     Data Type information
@@ -63,7 +65,8 @@ template <class data_t> using Pointer_t = ls::utils::Pointer<data_t>;
 extern template class ls::utils::Pointer<ls::script::Variable>;
 extern template class ls::utils::Pointer<ls::script::Functor>;
 
-namespace script { // continue script namespace
+namespace script // continue script namespace
+{
 /*-----------------------------------------------------------------------------
     Containers
 -----------------------------------------------------------------------------*/
@@ -80,4 +83,4 @@ typedef std::unordered_map<Functor*, Pointer_t<Functor>> FunctorMap_t;
 } // end script namespace
 } // end ls namespace
 
-#endif	/* __LS_SCRIPT_SETUP_H__ */
+#endif  /* __LS_SCRIPT_SETUP_H__ */

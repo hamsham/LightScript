@@ -1,11 +1,11 @@
-/* 
+/*
  * File:   variable.cpp
  * Author: Miles Lacey
- * 
+ *
  * Created on April 13, 2014, 9:05 PM
  */
 
-#include "lightsky/script/ScriptVariable.h"
+#include "ls/script/ScriptVariable.h"
 
 /*-----------------------------------------------------------------------------
     Non-Templated Class Definitions
@@ -23,22 +23,25 @@ Variable::~Variable() {
     Variable Object Constructor
 -------------------------------------*/
 Variable::Variable() :
-    Scriptable{}
-{}
+    Scriptable {}
+{
+}
 
 /*-------------------------------------
     Variable Object Copy Constructor
 -------------------------------------*/
 Variable::Variable(const Variable& v) :
-    Scriptable{v}
-{}
+    Scriptable {v}
+{
+}
 
 /*-------------------------------------
     Variable Object Move Constructor
 -------------------------------------*/
 Variable::Variable(Variable&& v) :
-    Scriptable{std::move(v)}
-{}
+    Scriptable {std::move(v)}
+{
+}
 
 } // end script namespace
 } // end ls namespace

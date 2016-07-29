@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   scriptBasicVar.h
  * Author: Miles Lacey
  *
@@ -6,9 +6,9 @@
  */
 
 #ifndef __LS_SCRIPT_BASIC_VARIABLE_H__
-#define	__LS_SCRIPT_BASIC_VARIABLE_H__
+#define __LS_SCRIPT_BASIC_VARIABLE_H__
 
-#include "lightsky/script/ScriptVariable.h"
+#include "ls/script/ScriptVariable.h"
 
 namespace ls {
 namespace script {
@@ -66,5 +66,4 @@ LS_SCRIPT_DECLARE_VAR(string, std::string); // ScriptVar_string
 } // end script namepace
 } // end ls namespace
 
-#endif	/* __LS_SCRIPT_BASIC_VARIABLE_H__ */
-
+#endif  /* __LS_SCRIPT_BASIC_VARIABLE_H__ */

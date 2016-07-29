@@ -5,6 +5,7 @@ namespace script {
 /*-----------------------------------------------------------------------------
     Functor Base Class
 -----------------------------------------------------------------------------*/
+
 /*-------------------------------------
     Retrieve the next function to run
 -------------------------------------*/
@@ -17,7 +18,7 @@ Functor* Functor::get_next_func() {
     Set the next function to run.
 -------------------------------------*/
 inline
-void Functor::set_next_func(Functor* const f) {
+void Functor::set_next_func(Functor * const f) {
     pNextFunc = f;
 }
 
@@ -46,7 +47,7 @@ void Functor::set_arg(unsigned index, Variable* v) {
     LS_DEBUG_ASSERT(index < this->get_num_args());
     pArgs[index] = v;
 }
-        
+
 /*-------------------------------------
     Functor parameter type-checking for a single argument.
 -------------------------------------*/
@@ -55,30 +56,30 @@ bool Functor::check_single_arg(const Functor& f, unsigned i, arg_t* t) {
     if (i >= f.get_num_args()) {
         std::cerr
             << "Error: Incorrect number of arguments being compiled: "
-            << "\n\tFunction:   " << (void*)&f << '-' << f.get_script_subtype()
+            << "\n\tFunction:   " << (void*) &f << '-' << f.get_script_subtype()
             << "\n\tParameter:  " << i << '/' << f.get_num_args()
             << std::endl;
         return false;
     }
-    
+
     if (f.get_arg(i) == nullptr) {
         std::cerr
             << "Error: Function contains a null parameter: "
-            << "\n\tFunction:    " << (void*)&f << '-' << f.get_script_subtype()
+            << "\n\tFunction:    " << (void*) &f << '-' << f.get_script_subtype()
             << "\n\tParameter:   " << i << '/' << f.get_num_args()
             << std::endl;
         return false;
     }
 
-    if (dynamic_cast<const arg_t*>(f.get_arg(i)) == nullptr) {
+    if (dynamic_cast<const arg_t*> (f.get_arg(i)) == nullptr) {
         std::cerr
             << "Error: TypeID of function argument does not match the type " \
-            " declared in its parent function."
-            << "\n\tFunction:    " << (void*)&f << '-' << f.get_script_subtype()
-            << "\n\tInput type:  " << typeid(f.get_arg(i)).name()
-            << "\n\tActual type: " << typeid(t).name()
+        " declared in its parent function."
+            << "\n\tFunction:    " << (void*) &f << '-' << f.get_script_subtype()
+            << "\n\tInput type:  " << typeid (f.get_arg(i)).name()
+            << "\n\tActual type: " << typeid (t).name()
             << std::endl;
-            return false;
+        return false;
     }
     return true;
 }
@@ -97,7 +98,7 @@ void Functor::run() {
 template <typename arg_t, typename... args_t> inline
 bool Functor::check_args(const Functor& f, unsigned i, arg_t* t, args_t*...) {
     return check_single_arg<arg_t>(f, i, t)
-    && check_args<args_t...>(f, i+1, ((args_t*)nullptr)...);
+        && check_args < args_t...>(f, i + 1, ((args_t*) nullptr)...);
 }
 
 /*-------------------------------------
@@ -111,6 +112,7 @@ bool Functor::check_args(const Functor& f, unsigned i, arg_t* t) {
 /*-----------------------------------------------------------------------------
     Functor Derived Template Types
 -----------------------------------------------------------------------------*/
+
 /*-------------------------------------
     Destructor
 -------------------------------------*/
@@ -124,7 +126,8 @@ Functor_t<hashId, args_t...>::~Functor_t() {
 template <hash_t hashId, typename... args_t>
 Functor_t<hashId, args_t...>::Functor_t() :
     Functor{parameters, func_impl}
-{}
+{
+}
 
 /*-------------------------------------
     Copy Constructor
@@ -150,7 +153,7 @@ Functor_t<hashId, args_t...>::Functor_t(Functor_t&& f) :
     Copy Assignment
 -------------------------------------*/
 template <hash_t hashId, typename... args_t>
-Functor_t<hashId, args_t...>& Functor_t<hashId, args_t...>::operator =(const Functor_t& f) {
+Functor_t<hashId, args_t...>& Functor_t<hashId, args_t...>::operator=(const Functor_t& f) {
     Functor::operator=(f);
     return *this;
 }
@@ -159,7 +162,7 @@ Functor_t<hashId, args_t...>& Functor_t<hashId, args_t...>::operator =(const Fun
     Move Assignment
 -------------------------------------*/
 template <hash_t hashId, typename... args_t>
-Functor_t<hashId, args_t...>& Functor_t<hashId, args_t...>::operator =(Functor_t&& f) {
+Functor_t<hashId, args_t...>& Functor_t<hashId, args_t...>::operator=(Functor_t&& f) {
     Functor::operator=(std::move(f));
     return *this;
 }
@@ -189,10 +192,10 @@ bool Functor_t<hashId, args_t...>::load(std::istream& istr, VariableMap_t& vlm, 
 
     for (unsigned i = 0; i < sizeof...(args_t); ++i) {
         Variable* ptr = nullptr;
-        istr >> (void*&)ptr;
+        istr >> (void*&) ptr;
         pArgs[i] = ptr ? vlm.at(ptr).get() : nullptr;
     }
-    
+
     return istr.good() || istr.eof();
 }
 
@@ -204,7 +207,7 @@ bool Functor_t<hashId, args_t...>::save(std::ostream& ostr) const {
     Functor::save(ostr);
 
     for (unsigned i = 0; i < sizeof...(args_t); ++i) {
-        ostr << ' ' << (void*)pArgs[i];
+        ostr << ' ' << (void*) pArgs[i];
     }
     return ostr.good();
 }
@@ -214,12 +217,13 @@ bool Functor_t<hashId, args_t...>::save(std::ostream& ostr) const {
 -------------------------------------*/
 template <hash_t hashId, typename... args_t> inline
 bool Functor_t<hashId, args_t...>::compile() {
-    return Functor::check_args(*this, 0, ((args_t*)nullptr)...);
+    return Functor::check_args(*this, 0, ((args_t*) nullptr)...);
 }
 
 /*-----------------------------------------------------------------------------
     Functor Derived Template Types (Void Functor Specialization).
 -----------------------------------------------------------------------------*/
+
 /*-------------------------------------
     Destructor
 -------------------------------------*/
@@ -233,7 +237,8 @@ Functor_t<hashId, void>::~Functor_t() {
 template <hash_t hashId>
 Functor_t<hashId, void>::Functor_t() :
     Functor{nullptr, func_impl}
-{}
+{
+}
 
 /*-------------------------------------
     Copy Constructor
@@ -259,7 +264,7 @@ Functor_t<hashId, void>::Functor_t(Functor_t&& f) :
     Copy Assignment
 -------------------------------------*/
 template <hash_t hashId>
-Functor_t<hashId, void>& Functor_t<hashId, void>::operator =(const Functor_t& f) {
+Functor_t<hashId, void>& Functor_t<hashId, void>::operator=(const Functor_t& f) {
     Functor::operator=(f);
     return *this;
 }
@@ -268,7 +273,7 @@ Functor_t<hashId, void>& Functor_t<hashId, void>::operator =(const Functor_t& f)
     Move Assignment
 -------------------------------------*/
 template <hash_t hashId>
-Functor_t<hashId, void>& Functor_t<hashId, void>::operator =(Functor_t&& f) {
+Functor_t<hashId, void>& Functor_t<hashId, void>::operator=(Functor_t&& f) {
     Functor::operator=(std::move(f));
     return *this;
 }

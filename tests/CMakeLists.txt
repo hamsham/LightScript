@@ -2,7 +2,7 @@
 # -------------------------------------
 # Project Setup
 # -------------------------------------
-project(lsscript_tests CXX)
+project(ls_script_tests CXX)
 
 
 
@@ -41,10 +41,10 @@ endif()
 # -------------------------------------
 set(
     LS_SCRIPT_TEST_DEPS
-    lsscript
-    lsmath
-    lsutils
-    lssetup
+    ls_script
+    ls_math
+    ls_utils
+    ls_setup
 )
 
 

@@ -1,14 +1,14 @@
-/* 
+/*
  * File:   scriptMath.cpp
  * Author: hammy
- * 
+ *
  * Created on December 27, 2014, 1:53 AM
  */
 
 #include <cmath>
 
-#include "lightsky/script/ScriptFactory.h"
-#include "lightsky/script/ScriptMath.h"
+#include "ls/script/ScriptFactory.h"
+#include "ls/script/ScriptMath.h"
 
 /*-----------------------------------------------------------------------------
     Built-In Math Types
@@ -119,6 +119,7 @@ LS_SCRIPT_LOAD_MATRIX(math::mat4, 4, 4)
  * Quaternion
 -------------------------------------*/
 LS_SCRIPT_DEFINE_VAR(quat, math::quat);
+
 LS_SCRIPT_SAVE_VECTOR(math::quat)
 LS_SCRIPT_LOAD_VECTOR(math::quat)
 
@@ -134,14 +135,14 @@ LS_SCRIPT_LOAD_VECTOR(math::quat)
  * Addition
  */
 LS_SCRIPT_DEFINE_FUNC(AddInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
-    LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) + LS_SCRIPT_PARAM(2, int);
+    LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) +LS_SCRIPT_PARAM(2, int);
 };
 
 /*
  * Subtraction
  */
 LS_SCRIPT_DEFINE_FUNC(SubInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
-    LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) - LS_SCRIPT_PARAM(2, int);
+    LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) -LS_SCRIPT_PARAM(2, int);
 };
 
 /*
@@ -168,18 +169,19 @@ LS_SCRIPT_DEFINE_FUNC(ModInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
 /*-----------------------------------------------------------------------------
  Floats
 -----------------------------------------------------------------------------*/
+
 /*
  * Addition
  */
 LS_SCRIPT_DEFINE_FUNC(AddFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
-    LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) + LS_SCRIPT_PARAM(2, float);
+    LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) +LS_SCRIPT_PARAM(2, float);
 };
 
 /*
  * Subtraction
  */
 LS_SCRIPT_DEFINE_FUNC(SubFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
-    LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) - LS_SCRIPT_PARAM(2, float);
+    LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) -LS_SCRIPT_PARAM(2, float);
 };
 
 /*
@@ -200,7 +202,7 @@ LS_SCRIPT_DEFINE_FUNC(DivFloats, ScriptVar_float, ScriptVar_float, ScriptVar_flo
  * Modulus
  */
 LS_SCRIPT_DEFINE_FUNC(ModFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
-    LS_SCRIPT_PARAM(0, float) = std::fmod(LS_SCRIPT_PARAM(1, float), LS_SCRIPT_PARAM(2, float));
+    LS_SCRIPT_PARAM(0, float) = math::fmod(LS_SCRIPT_PARAM(1, float), LS_SCRIPT_PARAM(2, float));
 };
 
 } // end script namespace

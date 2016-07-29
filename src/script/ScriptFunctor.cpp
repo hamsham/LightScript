@@ -1,14 +1,14 @@
-/* 
+/*
  * File:   functor.cpp
  * Author: Miles Lacey
- * 
+ *
  * Created on April 13, 2014, 9:07 PM
  */
 
 #include <utility> // std::move
 
-#include "lightsky/script/ScriptFactory.h"
-#include "lightsky/script/ScriptFunctor.h"
+#include "ls/script/ScriptFactory.h"
+#include "ls/script/ScriptFunctor.h"
 
 namespace ls {
 namespace script {
@@ -16,6 +16,7 @@ namespace script {
 /*-----------------------------------------------------------------------------
     Functor Base Class
 -----------------------------------------------------------------------------*/
+
 /*-------------------------------------
     Destructor
 -------------------------------------*/
@@ -25,24 +26,25 @@ Functor::~Functor() {
 /*-------------------------------------
     Constructor
 -------------------------------------*/
-Functor::Functor(Variable** const pArguments, FuncRef_t pFunc) :
-    Scriptable{},
-    pNextFunc{nullptr},
-    pFunction{pFunc},
-    pArgs{pArguments}
-{}
+Functor::Functor(Variable* * const pArguments, FuncRef_t pFunc) :
+    Scriptable {},
+pNextFunc {nullptr},
+pFunction {pFunc},
+pArgs {pArguments}
+{
+}
 
 /*-------------------------------------
     Copy Operator
 -------------------------------------*/
 Functor& Functor::operator =(const Functor& f) {
-    Scriptable::operator=(f);
-    
+    Scriptable::operator =(f);
+
     for (unsigned i = 0; i < f.get_num_args(); ++i) {
         pArgs[i] = f.pArgs[i];
     }
     pNextFunc = f.pNextFunc;
-    
+
     return *this;
 }
 
@@ -50,16 +52,16 @@ Functor& Functor::operator =(const Functor& f) {
     Move Operator
 -------------------------------------*/
 Functor& Functor::operator =(Functor&& f) {
-    Scriptable::operator=(std::move(f));
-    
+    Scriptable::operator =(std::move(f));
+
     for (unsigned i = 0; i < f.get_num_args(); ++i) {
         pArgs[i] = f.pArgs[i];
         f.pArgs[i] = nullptr;
     }
-    
+
     pNextFunc = f.pNextFunc;
     f.pNextFunc = nullptr;
-    
+
     return *this;
 }
 
@@ -93,14 +95,14 @@ bool Functor::save(std::ostream& ostr) const {
     else {
         ostr << pNextFunc->get_script_subtype() << ' ' << (void*)pNextFunc;
     }
-    
+
     return ostr.good();
 }
 
 /*-----------------------------------------------------------------------------
     NULL Functor Template Type.
 -----------------------------------------------------------------------------*/
-FuncRef_t Functor_t<0, void>::func_impl = *[](Variable** const)->void {    
+FuncRef_t Functor_t<0, void>::func_impl = *[](Variable* * const)->void {
 };
 
 /*-------------------------------------
@@ -113,32 +115,33 @@ Functor_t<0, void>::~Functor_t() {
     Constructor
 -------------------------------------*/
 Functor_t<0, void>::Functor_t() :
-    Functor{nullptr, func_impl}
-{}
+    Functor {nullptr, func_impl}
+{
+}
 
 /*-------------------------------------
     Copy Constructor
 -------------------------------------*/
 Functor_t<0, void>::Functor_t(const Functor_t& f) :
-    Functor{nullptr, func_impl}
+    Functor {nullptr, func_impl}
 {
-    Functor::operator=(f);
+    Functor::operator =(f);
 }
 
 /*-------------------------------------
     Move Constructor
 -------------------------------------*/
 Functor_t<0, void>::Functor_t(Functor_t&& f) :
-    Functor{nullptr, func_impl}
+    Functor {nullptr, func_impl}
 {
-    Functor::operator=(std::move(f));
+    Functor::operator =(std::move(f));
 }
 
 /*-------------------------------------
     Copy Assignment
 -------------------------------------*/
 Functor_t<0, void>& Functor_t<0, void>::operator =(const Functor_t& f) {
-    Functor::operator=(f);
+    Functor::operator =(f);
     return *this;
 }
 
@@ -146,7 +149,7 @@ Functor_t<0, void>& Functor_t<0, void>::operator =(const Functor_t& f) {
     Move Assignment
 -------------------------------------*/
 Functor_t<0, void>& Functor_t<0, void>::operator =(Functor_t&& f) {
-    Functor::operator=(std::move(f));
+    Functor::operator =(std::move(f));
     return *this;
 }
 

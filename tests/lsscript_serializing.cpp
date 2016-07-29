@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   newsimpletest.cpp
  * Author: hammy
  *
@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "lightsky/script/Script.h"
+#include "ls/script/Script.h"
 
 /*-----------------------------------------------------------------------------
  * Test Script File
@@ -51,7 +51,7 @@ LS_SCRIPT_DEFINE_FUNC(Entry, void) {
  * Verify that the functors compile.
 -----------------------------------------------------------------------------*/
 void validateScripts(FunctorMap_t& funcMap) {
-    for (std::pair<lsFunctor* const, lsPointer<lsFunctor>>& funcIter : funcMap) {
+    for (std::pair<lsFunctor * const, lsPointer < lsFunctor>>&funcIter : funcMap) {
         LS_ASSERT(funcIter.second->compile());
     }
 }
@@ -65,46 +65,46 @@ void generateScripts(VariableMap_t& varMap, FunctorMap_t& funcMap) {
     lsPointer<lsFunctor> testFunc3 = create_functor(ls::script::ScriptHash_MulInts);
     lsPointer<lsFunctor> testFunc4 = create_functor(ls::script::ScriptHash_DivInts);
     lsPointer<lsFunctor> testEntry1 = create_functor(ls::script::ScriptHash_Entry);
-    
+
     lsPointer<lsVariable> testVar1 = create_variable(ls::script::ScriptHash_int);
     lsPointer<lsVariable> testVar2 = create_variable(ls::script::ScriptHash_int);
     lsPointer<lsVariable> testVar3 = create_variable(ls::script::ScriptHash_int);
     lsPointer<lsVariable> testVar4 = create_variable(ls::script::ScriptHash_string);
-    
+
     LS_SCRIPT_VAR_DATA(testVar1, int) = 1;
     LS_SCRIPT_VAR_DATA(testVar2, int) = 2;
     LS_SCRIPT_VAR_DATA(testVar3, int) = 0; // dummy value
     LS_SCRIPT_VAR_DATA(testVar4, string) = "Hello World!";
-    
+
     testEntry1->set_next_func(testFunc1);
-    
+
     testFunc1->set_arg(0, testVar1); // param 1 = 1
     testFunc1->set_arg(1, testVar2); // param 2 = 2
     testFunc1->set_arg(2, testVar3); // return value should equal 1+2=3
     testFunc1->set_next_func(testFunc2);
-    
+
     testFunc2->set_arg(0, testVar1);
     testFunc2->set_arg(1, testVar2);
     testFunc2->set_arg(2, testVar2); // should equal 1-2=-3
     testFunc2->set_next_func(testFunc3);
-    
+
     testFunc3->set_arg(0, testVar1);
     testFunc3->set_arg(1, testVar2);
     testFunc3->set_arg(2, testVar2); // should equal 1*2=2
     testFunc3->set_next_func(testFunc4);
-    
+
     testFunc4->set_arg(0, testVar1);
     testFunc4->set_arg(1, testVar2);
     testFunc4->set_arg(2, testVar2); // should equal 1/2=1 (int division)
     testFunc4->set_next_func(nullptr);
-    
+
     validateScripts(funcMap);
-    
+
     varMap[testVar1] = std::move(testVar1);
     varMap[testVar2] = std::move(testVar2);
     varMap[testVar3] = std::move(testVar3);
     varMap[testVar4] = std::move(testVar4);
-    
+
     funcMap[testFunc1] = std::move(testFunc1);
     funcMap[testFunc2] = std::move(testFunc2);
     funcMap[testFunc3] = std::move(testFunc3);
@@ -124,7 +124,7 @@ void saveScripts(const VariableMap_t& varImporter, const FunctorMap_t& funcImpor
 -----------------------------------------------------------------------------*/
 void loadScripts(VariableMap_t& varImporter, FunctorMap_t& funcImporter) {
     LS_ASSERT(ls::script::load_script_file(TEST_FILE, varImporter, funcImporter));
-    
+
     ls::script::remap_script_keys(varImporter, funcImporter);
 }
 
@@ -132,29 +132,29 @@ void loadScripts(VariableMap_t& varImporter, FunctorMap_t& funcImporter) {
  * Run the scripts
 -----------------------------------------------------------------------------*/
 bool runScripts(VariableMap_t& varMap, FunctorMap_t& funcMap) {
-    ScriptRunner runner{};
-    
+    ScriptRunner runner {};
+
     ls::script::Functor* pEntryFunc = nullptr;
-    
-    for (std::pair<lsFunctor* const, lsPointer<lsFunctor>>& funcIter : funcMap) {
+
+    for (std::pair<lsFunctor * const, lsPointer < lsFunctor>>&funcIter : funcMap) {
         lsPointer<lsFunctor>& func = funcIter.second;
-        
+
         if (func->get_script_subtype() == ls::script::ScriptHash_Entry) {
             pEntryFunc = func.get();
             break;
         }
     }
-    
+
     LS_ASSERT(pEntryFunc != nullptr);
-    
+
     runner.run(pEntryFunc);
-    
+
     std::cout << "Successfully ran the script tests." << std::endl;
     std::cout << "The final variable values are:" << std::endl;
-    
-    for (std::pair<lsVariable* const, lsPointer<lsVariable>>& varIter : varMap) {
+
+    for (std::pair<lsVariable * const, lsPointer < lsVariable>>&varIter : varMap) {
         lsPointer<lsVariable>& pVar = varIter.second;
-        
+
         if (pVar->get_script_subtype() == ls::script::ScriptHash_int) {
             std::cout << '\t' << LS_SCRIPT_VAR_DATA(pVar, int) << std::endl;
         }
@@ -162,7 +162,7 @@ bool runScripts(VariableMap_t& varMap, FunctorMap_t& funcMap) {
             std::cout << '\t' << LS_SCRIPT_VAR_DATA(pVar, string) << std::endl;
         }
     }
-    
+
     return true;
 }
 
@@ -170,21 +170,20 @@ bool runScripts(VariableMap_t& varMap, FunctorMap_t& funcMap) {
  * Main()
 -----------------------------------------------------------------------------*/
 int main() {
-    VariableMap_t varMap{};
-    FunctorMap_t funcMap{};
-    
+    VariableMap_t varMap {};
+    FunctorMap_t funcMap {};
+
     generateScripts(varMap, funcMap);
     validateScripts(funcMap);
     runScripts(varMap, funcMap);
     saveScripts(varMap, funcMap);
-    
+
     varMap.clear();
     funcMap.clear();
-    
+
     loadScripts(varMap, funcMap);
     validateScripts(funcMap);
     runScripts(varMap, funcMap);
 
     return 0;
 }
-
