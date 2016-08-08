@@ -942,7 +942,7 @@ public:
 #define LS_SCRIPT_DECLARE_FUNC(funcName, ...) \
     \
     enum : ls::script::hash_t { \
-        ScriptHash_##funcName = __LS_SCRIPT_H__ ASH_FUNC(LS_STRINGIFY(funcName)) \
+        ScriptHash_##funcName = LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(funcName)) \
     }; \
     \
     typedef ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__> ScriptFunc_##funcName; \

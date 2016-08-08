@@ -30,8 +30,9 @@ set(LS_SCRIPT_SOURCES
 # -------------------------------------
 # Library Setup
 # -------------------------------------
-# LS Scrip must be built as a shared library to support
+# LS Script must be built as a shared library to support
 # global variables across multiple libraries and processes.
+add_definitions(-DLS_BUILD_SHARED -DLS_SHARED)
 add_library("${OUTPUT_NAME}" SHARED "${LS_SCRIPT_SOURCES}")
 
 
@@ -53,6 +54,18 @@ target_link_libraries("${OUTPUT_NAME}" ${LS_SCRIPT_DEPS})
 # Library Setup
 # -------------------------------------
 add_dependencies("${OUTPUT_NAME}" lssetup lsutils lsmath)
+
+
+
+# -------------------------------------
+# Library Installation Setup
+# -------------------------------------
+install(TARGETS "${OUTPUT_NAME}"
+    RUNTIME DESTINATION bin
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+)
+install(DIRECTORY include/lightsky/script DESTINATION include/lightsky)
 
 
 

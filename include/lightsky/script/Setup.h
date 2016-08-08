@@ -19,6 +19,8 @@
 namespace ls {
 namespace script {
 
+
+
 /*-----------------------------------------------------------------------------
     Hashing Setup
 -----------------------------------------------------------------------------*/
@@ -30,7 +32,7 @@ using ls::utils::hash_t;
 /**
  * @brief Scripting function used internally for generating script IDs.
  */
-#define __LS_SCRIPT_H__ ASH_FUNC( str ) ls::utils::hash_fnv1( str )
+#define LS_SCRIPT_HASH_FUNC( str ) ls::utils::hash_fnv1( str )
 
 
 
@@ -42,12 +44,16 @@ enum class script_base_t : int {
     FUNCTOR
 };
 
+
+
 /*-----------------------------------------------------------------------------
  Forward Declarations
 -----------------------------------------------------------------------------*/
 class Scriptable;
 class Variable;
 class Functor;
+
+
 
 /*-----------------------------------------------------------------------------
  Dynamic Memory Types
@@ -65,8 +71,9 @@ template <class data_t> using Pointer_t = ls::utils::Pointer<data_t>;
 extern template class ls::utils::Pointer<ls::script::Variable>;
 extern template class ls::utils::Pointer<ls::script::Functor>;
 
-namespace script // continue script namespace
-{
+namespace script { // continue script namespace
+
+
 /*-----------------------------------------------------------------------------
     Containers
 -----------------------------------------------------------------------------*/

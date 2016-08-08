@@ -306,7 +306,7 @@ public:
 #define LS_SCRIPT_DECLARE_VAR( varName, varType ) \
         \
         enum : ls::script::hash_t { \
-            ScriptHash_##varName = __LS_SCRIPT_H__ ASH_FUNC(LS_STRINGIFY(varType)) \
+            ScriptHash_##varName = LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)) \
         }; \
         \
         LS_API extern const ls::script::VarFactory_t& ScriptFactory_##varName; \
