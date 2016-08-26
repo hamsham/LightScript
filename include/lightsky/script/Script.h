@@ -8,6 +8,8 @@
 #ifndef __LS_SCRIPT_SCRIPT_H__
 #define __LS_SCRIPT_SCRIPT_H__
 
+
+
 #include "lightsky/script/Setup.h"
 
 #include "lightsky/script/Scriptable.h"
@@ -22,5 +24,7 @@
 #include "lightsky/script/ScriptMath.h"
 
 #include "lightsky/script/ScriptSerializer.h"
+
+
 
 #endif  /* __LS_SCRIPT_SCRIPT_H__ */

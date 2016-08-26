@@ -28,7 +28,7 @@ bool initialRead(
     FunctorMap_t& funcList,
     std::istream& fin,
     const script_base_t baseType
-    ) {
+) {
     std::underlying_type<script_base_t>::type scriptBaseType; // int?
     hash_t scriptDataType = 0;
     void* pScript = nullptr;
@@ -73,7 +73,7 @@ bool dataRead(
     FunctorMap_t& funcList,
     std::istream& istr,
     const script_base_t baseType
-    ) {
+) {
     void* inAddr = nullptr;
     istr >> inAddr; // import the scriptable's address
     istr.get(); // discard extra whitespace inserted by the save() method
@@ -200,7 +200,7 @@ bool save_script_file(
     const std::string& filename,
     const VariableMap_t& inVarList,
     const FunctorMap_t& inFuncList
-    ) {
+) {
     std::ofstream fout {filename, std::ios_base::binary | std::ios_base::out};
 
     if (!fout.good()) {

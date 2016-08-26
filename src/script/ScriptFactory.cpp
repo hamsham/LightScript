@@ -34,9 +34,9 @@ namespace {
  * whichever type is requested
  *
  * They are retrieved from functions as static variables in order to ensure a
- * proper order-of-creation. The MUSTls::script:: be instantiated and initialized before
- * any other script variable used in client code to prevent crashing at
- * startup.
+ * proper order-of-creation. The ls::script::ScriptFactory MUST be instantiated
+ * and initialized before any other script variable used in client code to
+ * prevent crashing at startup.
  *
  * See the following for additional details on order-of-creation:
  *      http://stackoverflow.com/questions/25857340/access-violation-inserting-element-into-global-map?lq=1

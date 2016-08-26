@@ -2,10 +2,11 @@
 namespace ls {
 namespace script {
 
+
+
 /*-----------------------------------------------------------------------------
     Functor Base Class
 -----------------------------------------------------------------------------*/
-
 /*-------------------------------------
     Retrieve the next function to run
 -------------------------------------*/
@@ -73,8 +74,7 @@ bool Functor::check_single_arg(const Functor& f, unsigned i, arg_t* t) {
 
     if (dynamic_cast<const arg_t*> (f.get_arg(i)) == nullptr) {
         std::cerr
-            << "Error: TypeID of function argument does not match the type " \
-        " declared in its parent function."
+            << "Error: TypeID of function argument does not match the type declared in its parent function."
             << "\n\tFunction:    " << (void*) &f << '-' << f.get_script_subtype()
             << "\n\tInput type:  " << typeid (f.get_arg(i)).name()
             << "\n\tActual type: " << typeid (t).name()
@@ -112,7 +112,6 @@ bool Functor::check_args(const Functor& f, unsigned i, arg_t* t) {
 /*-----------------------------------------------------------------------------
     Functor Derived Template Types
 -----------------------------------------------------------------------------*/
-
 /*-------------------------------------
     Destructor
 -------------------------------------*/
@@ -126,8 +125,7 @@ Functor_t<hashId, args_t...>::~Functor_t() {
 template <hash_t hashId, typename... args_t>
 Functor_t<hashId, args_t...>::Functor_t() :
     Functor{parameters, func_impl}
-{
-}
+{}
 
 /*-------------------------------------
     Copy Constructor
@@ -223,7 +221,6 @@ bool Functor_t<hashId, args_t...>::compile() {
 /*-----------------------------------------------------------------------------
     Functor Derived Template Types (Void Functor Specialization).
 -----------------------------------------------------------------------------*/
-
 /*-------------------------------------
     Destructor
 -------------------------------------*/
@@ -237,8 +234,7 @@ Functor_t<hashId, void>::~Functor_t() {
 template <hash_t hashId>
 Functor_t<hashId, void>::Functor_t() :
     Functor{nullptr, func_impl}
-{
-}
+{}
 
 /*-------------------------------------
     Copy Constructor
@@ -317,6 +313,8 @@ template <hash_t hashId> inline
 bool Functor_t<hashId, void>::compile() {
     return true;
 }
+
+
 
 } // end script namespace
 } // end ls namespace

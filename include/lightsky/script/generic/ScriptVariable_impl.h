@@ -2,10 +2,11 @@
 namespace ls {
 namespace script {
 
+
+
 /*-----------------------------------------------------------------------------
     Variable Base Type
 -----------------------------------------------------------------------------*/
-
 /*-------------------------------------
     Variable Object Copy Assignment
 -------------------------------------*/
@@ -35,7 +36,6 @@ script_base_t Variable::get_script_type() const {
 /*-----------------------------------------------------------------------------
     Extended Variable Template Type
 -----------------------------------------------------------------------------*/
-
 /*-------------------------------------
     Variable Object Type Destructor
 -------------------------------------*/
@@ -49,9 +49,8 @@ Variable_t<hashId, type>::~Variable_t() {
 template <hash_t hashId, typename type>
 Variable_t<hashId, type>::Variable_t() :
     Variable{},
-data{}
-{
-}
+    data{}
+{}
 
 /*-------------------------------------
     Variable Object Type Copy Constructor
@@ -59,9 +58,8 @@ data{}
 template <hash_t hashId, typename type>
 Variable_t<hashId, type>::Variable_t(const Variable_t& v) :
     Variable{v},
-data{v.data}
-{
-}
+    data{v.data}
+{}
 
 /*-------------------------------------
     Variable Object Type Move Constructor
@@ -69,9 +67,8 @@ data{v.data}
 template <hash_t hashId, typename type>
 Variable_t<hashId, type>::Variable_t(Variable_t&& v) :
     Variable{std::move(v)},
-data{std::move(v.data)}
-{
-}
+    data{std::move(v.data)}
+{}
 
 /*-------------------------------------
     Variable Object Type Copy Assignment
@@ -118,6 +115,8 @@ template <hash_t hashId, typename type> inline
 hash_t Variable_t<hashId, type>::get_script_subtype() const {
     return hashId;
 }
+
+
 
 } // end script namespace
 } // end ls namespace

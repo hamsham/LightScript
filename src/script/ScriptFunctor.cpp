@@ -27,12 +27,11 @@ Functor::~Functor() {
     Constructor
 -------------------------------------*/
 Functor::Functor(Variable* * const pArguments, FuncRef_t pFunc) :
-    Scriptable {},
-pNextFunc {nullptr},
-pFunction {pFunc},
-pArgs {pArguments}
-{
-}
+    Scriptable{},
+    pNextFunc{nullptr},
+    pFunction{pFunc},
+    pArgs{pArguments}
+{}
 
 /*-------------------------------------
     Copy Operator
@@ -116,8 +115,7 @@ Functor_t<0, void>::~Functor_t() {
 -------------------------------------*/
 Functor_t<0, void>::Functor_t() :
     Functor {nullptr, func_impl}
-{
-}
+{}
 
 /*-------------------------------------
     Copy Constructor

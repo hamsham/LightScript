@@ -39,7 +39,7 @@ LS_API bool LS_CALL load_script_file(
     const std::string& filename,
     VariableMap_t& outVarMap,
     FunctorMap_t& outFuncMap
-    );
+);
 
 /**
  * @brief Load a file using a c-style wide string.
@@ -107,7 +107,7 @@ LS_API bool LS_CALL save_script_file(
     const std::string& filename,
     const VariableMap_t& inVarList,
     const FunctorMap_t& inFuncList
-    );
+);
 
 /**
  * @brief Save a file using a c-style string of wide (UTF-8) characters
@@ -133,7 +133,7 @@ inline LS_API bool save_script_file(
     const std::wstring& filename,
     const VariableMap_t& inVarList,
     const FunctorMap_t& inFuncList
-    ) {
+) {
     return save_script_file(utils::wide_to_mb_string(filename), inVarList, inFuncList);
 }
 
