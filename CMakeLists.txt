@@ -13,16 +13,16 @@ set(OUTPUT_NAME lsscript)
 include_directories("include")
 
 set(LS_SCRIPT_SOURCES
-    "src/script/ScriptBasicVar.cpp"
-    "src/script/ScriptFactory.cpp"
-    "src/script/ScriptFunctor.cpp"
-    "src/script/ScriptIO.cpp"
-    "src/script/ScriptMath.cpp"
-    "src/script/ScriptRunner.cpp"
-    "src/script/ScriptSerializer.cpp"
-    "src/script/ScriptVariable.cpp"
-    "src/script/Scriptable.cpp"
-    "src/script/Setup.cpp"
+    src/ScriptBasicVar.cpp
+    src/ScriptFactory.cpp
+    src/ScriptFunctor.cpp
+    src/ScriptIO.cpp
+    src/ScriptMath.cpp
+    src/ScriptRunner.cpp
+    src/ScriptSerializer.cpp
+    src/ScriptVariable.cpp
+    src/Scriptable.cpp
+    src/Setup.cpp
 )
 
 
