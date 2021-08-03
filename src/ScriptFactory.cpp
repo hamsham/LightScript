@@ -123,7 +123,9 @@ const FuncFactory_t& script::register_func_factory(hash_t factoryId, const FuncF
 -------------------------------------*/
 Pointer_t<script::Variable> script::create_variable(hash_t factoryId)
 {
-    for (const std::pair<hash_t, VarFactory_t>& iter : _get_var_factory())
+    const std::unordered_map<hash_t, VarFactory_t>& varFactory = _get_var_factory();
+
+    for (const std::unordered_map<hash_t, VarFactory_t>::value_type& iter : varFactory)
     {
         if (iter.first == factoryId)
         {
@@ -151,7 +153,9 @@ void script::destroy_variable(Pointer_t<Variable>& pVariable)
 -------------------------------------*/
 Pointer_t<script::Functor> script::create_functor(hash_t factoryId)
 {
-    for (const std::pair<hash_t, FuncFactory_t>& iter : _get_func_factory())
+    const std::unordered_map<hash_t, FuncFactory_t>& funcFactory = _get_func_factory();
+
+    for (const std::unordered_map<hash_t, FuncFactory_t>::value_type& iter : funcFactory)
     {
         if (iter.first == factoryId)
         {

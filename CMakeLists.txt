@@ -63,6 +63,19 @@ add_library(${OUTPUT_NAME} SHARED ${LS_SCRIPT_HEADERS} ${LS_SCRIPT_SOURCES})
 # global variables across multiple libraries and processes.
 target_compile_definitions(${OUTPUT_NAME} PRIVATE -DLS_BUILD_SHARED -DLS_SHARED)
 
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(${OUTPUT_NAME}
+        PRIVATE
+            -Wall
+            -Werror
+            -Wextra
+            -pedantic
+            -pedantic-errors
+            -Wno-implicit-fallthrough
+            -Wno-pessimizing-move
+    )
+endif()
+
 target_include_directories(${OUTPUT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
 
 

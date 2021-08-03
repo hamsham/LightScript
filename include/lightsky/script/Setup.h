@@ -54,7 +54,7 @@
  * Calling Conventions
  */
 #if !(defined (_WIN64) || defined (__amd64__) || defined (_M_X64)) && (defined (__i386__) || defined (_M_IX86_) || defined (__THW_INTEL__))
-    #if defined(_WIN32)
+    #if defined(_MSC_VER)
         #define LS_CALL __stdcall
     #elif defined __GNUC__
         #define LS_CALL __attribute__((stdcall))
@@ -120,10 +120,10 @@ constexpr hash_t hash_fnv1(const char* str) noexcept
     Data Type information
 -----------------------------------------------------------------------------*/
 enum class ScriptBaseType : int
-    {
+{
     VARIABLE,
     FUNCTOR
-    };
+};
 
 
 
@@ -145,11 +145,17 @@ class Functor;
 //template <class data_t> using Pointer_t = ls::utils::Pointer<data_t>;
 template <class data_t> using Pointer_t = std::unique_ptr<data_t, std::default_delete<data_t>>;
 
-/*
- * Create an extern template for the dynamic pointer type.
-*/
+
+
 } // end script namespace
 } // end ls namespace
+
+
+
+/*
+ * Create an extern template for the dynamic pointer type... If we're not on MSVC
+ */
+#if !defined(_MSC_VER)
 
 //LS_EXTERN template class LS_API ls::utils::Pointer<ls::script::Variable>;
 //LS_EXTERN template class LS_API ls::utils::Pointer<ls::script::Functor>;
@@ -157,9 +163,15 @@ template <class data_t> using Pointer_t = std::unique_ptr<data_t, std::default_d
 LS_EXTERN template class LS_API std::unique_ptr<ls::script::Variable, std::default_delete<ls::script::Variable>>;
 LS_EXTERN template class LS_API std::unique_ptr<ls::script::Functor, std::default_delete<ls::script::Functor>>;
 
+#endif
+
+
+
 // continue script namespace
-namespace ls {
-namespace script {
+namespace ls
+{
+namespace script
+{
 
 
 
