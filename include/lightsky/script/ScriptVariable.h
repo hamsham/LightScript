@@ -26,7 +26,7 @@ namespace script
  * 
  * The Variable base object is used as an interface for scriptable data types.
 -----------------------------------------------------------------------------*/
-class LS_API Variable : public Scriptable
+class Variable : public Scriptable
 {
   public:
     /**
@@ -116,7 +116,7 @@ class LS_API Variable : public Scriptable
     Extended Variable Template Type
 -----------------------------------------------------------------------------*/
 template <hash_t hashId, typename type>
-class LS_API Variable_t final : public Variable
+class Variable_t final : public Variable
 {
   public:
 
@@ -337,16 +337,16 @@ class LS_API Variable_t final : public Variable
  */
 #ifndef LS_SCRIPT_DECLARE_VAR
     #define LS_SCRIPT_DECLARE_VAR(varName, varType) \
-            \
-            enum : ls::script::hash_t { \
-                ScriptHash_##varName = LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)) \
-            }; \
-            \
-            extern const ls::script::VarFactory_t& ScriptFactory_##varName; \
-            \
-            typedef ls::script::Variable_t<ScriptHash_##varName, varType> ScriptVar_##varName; \
-            \
-            extern template class ls::script::Variable_t<ScriptHash_##varName, varType>
+        \
+        enum : ls::script::hash_t { \
+            ScriptHash_##varName = LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)) \
+        }; \
+        \
+        extern const ls::script::VarFactory_t& ScriptFactory_##varName; \
+        \
+        typedef ls::script::Variable_t<ScriptHash_##varName, varType> ScriptVar_##varName; \
+        \
+        extern template class ls::script::Variable_t<ScriptHash_##varName, varType>
 #endif /* LS_SCRIPT_DECLARE_VAR */
 
 /**
@@ -370,14 +370,14 @@ class LS_API Variable_t final : public Variable
  */
 #ifndef LS_SCRIPT_DEFINE_VAR
     #define LS_SCRIPT_DEFINE_VAR(varName, varType) \
-            \
-            template class LS_API ls::script::Variable_t<ScriptHash_##varName, varType>; \
-            \
-            LS_API const ls::script::VarFactory_t& ScriptFactory_##varName = ls::script::register_var_factory( \
-                ScriptHash_##varName, []()->ls::script::Pointer_t<ls::script::Variable> { \
-                    return ls::script::Pointer_t<ls::script::Variable>{new ScriptVar_##varName{}}; \
-                } \
-            )
+        \
+        template class LS_API ls::script::Variable_t<ScriptHash_##varName, varType>; \
+        \
+        LS_API const ls::script::VarFactory_t& ScriptFactory_##varName = ls::script::register_var_factory( \
+            ScriptHash_##varName, []()->ls::script::Pointer_t<ls::script::Variable> { \
+                return ls::script::Pointer_t<ls::script::Variable>{new ScriptVar_##varName{}}; \
+            } \
+        )
 #endif /* LS_SCRIPT_DEFINE_VAR */
 
 /**

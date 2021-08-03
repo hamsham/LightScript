@@ -42,7 +42,7 @@ typedef void (& FuncRef_t)(Variable** const);
     function. It contains methods to store and load its parameters from a
     script file, self-compile, and change its arguments at runtime.
 -----------------------------------------------------------------------------*/
-class LS_API Functor : public Scriptable {
+class Functor : public Scriptable {
   protected:
     /**
      *  @brief A verification method for single arguments.
@@ -431,7 +431,7 @@ class LS_API Functor : public Scriptable {
     base class.
 -----------------------------------------------------------------------------*/
 template <hash_t hashId, typename... args_t>
-class LS_API Functor_t final : public Functor
+class Functor_t final : public Functor
 {
   private:
 
@@ -634,7 +634,7 @@ class LS_API Functor_t final : public Functor
     @brief Functor Template Type with Void Parameters
 -----------------------------------------------------------------------------*/
 template <hash_t hashId>
-class LS_API Functor_t<hashId, void> final : public Functor
+class Functor_t<hashId, void> final : public Functor
 {
   private:
 
@@ -830,7 +830,7 @@ class LS_API Functor_t<hashId, void> final : public Functor
     @brief Null Functor Template Type
 -----------------------------------------------------------------------------*/
 template <>
-class LS_API Functor_t<0, void> final : public Functor
+class Functor_t<0, void> final : public Functor
 {
   private:
 
