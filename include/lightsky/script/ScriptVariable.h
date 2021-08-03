@@ -346,7 +346,7 @@ class LS_API Variable_t final : public Variable
             \
             typedef ls::script::Variable_t<ScriptHash_##varName, varType> ScriptVar_##varName; \
             \
-            LS_EXTERN template class LS_API ls::script::Variable_t<ScriptHash_##varName, varType>
+            extern template class ls::script::Variable_t<ScriptHash_##varName, varType>
 #endif /* LS_SCRIPT_DECLARE_VAR */
 
 /**
@@ -371,7 +371,7 @@ class LS_API Variable_t final : public Variable
 #ifndef LS_SCRIPT_DEFINE_VAR
     #define LS_SCRIPT_DEFINE_VAR(varName, varType) \
             \
-            template class ls::script::Variable_t<ScriptHash_##varName, varType>; \
+            template class LS_API ls::script::Variable_t<ScriptHash_##varName, varType>; \
             \
             LS_API const ls::script::VarFactory_t& ScriptFactory_##varName = ls::script::register_var_factory( \
                 ScriptHash_##varName, []()->ls::script::Pointer_t<ls::script::Variable> { \

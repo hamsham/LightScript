@@ -1069,9 +1069,9 @@ class LS_API Functor_t<0, void> final : public Functor
     extern const ls::script::FuncFactory_t& ScriptFactory_##funcName; \
     \
     template <> \
-    LS_API ls::script::FuncRef_t ScriptFunc_##funcName::func_impl; \
+    ls::script::FuncRef_t ScriptFunc_##funcName::func_impl; \
     \
-    LS_EXTERN template class LS_API ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>
+    extern template class ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>
 
 /**
  *  @brief Function Definition for source files.
@@ -1104,16 +1104,16 @@ class LS_API Functor_t<0, void> final : public Functor
  *
  */
 #define LS_SCRIPT_DEFINE_FUNC(funcName, ...) \
-    template class ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>; \
+    template class LS_API ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>; \
     \
-    LS_API const ls::script::FuncFactory_t& ScriptFactory_##funcName = ls::script::register_func_factory( \
+    LS_API const ls::script::FuncFactory_t& ScriptFactory_##funcName = register_func_factory( \
         ScriptHash_##funcName, []()->ls::script::Pointer_t<Functor> { \
             return ls::script::Pointer_t<Functor>{new ScriptFunc_##funcName{}}; \
         } \
     ); \
     \
     template <> \
-    ls::script::FuncRef_t ScriptFunc_##funcName::func_impl = *[](ls::script::Variable** const pArgs)->void
+    LS_API ls::script::FuncRef_t ScriptFunc_##funcName::func_impl = *[](ls::script::Variable** const pArgs)->void
 
 /**
  *  @brief Function Argument Accessibility
