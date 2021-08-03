@@ -342,7 +342,7 @@ class LS_API Variable_t final : public Variable
                 ScriptHash_##varName = LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)) \
             }; \
             \
-            LS_API LS_EXTERN const ls::script::VarFactory_t& ScriptFactory_##varName; \
+            LS_EXTERN const ls::script::VarFactory_t& ScriptFactory_##varName; \
             \
             typedef ls::script::Variable_t<ScriptHash_##varName, varType> ScriptVar_##varName; \
             \
@@ -373,7 +373,7 @@ class LS_API Variable_t final : public Variable
             \
             template class ls::script::Variable_t<ScriptHash_##varName, varType>; \
             \
-            const VarFactory_t& ScriptFactory_##varName = ls::script::register_var_factory( \
+            LS_API const ls::script::VarFactory_t& ScriptFactory_##varName = ls::script::register_var_factory( \
                 ScriptHash_##varName, []()->ls::script::Pointer_t<ls::script::Variable> { \
                     return ls::script::Pointer_t<ls::script::Variable>{new ScriptVar_##varName{}}; \
                 } \

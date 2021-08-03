@@ -1066,7 +1066,7 @@ class LS_API Functor_t<0, void> final : public Functor
     \
     typedef ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__> ScriptFunc_##funcName; \
     \
-    LS_API LS_EXTERN const ls::script::FuncFactory_t& ScriptFactory_##funcName; \
+    LS_EXTERN const ls::script::FuncFactory_t& ScriptFactory_##funcName; \
     \
     template <> \
     LS_API ls::script::FuncRef_t ScriptFunc_##funcName::func_impl; \
@@ -1106,7 +1106,7 @@ class LS_API Functor_t<0, void> final : public Functor
 #define LS_SCRIPT_DEFINE_FUNC(funcName, ...) \
     template class ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>; \
     \
-    const ls::script::FuncFactory_t& ScriptFactory_##funcName = register_func_factory( \
+    LS_API const ls::script::FuncFactory_t& ScriptFactory_##funcName = ls::script::register_func_factory( \
         ScriptHash_##funcName, []()->ls::script::Pointer_t<Functor> { \
             return ls::script::Pointer_t<Functor>{new ScriptFunc_##funcName{}}; \
         } \
