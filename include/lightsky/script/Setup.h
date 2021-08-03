@@ -28,8 +28,10 @@
 #if defined(_MSC_VER)
     #if defined(LS_BUILD_SHARED)
         #define LS_API __declspec(dllexport)
+        #define LS_EXTERN
     #else
         #define LS_API __declspec(dllimport)
+        #define LS_EXTERN extern
     #endif
 
 #elif defined(__GNUC__)
@@ -39,8 +41,11 @@
         #define LS_API
     #endif
 
+    #define LS_EXTERN extern
+
 #else
     #define LS_API
+    #define LS_EXTERN extern
 #endif
 
 
@@ -146,11 +151,11 @@ template <class data_t> using Pointer_t = std::unique_ptr<data_t, std::default_d
 } // end script namespace
 } // end ls namespace
 
-//extern template class ls::utils::Pointer<ls::script::Variable>;
-//extern template class ls::utils::Pointer<ls::script::Functor>;
+//LS_EXTERN template class LS_API ls::utils::Pointer<ls::script::Variable>;
+//LS_EXTERN template class LS_API ls::utils::Pointer<ls::script::Functor>;
 
-extern template class std::unique_ptr<ls::script::Variable, std::default_delete<ls::script::Variable>>;
-extern template class std::unique_ptr<ls::script::Functor, std::default_delete<ls::script::Functor>>;
+LS_EXTERN template class LS_API std::unique_ptr<ls::script::Variable, std::default_delete<ls::script::Variable>>;
+LS_EXTERN template class LS_API std::unique_ptr<ls::script::Functor, std::default_delete<ls::script::Functor>>;
 
 // continue script namespace
 namespace ls {
