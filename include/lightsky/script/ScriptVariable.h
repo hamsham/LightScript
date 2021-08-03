@@ -26,7 +26,7 @@ namespace script
  * 
  * The Variable base object is used as an interface for scriptable data types.
 -----------------------------------------------------------------------------*/
-class Variable : public Scriptable
+class LS_API Variable : public Scriptable
 {
   public:
     /**
@@ -116,7 +116,7 @@ class Variable : public Scriptable
     Extended Variable Template Type
 -----------------------------------------------------------------------------*/
 template <hash_t hashId, typename type>
-class Variable_t final : public Variable
+class LS_API Variable_t final : public Variable
 {
   public:
 
@@ -407,9 +407,9 @@ class Variable_t final : public Variable
         \
         template <> \
         LS_API bool ls::script::Variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>::load( \
-            std::istream&       istr, \
-            VariableMap_t&     varImporter, \
-            FunctorMap_t&    funcImporter \
+            std::istream&  istr, \
+            VariableMap_t& varImporter, \
+            FunctorMap_t&  funcImporter \
         )
 #endif /* LS_SCRIPT_OVERRIDE_VAR_LOAD */
 
