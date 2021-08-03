@@ -1,46 +1,70 @@
 
 #include "lightsky/script/Scriptable.h"
 
-namespace ls {
-namespace script {
+
+
+namespace ls
+{
+namespace script
+{
+
+
 
 /*-------------------------------------
     Destructor
 -------------------------------------*/
-Scriptable::~Scriptable() {
+Scriptable::~Scriptable()
+{
 }
+
+
 
 /*-------------------------------------
     Constructor
 -------------------------------------*/
-Scriptable::Scriptable() {
+Scriptable::Scriptable()
+{
 }
+
+
 
 /*-------------------------------------
     Copy Constructor
 -------------------------------------*/
-Scriptable::Scriptable(const Scriptable&) {
+Scriptable::Scriptable(const Scriptable&)
+{
 }
+
+
 
 /*-------------------------------------
     Move Constructor
 -------------------------------------*/
-Scriptable::Scriptable(Scriptable&&) {
+Scriptable::Scriptable(Scriptable&&)
+{
 }
+
+
 
 /*-------------------------------------
     Copy Operator
 -------------------------------------*/
-Scriptable& Scriptable::operator =(const Scriptable&) {
+Scriptable& Scriptable::operator=(const Scriptable&)
+{
     return *this;
 }
+
+
 
 /*-------------------------------------
     Move Operator
 -------------------------------------*/
-Scriptable& Scriptable::operator =(Scriptable&&) {
+Scriptable& Scriptable::operator=(Scriptable&&)
+{
     return *this;
 }
+
+
 
 } // end script namespace
 } // end ls namespace

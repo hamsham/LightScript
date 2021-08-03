@@ -10,123 +10,17 @@
 #include "lightsky/script/ScriptFactory.h"
 #include "lightsky/script/ScriptMath.h"
 
+
+
 /*-----------------------------------------------------------------------------
     Built-In Math Types
 -----------------------------------------------------------------------------*/
-namespace ls {
-namespace script {
+namespace ls
+{
+namespace script
+{
 
-/*-----------------------------------------------------------------------------
- Vector Types
------------------------------------------------------------------------------*/
-/*-------------------------------------
- * Ugly Vector and quaternion saving
--------------------------------------*/
-#define LS_SCRIPT_SAVE_VECTOR( varType ) LS_SCRIPT_OVERRIDE_VAR_SAVE( varType ) { \
-    for (unsigned i = 0; i < LS_ARRAY_SIZE(data); ++i) { \
-        if (i) { \
-            ostr << ' '; \
-        } \
-        ostr << data[i]; \
-    } \
-    return ostr.good(); \
-}
 
-/*-------------------------------------
- * Ugly Vector, matrix, quaternion loading
--------------------------------------*/
-#define LS_SCRIPT_LOAD_VECTOR( varType ) LS_SCRIPT_OVERRIDE_VAR_LOAD( varType ) { \
-    (void)varImporter; \
-    (void)funcImporter; \
-    for (unsigned i = 0; i < LS_ARRAY_SIZE(data); ++i) { \
-        istr >> data[i]; \
-    } \
-    return istr.good() || istr.eof(); \
-}
-
-/*-------------------------------------
- * Ugly matrix saving
--------------------------------------*/
-#define LS_SCRIPT_SAVE_MATRIX( varType, x, y ) LS_SCRIPT_OVERRIDE_VAR_SAVE( varType ) { \
-    for (unsigned i = 0; i < x; ++i) { \
-        for (unsigned j = 0; j < y; ++j) { \
-            if (i) { \
-                ostr << ' '; \
-            } \
-            ostr << data[i][j]; \
-        } \
-    } \
-    return ostr.good(); \
-}
-
-/*-------------------------------------
- * Ugly Vector, matrix, quaternion loading
--------------------------------------*/
-#define LS_SCRIPT_LOAD_MATRIX( varType, x, y ) LS_SCRIPT_OVERRIDE_VAR_LOAD( varType ) { \
-    (void)varImporter; \
-    (void)funcImporter; \
-    for (unsigned i = 0; i < x; ++i) { \
-        for (unsigned j = 0; j < y; ++j) { \
-            istr >> data[i][j]; \
-        } \
-    } \
-    return istr.good() || istr.eof(); \
-}
-
-/*-------------------------------------
- * 2D Vector
--------------------------------------*/
-LS_SCRIPT_DEFINE_VAR(vec2, math::vec2);
-LS_SCRIPT_SAVE_VECTOR(math::vec2)
-LS_SCRIPT_LOAD_VECTOR(math::vec2)
-
-/*-------------------------------------
- * 3D Vector
--------------------------------------*/
-LS_SCRIPT_DEFINE_VAR(vec3, math::vec3);
-LS_SCRIPT_SAVE_VECTOR(math::vec3)
-LS_SCRIPT_LOAD_VECTOR(math::vec3)
-
-/*-------------------------------------
- * 4D Vector
--------------------------------------*/
-LS_SCRIPT_DEFINE_VAR(vec4, math::vec4);
-LS_SCRIPT_SAVE_VECTOR(math::vec4)
-LS_SCRIPT_LOAD_VECTOR(math::vec4)
-
-/*-------------------------------------
- * 2D Matrix
--------------------------------------*/
-LS_SCRIPT_DEFINE_VAR(mat2, math::mat2);
-LS_SCRIPT_SAVE_MATRIX(math::mat2, 2, 2)
-LS_SCRIPT_LOAD_MATRIX(math::mat2, 2, 2)
-
-/*-------------------------------------
- * 3D Matrix
--------------------------------------*/
-LS_SCRIPT_DEFINE_VAR(mat3, math::mat3);
-LS_SCRIPT_SAVE_MATRIX(math::mat3, 3, 3)
-LS_SCRIPT_LOAD_MATRIX(math::mat3, 3, 3)
-
-/*-------------------------------------
- * 4D Matrix
--------------------------------------*/
-LS_SCRIPT_DEFINE_VAR(mat4, math::mat4);
-LS_SCRIPT_SAVE_MATRIX(math::mat4, 4, 4)
-LS_SCRIPT_LOAD_MATRIX(math::mat4, 4, 4)
-
-/*-------------------------------------
- * Quaternion
--------------------------------------*/
-LS_SCRIPT_DEFINE_VAR(quat, math::quat);
-
-LS_SCRIPT_SAVE_VECTOR(math::quat)
-LS_SCRIPT_LOAD_VECTOR(math::quat)
-
-#undef LS_SCRIPT_SAVE_VECTOR
-#undef LS_SCRIPT_LOAD_VECTOR
-#undef LS_SCRIPT_SAVE_MATRIX
-#undef LS_SCRIPT_LOAD_MATRIX
 
 /*-----------------------------------------------------------------------------
  Integers
@@ -134,35 +28,40 @@ LS_SCRIPT_LOAD_VECTOR(math::quat)
 /*
  * Addition
  */
-LS_SCRIPT_DEFINE_FUNC(AddInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
-    LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) +LS_SCRIPT_PARAM(2, int);
+LS_SCRIPT_DEFINE_FUNC(AddInts, ScriptVar_int, ScriptVar_int, ScriptVar_int)
+{
+    LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) + LS_SCRIPT_PARAM(2, int);
 };
 
 /*
  * Subtraction
  */
-LS_SCRIPT_DEFINE_FUNC(SubInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
-    LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) -LS_SCRIPT_PARAM(2, int);
+LS_SCRIPT_DEFINE_FUNC(SubInts, ScriptVar_int, ScriptVar_int, ScriptVar_int)
+{
+    LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) - LS_SCRIPT_PARAM(2, int);
 };
 
 /*
  * Multiplication
  */
-LS_SCRIPT_DEFINE_FUNC(MulInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
+LS_SCRIPT_DEFINE_FUNC(MulInts, ScriptVar_int, ScriptVar_int, ScriptVar_int)
+{
     LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) * LS_SCRIPT_PARAM(2, int);
 };
 
 /*
  * Division
  */
-LS_SCRIPT_DEFINE_FUNC(DivInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
+LS_SCRIPT_DEFINE_FUNC(DivInts, ScriptVar_int, ScriptVar_int, ScriptVar_int)
+{
     LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) / LS_SCRIPT_PARAM(2, int);
 };
 
 /*
  * Modulus
  */
-LS_SCRIPT_DEFINE_FUNC(ModInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
+LS_SCRIPT_DEFINE_FUNC(ModInts, ScriptVar_int, ScriptVar_int, ScriptVar_int)
+{
     LS_SCRIPT_PARAM(0, int) = LS_SCRIPT_PARAM(1, int) % LS_SCRIPT_PARAM(2, int);
 };
 
@@ -173,37 +72,44 @@ LS_SCRIPT_DEFINE_FUNC(ModInts, ScriptVar_int, ScriptVar_int, ScriptVar_int) {
 /*
  * Addition
  */
-LS_SCRIPT_DEFINE_FUNC(AddFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
-    LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) +LS_SCRIPT_PARAM(2, float);
+LS_SCRIPT_DEFINE_FUNC(AddFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float)
+{
+    LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) + LS_SCRIPT_PARAM(2, float);
 };
 
 /*
  * Subtraction
  */
-LS_SCRIPT_DEFINE_FUNC(SubFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
-    LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) -LS_SCRIPT_PARAM(2, float);
+LS_SCRIPT_DEFINE_FUNC(SubFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float)
+{
+    LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) - LS_SCRIPT_PARAM(2, float);
 };
 
 /*
  * Multiplication
  */
-LS_SCRIPT_DEFINE_FUNC(MulFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
+LS_SCRIPT_DEFINE_FUNC(MulFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float)
+{
     LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) * LS_SCRIPT_PARAM(2, float);
 };
 
 /*
  * Division
  */
-LS_SCRIPT_DEFINE_FUNC(DivFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
+LS_SCRIPT_DEFINE_FUNC(DivFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float)
+{
     LS_SCRIPT_PARAM(0, float) = LS_SCRIPT_PARAM(1, float) / LS_SCRIPT_PARAM(2, float);
 };
 
 /*
  * Modulus
  */
-LS_SCRIPT_DEFINE_FUNC(ModFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float) {
-    LS_SCRIPT_PARAM(0, float) = math::fmod(LS_SCRIPT_PARAM(1, float), LS_SCRIPT_PARAM(2, float));
+LS_SCRIPT_DEFINE_FUNC(ModFloats, ScriptVar_float, ScriptVar_float, ScriptVar_float)
+{
+    LS_SCRIPT_PARAM(0, float) = std::fmod(LS_SCRIPT_PARAM(1, float), LS_SCRIPT_PARAM(2, float));
 };
+
+
 
 } // end script namespace
 } // end ls namespace

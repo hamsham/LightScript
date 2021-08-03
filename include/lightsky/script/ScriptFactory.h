@@ -12,8 +12,12 @@
 
 #include "lightsky/script/Setup.h"
 
-namespace ls {
-namespace script {
+
+
+namespace ls
+{
+namespace script
+{
 
 /*-----------------------------------------------------------------------------
  * Script Factory Functions
@@ -24,7 +28,9 @@ namespace script {
  * This type represents a pointer to a function which instantiates a particular
  * variable type.
  */
-typedef Pointer_t<Variable> (*VarFactory_t)();
+typedef Pointer_t<Variable>(*VarFactory_t)();
+
+
 
 /**
  * @brief funcFactory_t
@@ -32,7 +38,9 @@ typedef Pointer_t<Variable> (*VarFactory_t)();
  * This type represents a pointer to a function which instantiates a particular
  * function type.
  */
-typedef Pointer_t<Functor> (*FuncFactory_t)();
+typedef Pointer_t<Functor>(*FuncFactory_t)();
+
+
 
 /*-----------------------------------------------------------------------------
  * Script Factory Maps
@@ -54,6 +62,8 @@ typedef std::unordered_map<hash_t, VarFactory_t> VarFactoryMap_t;
  * This type maps script functors to their factory functions.
  */
 typedef std::unordered_map<hash_t, FuncFactory_t> FuncFactoryMap_t;
+
+
 
 /*-----------------------------------------------------------------------------
  * Factory Method Registration
@@ -79,6 +89,8 @@ typedef std::unordered_map<hash_t, FuncFactory_t> FuncFactoryMap_t;
  */
 LS_API const VarFactory_t& LS_CALL register_var_factory(hash_t factoryId, const VarFactory_t& pFactory);
 
+
+
 /**
  * @brief Register a factory function for instantiating a functor type.
  *
@@ -100,6 +112,8 @@ LS_API const VarFactory_t& LS_CALL register_var_factory(hash_t factoryId, const 
  */
 LS_API const FuncFactory_t& LS_CALL register_func_factory(hash_t factoryId, const FuncFactory_t& pFactory);
 
+
+
 /*-----------------------------------------------------------------------------
  * Script Object Instantiation/Deletion
 -----------------------------------------------------------------------------*/
@@ -116,6 +130,8 @@ LS_API const FuncFactory_t& LS_CALL register_func_factory(hash_t factoryId, cons
  */
 LS_API Pointer_t<Variable> LS_CALL create_variable(hash_t factoryId);
 
+
+
 /**
  * @brief Destroy/free an instance of a script variable object.
  *
@@ -124,6 +140,8 @@ LS_API Pointer_t<Variable> LS_CALL create_variable(hash_t factoryId);
  * variable created using the "createVariable(...)" function.
  */
 LS_API void LS_CALL destroy_variable(Pointer_t<Variable>& pVariable);
+
+
 
 /**
  * @brief Create a script function using the global functor factory
@@ -138,6 +156,8 @@ LS_API void LS_CALL destroy_variable(Pointer_t<Variable>& pVariable);
  */
 LS_API Pointer_t<Functor> LS_CALL create_functor(hash_t factoryId);
 
+
+
 /**
  * @brief Destroy/free an instance of a script functor object.
  *
@@ -146,6 +166,8 @@ LS_API Pointer_t<Functor> LS_CALL create_functor(hash_t factoryId);
  * functor created using the "createVariable(...)" function.
  */
 LS_API void LS_CALL destroy_functor(Pointer_t<Functor>& pFunc);
+
+
 
 } // end script namespace
 } // end ls namespace

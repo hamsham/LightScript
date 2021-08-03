@@ -1,9 +1,22 @@
 
-# -------------------------------------
+# #####################################
 # Project Setup
-# -------------------------------------
+# #####################################
+cmake_minimum_required(VERSION 3.18)
+
 project(LightScript CXX)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
 set(OUTPUT_NAME lsscript)
+
+
+
+# -------------------------------------
+# Target Setup
+# -------------------------------------
+set(CMAKE_PREFER_PTHREAD)
+find_package(Threads REQUIRED)
 
 
 
@@ -44,16 +57,13 @@ set(LS_SCRIPT_SOURCES
 # -------------------------------------
 # Library Setup
 # -------------------------------------
-# LS Script must be built as a shared library to support
-# global variables across multiple libraries and processes.
-add_definitions(-DLS_BUILD_SHARED -DLS_SHARED)
-
 add_library(${OUTPUT_NAME} SHARED ${LS_SCRIPT_HEADERS} ${LS_SCRIPT_SOURCES})
 
-target_include_directories(${OUTPUT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
+# LS Script must be built as a shared library to support
+# global variables across multiple libraries and processes.
+target_compile_definitions(${OUTPUT_NAME} PRIVATE -DLS_BUILD_SHARED -DLS_SHARED)
 
-# Dependencies
-target_link_libraries(${OUTPUT_NAME} LightSky::Math LightSky::Utils LightSky::Setup)
+target_include_directories(${OUTPUT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
 
 
 

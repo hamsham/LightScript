@@ -10,35 +10,49 @@
 /*-----------------------------------------------------------------------------
     Non-Templated Class Definitions
 -----------------------------------------------------------------------------*/
-namespace ls {
-namespace script {
+namespace ls
+{
+namespace script
+{
 
 /*-------------------------------------
     Variable Object Destructor
 -------------------------------------*/
-Variable::~Variable() {
+Variable::~Variable()
+{
 }
+
+
 
 /*-------------------------------------
     Variable Object Constructor
 -------------------------------------*/
 Variable::Variable() :
-    Scriptable {}
-{}
+    Scriptable{}
+{
+}
+
+
 
 /*-------------------------------------
     Variable Object Copy Constructor
 -------------------------------------*/
 Variable::Variable(const Variable& v) :
-    Scriptable {v}
-{}
+    Scriptable{v}
+{
+}
+
+
 
 /*-------------------------------------
     Variable Object Move Constructor
 -------------------------------------*/
 Variable::Variable(Variable&& v) :
-    Scriptable {std::move(v)}
-{}
+    Scriptable{std::move(v)}
+{
+}
+
+
 
 } // end script namespace
 } // end ls namespace

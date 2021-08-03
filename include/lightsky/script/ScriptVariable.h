@@ -14,210 +14,247 @@
 #include "lightsky/script/Setup.h"
 #include "lightsky/script/Scriptable.h"
 
-namespace ls {
-namespace script {
+
+
+namespace ls
+{
+namespace script
+{
 
 /**----------------------------------------------------------------------------
  * Variable Base Type
  * 
  * The Variable base object is used as an interface for scriptable data types.
 -----------------------------------------------------------------------------*/
-class LS_API Variable : public Scriptable {
-    public:
-        /**
-         *  @brief
-         */
-        virtual ~Variable() = 0;
+class LS_API Variable : public Scriptable
+{
+  public:
+    /**
+     *  @brief
+     */
+    virtual ~Variable() = 0;
 
-        /**
-         *  @brief Constructor
-         *  Constructs *this and the 'scriptable' base class.
-         */
-        Variable();
 
-        /**
-         *  @brief Copy Constructor
-         *  Copies data from the input parameter into *this.
-         *
-         *  @param v
-         *  A constant reference to a variable base object.
-         */
-        Variable(const Variable& v);
 
-        /**
-         *  @brief Move Constructor
-         *  Moves data from the input parameter into *this without performing
-         *  any copies.
-         *
-         *  @param v
-         *  An r-value reference to a variable base object.
-         */
-        Variable(Variable&& v);
+    /**
+     *  @brief Constructor
+     *  Constructs *this and the 'scriptable' base class.
+     */
+    Variable();
 
-        /**
-         *  @brief Copy Constructor
-         *  Copies data from the input parameter into *this.
-         *
-         *  @param v
-         *  A constant reference to a variable base object.
-         *
-         *  @return
-         *  A reference to *this.
-         */
-        Variable& operator =(const Variable& v);
 
-        /**
-         *  @brief Move Operator
-         *  Moves data from the input parameter into *this without performing
-         *  any copies.
-         *
-         *  @param v
-         *  An r-value reference to a variable base object.
-         *
-         *  @return
-         *  A reference to *this.
-         */
-        Variable& operator =(Variable&& v);
 
-        /**
-         *  @brief getScriptType
-         *  Retrieve the type of scripting object *this is.
-         *
-         *  @return ls::script::script_base_t::SCRIPT_VAR
-         */
-        script_base_t get_script_type() const final;
+    /**
+     *  @brief Copy Constructor
+     *  Copies data from the input parameter into *this.
+     *
+     *  @param v
+     *  A constant reference to a variable base object.
+     */
+    Variable(const Variable& v);
 
-        /**
-         *  @brief
-         */
-        virtual hash_t get_script_subtype() const = 0;
+
+
+    /**
+     *  @brief Move Constructor
+     *  Moves data from the input parameter into *this without performing
+     *  any copies.
+     *
+     *  @param v
+     *  An r-value reference to a variable base object.
+     */
+    Variable(Variable&& v);
+
+
+
+    /**
+     *  @brief Copy Constructor
+     *  Copies data from the input parameter into *this.
+     *
+     *  @param v
+     *  A constant reference to a variable base object.
+     *
+     *  @return
+     *  A reference to *this.
+     */
+    Variable& operator=(const Variable& v);
+
+
+
+    /**
+     *  @brief Move Operator
+     *  Moves data from the input parameter into *this without performing
+     *  any copies.
+     *
+     *  @param v
+     *  An r-value reference to a variable base object.
+     *
+     *  @return
+     *  A reference to *this.
+     */
+    Variable& operator=(Variable && v);
+
+
+
+    /**
+     *  @brief getScriptType
+     *  Retrieve the type of scripting object *this is.
+     *
+     *  @return ls::script::ScriptBaseType::SCRIPT_VAR
+     */
+    ScriptBaseType base_type() const final;
+
+
+
+    /**
+     *  @brief
+     */
+    virtual hash_t sub_type() const = 0;
 };
 
 /**----------------------------------------------------------------------------
     Extended Variable Template Type
 -----------------------------------------------------------------------------*/
 template <hash_t hashId, typename type>
-class LS_API Variable_t final : public Variable {
-    public:
-        /**
-         *  @brief Data Member
-         *
-         *  This class member is meant to be as transparent as a regular
-         *  variable in code. Since scripted objects contain no internal
-         *  manipulation, it can remain exposed.
-         */
-        type data;
+class LS_API Variable_t final : public Variable
+{
+  public:
 
-        /**
-         *  @brief Destructor
-         *
-         *  Cleans up any resources used by the parent classes.
-         */
-        virtual ~Variable_t();
+    /**
+     *  @brief Data Member
+     *
+     *  This class member is meant to be as transparent as a regular
+     *  variable in code. Since scripted objects contain no internal
+     *  manipulation, it can remain exposed.
+     */
+    type data;
 
-        /**
-         *  @brief Constructor
-         *
-         *  Initializes all base classes and data members.
-         */
-        Variable_t();
+    /**
+     *  @brief Destructor
+     *
+     *  Cleans up any resources used by the parent classes.
+     */
+    virtual ~Variable_t() override;
 
-        /**
-         *  @brief Copy Constructor
-         *
-         *  Copies data from the input parameter into *this.
-         *
-         *  @param v
-         *  A constant reference to a scripting variable of the same type as
-         *  *this.
-         */
-        Variable_t(const Variable_t& v);
 
-        /**
-         *  @brief Move Constructor
-         *
-         *  Moves data from the input parameter into *this without performing
-         *  any copies.
-         *
-         *  @param v
-         *  An r-value reference to a scripting variable of the same type as
-         *  *this.
-         */
-        Variable_t(Variable_t&& v);
 
-        /**
-         *  @brief Copy Operator
-         *
-         *  Copies data from the input parameter into *this.
-         *
-         *  @param v
-         *  A constant reference to a scripting variable of the same type as
-         *  *this.
-         *
-         *  @return a reference to *this.
-         */
-        Variable_t& operator =(const Variable_t& v);
+    /**
+     *  @brief Constructor
+     *
+     *  Initializes all base classes and data members.
+     */
+    Variable_t();
 
-        /**
-         *  @brief Move Operator
-         *
-         *  Moves data from the input parameter into *this without performing
-         *  any copies.
-         *
-         *  @param v
-         *  An r-value reference to a scripting variable of the same type as
-         *  *this.
-         *
-         *  @return a reference to *this.
-         */
-        Variable_t& operator =(Variable_t&& v);
 
-        /**
-         *  @brief Load Variable data from an std::istream
-         *
-         *  A serialization method to will help reload data from a standard
-         *  input stream. This method uses the overloaded input stream operator
-         *  'std::istream::operator >> (T)' in order to load variable data into
-         *  *this.
-         *
-         *  @param istr
-         *  A reference to a std::istream object which contains variable data
-         *  to be loaded into *this.
-         *
-         *  @param varLoader
-         *  A variable-loading factory that will be used to map variable data
-         *  from the input stream into *this.
-         *
-         *  @param funcLoader
-         *  A function-loading factory that will be used to map functor data
-         *  from the input stream into *this.
-         *
-         *  @return a boolean value that will determine if data was
-         *  successfully loaded into *this (TRUE) or not (FALSE).
-         */
-        bool load(std::istream& istr, VariableMap_t& vlm, FunctorMap_t& flm) override;
 
-        /**
-         *  @brief Save all data from *this into an std::ostream.
-         *
-         *  @param ostr
-         *  A reference to an std::ostream object. Each scripted variable must
-         *  make use of the overloaded stream operator
-         *  'std::istream::operator >> (T)' in order to save variable data from
-         *  *this.
-         *
-         * @return TRUE if the data was successfully saved, FALSE if not.
-         */
-        bool save(std::ostream& ostr) const override;
+    /**
+     *  @brief Copy Constructor
+     *
+     *  Copies data from the input parameter into *this.
+     *
+     *  @param v
+     *  A constant reference to a scripting variable of the same type as
+     *  *this.
+     */
+    Variable_t(const Variable_t& v);
 
-        /**
-         *  @brief getScriptSubType
-         *  Retrieve the run-time-type information of the data stored in *this.
-         *
-         *  @return A portable hash code, representing the hashed lexical name
-         *  of the data type stored in *this.
-         */
-        hash_t get_script_subtype() const final;
+
+
+    /**
+     *  @brief Move Constructor
+     *
+     *  Moves data from the input parameter into *this without performing
+     *  any copies.
+     *
+     *  @param v
+     *  An r-value reference to a scripting variable of the same type as
+     *  *this.
+     */
+    Variable_t(Variable_t&& v);
+
+
+
+    /**
+     *  @brief Copy Operator
+     *
+     *  Copies data from the input parameter into *this.
+     *
+     *  @param v
+     *  A constant reference to a scripting variable of the same type as
+     *  *this.
+     *
+     *  @return a reference to *this.
+     */
+    Variable_t& operator=(const Variable_t& v);
+
+
+
+    /**
+     *  @brief Move Operator
+     *
+     *  Moves data from the input parameter into *this without performing
+     *  any copies.
+     *
+     *  @param v
+     *  An r-value reference to a scripting variable of the same type as
+     *  *this.
+     *
+     *  @return a reference to *this.
+     */
+    Variable_t& operator=(Variable_t&& v);
+
+
+
+    /**
+     *  @brief Load Variable data from an std::istream
+     *
+     *  A serialization method to will help reload data from a standard
+     *  input stream. This method uses the overloaded input stream operator
+     *  'std::istream::operator >> (T)' in order to load variable data into
+     *  *this.
+     *
+     *  @param istr
+     *  A reference to a std::istream object which contains variable data
+     *  to be loaded into *this.
+     *
+     *  @param varLoader
+     *  A variable-loading factory that will be used to map variable data
+     *  from the input stream into *this.
+     *
+     *  @param funcLoader
+     *  A function-loading factory that will be used to map functor data
+     *  from the input stream into *this.
+     *
+     *  @return a boolean value that will determine if data was
+     *  successfully loaded into *this (TRUE) or not (FALSE).
+     */
+    bool load(std::istream& istr, VariableMap_t& vlm, FunctorMap_t& flm) override;
+
+
+
+    /**
+     *  @brief Save all data from *this into an std::ostream.
+     *
+     *  @param ostr
+     *  A reference to an std::ostream object. Each scripted variable must
+     *  make use of the overloaded stream operator
+     *  'std::istream::operator >> (T)' in order to save variable data from
+     *  *this.
+     *
+     * @return TRUE if the data was successfully saved, FALSE if not.
+     */
+    bool save(std::ostream& ostr) const override;
+
+
+
+    /**
+     *  @brief getScriptSubType
+     *  Retrieve the run-time-type information of the data stored in *this.
+     *
+     *  @return A portable hash code, representing the hashed lexical name
+     *  of the data type stored in *this.
+     */
+    hash_t sub_type() const final;
 };
 
 } // end script namespace
@@ -244,7 +281,7 @@ class LS_API Variable_t final : public Variable {
  *      ScriptVar_int (if registered using the LS_SCRIPT_DECLARE_VAR macro).
  */
 #ifndef LS_SCRIPT_VAR_TYPE
-    #define LS_SCRIPT_VAR_TYPE( varType ) \
+    #define LS_SCRIPT_VAR_TYPE(varType) \
             ls::script::Variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>
 #endif /* LS_SCRIPT_VAR_TYPE */
 
@@ -259,8 +296,8 @@ class LS_API Variable_t final : public Variable {
  *      LS_SCRIPT_VAR_DATA(foo, int) = 42.
  */
 #ifndef LS_SCRIPT_VAR_DATA
-    #define LS_SCRIPT_VAR_DATA( pVar, varName ) \
-            static_cast<ls::script::ScriptVar_##varName*>((ls::script::Variable*)pVar)->data
+    #define LS_SCRIPT_VAR_DATA(pVar, varName) \
+            static_cast<ls::script::ScriptVar_##varName*>((ls::script::Variable*)pVar.get())->data
 #endif /* LS_SCRIPT_VAR_DATA */
 
 /**
@@ -299,7 +336,7 @@ class LS_API Variable_t final : public Variable {
  *  All data generated by a factory method MUST be deleted using 'delete.'
  */
 #ifndef LS_SCRIPT_DECLARE_VAR
-    #define LS_SCRIPT_DECLARE_VAR( varName, varType ) \
+    #define LS_SCRIPT_DECLARE_VAR(varName, varType) \
             \
             enum : ls::script::hash_t { \
                 ScriptHash_##varName = LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)) \
@@ -332,7 +369,7 @@ class LS_API Variable_t final : public Variable {
  *      delete pVar;
  */
 #ifndef LS_SCRIPT_DEFINE_VAR
-    #define LS_SCRIPT_DEFINE_VAR( varName, varType ) \
+    #define LS_SCRIPT_DEFINE_VAR(varName, varType) \
             \
             template class ls::script::Variable_t<ScriptHash_##varName, varType>; \
             \
@@ -366,7 +403,7 @@ class LS_API Variable_t final : public Variable {
  * The C++ type of the data contained within the specialized script object.
  */
 #ifndef LS_SCRIPT_OVERRIDE_VAR_LOAD
-    #define LS_SCRIPT_OVERRIDE_VAR_LOAD( varType ) \
+    #define LS_SCRIPT_OVERRIDE_VAR_LOAD(varType) \
         \
         template <> \
         LS_API bool ls::script::Variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>::load( \
@@ -395,7 +432,7 @@ class LS_API Variable_t final : public Variable {
  * The C++ type of the data contained within the specialized script object.
  */
 #ifndef LS_SCRIPT_OVERRIDE_VAR_SAVE
-    #define LS_SCRIPT_OVERRIDE_VAR_SAVE( varType ) \
+    #define LS_SCRIPT_OVERRIDE_VAR_SAVE(varType) \
         \
         template <> \
         LS_API bool ls::script::Variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>::save(std::ostream& ostr) const

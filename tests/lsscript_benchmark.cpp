@@ -21,6 +21,8 @@ using lsFunctor = ls::script::Functor;
 using ls::script::create_functor;
 using ls::script::destroy_functor;
 
+
+
 /******************************************************************************
  * Benchmark Setup
  ******************************************************************************/
@@ -29,27 +31,33 @@ namespace chrono = std::chrono;
 typedef chrono::steady_clock::time_point hr_time;
 typedef chrono::milliseconds hr_prec;
 
-int addNums(int x, int y) {
+int add_nums(int x, int y)
+{
     return x + y;
 }
 
-int subNums(int x, int y) {
+int sub_nums(int x, int y)
+{
     return x - y;
 }
+
+
 
 /******************************************************************************
  * REFERENCE FUNCTION
  ******************************************************************************/
-void nativeFunc() {
+void native_bench()
+{
     int testVar1 = 42;
     int testVar2 = 77;
     int testVar3 = 13;
 
     hr_time t1, t2;
     t1 = chrono::steady_clock::now();
-    int (*pFunc[2])(int, int) = {&addNums, &subNums};
+    int (*pFunc[2])(int, int) = {&add_nums, &sub_nums};
 
-    for (unsigned i = 0; i < NUM_TEST_RUNS; ++i) {
+    for (unsigned i = 0; i < NUM_TEST_RUNS; ++i)
+    {
         testVar1 = (*pFunc[i % 2])(testVar2, testVar3);
     }
 
@@ -65,10 +73,13 @@ void nativeFunc() {
     return;
 }
 
+
+
 /******************************************************************************
  * SCRIPTED BENCHMARK
  ******************************************************************************/
-void scriptBench() {
+void script_bench()
+{
     lsPointer<lsFunctor>&& testFunc1 = create_functor(ls::script::ScriptHash_AddInts);
     lsPointer<lsFunctor>&& testFunc2 = create_functor(ls::script::ScriptHash_SubInts);
 
@@ -80,18 +91,19 @@ void scriptBench() {
     LS_SCRIPT_VAR_DATA(testVar2, int) = 77;
     LS_SCRIPT_VAR_DATA(testVar3, int) = 13;
 
-    testFunc1->set_arg(0, testVar1);
-    testFunc1->set_arg(1, testVar2);
-    testFunc1->set_arg(2, testVar3);
+    testFunc1->arg(0, testVar1.get());
+    testFunc1->arg(1, testVar2.get());
+    testFunc1->arg(2, testVar3.get());
 
-    testFunc2->set_arg(2, testVar3);
-    testFunc2->set_arg(0, testVar2);
-    testFunc2->set_arg(1, testVar1);
+    testFunc2->arg(2, testVar3.get());
+    testFunc2->arg(0, testVar2.get());
+    testFunc2->arg(1, testVar1.get());
 
-    testFunc1->set_next_func(testFunc2);
-    testFunc2->set_next_func(testFunc1);
+    testFunc1->next_func_ptr(testFunc2.get());
+    testFunc2->next_func_ptr(testFunc1.get());
 
-    if (!testFunc1->compile() || !testFunc2->compile()) {
+    if (!testFunc1->compile() || !testFunc2->compile())
+    {
         std::cerr << "Error: Unable to compile the test functions." << std::endl;
         return;
     }
@@ -100,9 +112,10 @@ void scriptBench() {
     t1 = chrono::steady_clock::now();
     lsFunctor* pFunc = testFunc1.get();
 
-    for (unsigned i = 0; i < NUM_TEST_RUNS; ++i) {
+    for (unsigned i = 0; i < NUM_TEST_RUNS; ++i)
+    {
         pFunc->run();
-        pFunc = pFunc->get_next_func();
+        pFunc = pFunc->next_func_ptr();
     }
 
     t2 = chrono::steady_clock::now();
@@ -122,10 +135,16 @@ void scriptBench() {
     return;
 }
 
-int main() {
+
+
+/*-----------------------------------------------------------------------------
+ * Main()
+-----------------------------------------------------------------------------*/
+int main()
+{
     for (unsigned i = 5; i-- > 0;) {
-        std::thread t2 {&nativeFunc};
-        std::thread t1 {&scriptBench};
+        std::thread t2 {&native_bench};
+        std::thread t1 {&script_bench};
 
         t2.join();
         t1.join();

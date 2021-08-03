@@ -8,10 +8,14 @@
 #ifndef __LS_SCRIPT_RUNNER_H__
 #define __LS_SCRIPT_RUNNER_H__
 
-#include "lightsky/setup/Api.h"
+#include "lightsky/script/Setup.h"
 
-namespace ls {
-namespace script {
+
+
+namespace ls
+{
+namespace script
+{
 
 class Functor;
 
@@ -33,8 +37,8 @@ class Functor;
  * running them through a scriptRunner in order to catch any potential errors
  * which may cause the program to crash.
  */
-class LS_API ScriptRunner {
-  public:
+class LS_API ScriptRunner{
+    public:
     /**
      * @brief Destructor
      */
@@ -135,6 +139,8 @@ class LS_API ScriptRunner {
      */
     virtual bool run(Functor * const pEntryFunction, const Functor * const pSentinel = nullptr);
 };
+
+
 
 } // end script namespace
 } // end ls namespace

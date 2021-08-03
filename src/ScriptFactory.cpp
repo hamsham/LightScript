@@ -8,11 +8,10 @@
 #include <utility> // std::make_pair<>(...)
 #include <unordered_map>
 
-#include "lightsky/utils/Log.h"
-#include "lightsky/utils/Assertions.h"
-
 #include "lightsky/script/Script.h"
 #include "lightsky/script/ScriptFactory.h"
+
+
 
 using ls::script::hash_t;
 using ls::script::VarFactory_t;
@@ -23,7 +22,10 @@ using ls::script::Pointer_t;
 /*
  * Anonymous namespace to hide global variables
  */
-namespace {
+namespace
+{
+
+
 
 /*-----------------------------------------------------------------------------
  * Variable and Function factories
@@ -47,50 +49,66 @@ namespace {
 /**
  * Global Variable Factory
  */
-std::unordered_map<hash_t, VarFactory_t>& get_var_factory() {
-    static std::unordered_map<hash_t, VarFactory_t> gVarFactoryList {};
+std::unordered_map<hash_t, VarFactory_t>& _get_var_factory()
+{
+    static std::unordered_map<hash_t, VarFactory_t> gVarFactoryList{};
     return gVarFactoryList;
 }
+
+
 
 /**
  * Global Functor Factory
  */
-std::unordered_map<hash_t, FuncFactory_t>& get_func_factory() {
-    static std::unordered_map<hash_t, FuncFactory_t> gFuncFactoryList {};
+std::unordered_map<hash_t, FuncFactory_t>& _get_func_factory()
+{
+    static std::unordered_map<hash_t, FuncFactory_t> gFuncFactoryList{};
     return gFuncFactoryList;
 }
 
+
+
 } // anonymous namespace
 
-namespace ls {
+
 
 /*-----------------------------------------------------------------------------
  * Factory Method Registration
 -----------------------------------------------------------------------------*/
+namespace ls
+{
 
 /*-------------------------------------
  * Variable Factory Registration
 -------------------------------------*/
-const VarFactory_t& script::register_var_factory(hash_t factoryId, const VarFactory_t& pFactory) {
-    if (get_var_factory().count(factoryId)) {
-        return get_var_factory()[factoryId];
+const VarFactory_t& script::register_var_factory(hash_t factoryId, const VarFactory_t& pFactory)
+{
+    if (_get_var_factory().count(factoryId))
+    {
+        return _get_var_factory()[factoryId];
     }
 
-    get_var_factory().insert(std::pair<hash_t, VarFactory_t> {factoryId, pFactory});
-    return get_var_factory()[factoryId];
+    _get_var_factory().insert(std::pair<hash_t, VarFactory_t>{factoryId, pFactory});
+    return _get_var_factory()[factoryId];
 }
+
+
 
 /*-------------------------------------
  * Functor Factory Registration
 -------------------------------------*/
-const FuncFactory_t& script::register_func_factory(hash_t factoryId, const FuncFactory_t& pFactory) {
-    if (get_func_factory().count(factoryId)) {
-        return get_func_factory()[factoryId];
+const FuncFactory_t& script::register_func_factory(hash_t factoryId, const FuncFactory_t& pFactory)
+{
+    if (_get_func_factory().count(factoryId))
+    {
+        return _get_func_factory()[factoryId];
     }
 
-    get_func_factory().insert(std::pair<hash_t, FuncFactory_t> {factoryId, pFactory});
-    return get_func_factory()[factoryId];
+    _get_func_factory().insert(std::pair<hash_t, FuncFactory_t>{factoryId, pFactory});
+    return _get_func_factory()[factoryId];
 }
+
+
 
 /*-----------------------------------------------------------------------------
  * Script Object Creation/Instantiation
@@ -103,29 +121,40 @@ const FuncFactory_t& script::register_func_factory(hash_t factoryId, const FuncF
 /*-------------------------------------
  * Variable Creation
 -------------------------------------*/
-Pointer_t<script::Variable> script::create_variable(hash_t factoryId) {
-    for (const std::pair<hash_t, VarFactory_t>& iter : get_var_factory()) {
-        if (iter.first == factoryId) {
+Pointer_t<script::Variable> script::create_variable(hash_t factoryId)
+{
+    for (const std::pair<hash_t, VarFactory_t>& iter : _get_var_factory())
+    {
+        if (iter.first == factoryId)
+        {
             return (*iter.second)();
         }
     }
 
-    return Pointer_t<Variable> {nullptr};
+    return Pointer_t<Variable>{nullptr};
 }
+
+
 
 /*-------------------------------------
  * Variable Deletion
 -------------------------------------*/
-void script::destroy_variable(Pointer_t<Variable>& pVariable) {
+void script::destroy_variable(Pointer_t<Variable>& pVariable)
+{
     pVariable.reset();
 }
+
+
 
 /*-------------------------------------
  * Functor Creation
 -------------------------------------*/
-Pointer_t<script::Functor> script::create_functor(hash_t factoryId) {
-    for (const std::pair<hash_t, FuncFactory_t>& iter : get_func_factory()) {
-        if (iter.first == factoryId) {
+Pointer_t<script::Functor> script::create_functor(hash_t factoryId)
+{
+    for (const std::pair<hash_t, FuncFactory_t>& iter : _get_func_factory())
+    {
+        if (iter.first == factoryId)
+        {
             return (*iter.second)();
         }
     }
@@ -133,11 +162,16 @@ Pointer_t<script::Functor> script::create_functor(hash_t factoryId) {
     return Pointer_t<Functor> {nullptr};
 }
 
+
+
 /*-------------------------------------
  * Functor Deletion
 -------------------------------------*/
-void script::destroy_functor(Pointer_t<Functor>& pFunc) {
+void script::destroy_functor(Pointer_t<Functor>& pFunc)
+{
     pFunc.reset();
 }
+
+
 
 } // end ls namespace

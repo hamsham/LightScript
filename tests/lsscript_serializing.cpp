@@ -9,12 +9,14 @@
 
 #include "lightsky/script/Script.h"
 
+
+
 /*-----------------------------------------------------------------------------
  * Test Script File
 -----------------------------------------------------------------------------*/
-#ifndef TEST_FILE
-    #define TEST_FILE u8R"***(test_file.lss)***"
-#endif
+static constexpr char TEST_FILE[] = u8R"***(test_file.lss)***";
+
+
 
 /*-----------------------------------------------------------------------------
  * Namespacing setup
@@ -33,33 +35,53 @@ using ls::script::ScriptRunner;
 using ls::script::VariableMap_t;
 using ls::script::FunctorMap_t;
 
+
+
 /*-----------------------------------------------------------------------------
  * Function Entry Point
 -----------------------------------------------------------------------------*/
-namespace ls {
-namespace script {
+namespace ls
+{
+namespace script
+{
 // dummy value to get the entry points
 LS_SCRIPT_DECLARE_FUNC(Entry, void);
 
-LS_SCRIPT_DEFINE_FUNC(Entry, void) {
+LS_SCRIPT_DEFINE_FUNC(Entry, void)
+{
     (void)pArgs;
 };
+
+
+
 } // end script namespace
 } // end ls namespace
+
+
 
 /*-----------------------------------------------------------------------------
  * Verify that the functors compile.
 -----------------------------------------------------------------------------*/
-void validateScripts(FunctorMap_t& funcMap) {
-    for (std::pair<lsFunctor * const, lsPointer < lsFunctor>>&funcIter : funcMap) {
-        LS_ASSERT(funcIter.second->compile());
+void validate_scripts(FunctorMap_t& funcMap)
+{
+    for (std::pair<lsFunctor * const, lsPointer <lsFunctor>>&funcIter : funcMap)
+    {
+        bool result = funcIter.second->compile();
+        assert(result == true);
+        if (!result)
+        {
+            std::cerr << "Failed to compile script!" << std::endl;
+        }
     }
 }
+
+
 
 /*-----------------------------------------------------------------------------
  * Generate the test maps
 -----------------------------------------------------------------------------*/
-void generateScripts(VariableMap_t& varMap, FunctorMap_t& funcMap) {
+void generate_scripts(VariableMap_t& varMap, FunctorMap_t& funcMap)
+{
     lsPointer<lsFunctor> testFunc1 = create_functor(ls::script::ScriptHash_AddInts);
     lsPointer<lsFunctor> testFunc2 = create_functor(ls::script::ScriptHash_SubInts);
     lsPointer<lsFunctor> testFunc3 = create_functor(ls::script::ScriptHash_MulInts);
@@ -76,89 +98,111 @@ void generateScripts(VariableMap_t& varMap, FunctorMap_t& funcMap) {
     LS_SCRIPT_VAR_DATA(testVar3, int) = 0; // dummy value
     LS_SCRIPT_VAR_DATA(testVar4, string) = "Hello World!";
 
-    testEntry1->set_next_func(testFunc1);
+    testEntry1->next_func_ptr(testFunc1.get());
 
-    testFunc1->set_arg(0, testVar1); // param 1 = 1
-    testFunc1->set_arg(1, testVar2); // param 2 = 2
-    testFunc1->set_arg(2, testVar3); // return value should equal 1+2=3
-    testFunc1->set_next_func(testFunc2);
+    testFunc1->arg(0, testVar1.get()); // param 1 = 1
+    testFunc1->arg(1, testVar2.get()); // param 2 = 2
+    testFunc1->arg(2, testVar3.get()); // return value should equal 1+2=3
+    testFunc1->next_func_ptr(testFunc2.get());
 
-    testFunc2->set_arg(0, testVar1);
-    testFunc2->set_arg(1, testVar2);
-    testFunc2->set_arg(2, testVar2); // should equal 1-2=-3
-    testFunc2->set_next_func(testFunc3);
+    testFunc2->arg(0, testVar1.get());
+    testFunc2->arg(1, testVar2.get());
+    testFunc2->arg(2, testVar2.get()); // should equal 1-2=-3
+    testFunc2->next_func_ptr(testFunc3.get());
 
-    testFunc3->set_arg(0, testVar1);
-    testFunc3->set_arg(1, testVar2);
-    testFunc3->set_arg(2, testVar2); // should equal 1*2=2
-    testFunc3->set_next_func(testFunc4);
+    testFunc3->arg(0, testVar1.get());
+    testFunc3->arg(1, testVar2.get());
+    testFunc3->arg(2, testVar2.get()); // should equal 1*2=2
+    testFunc3->next_func_ptr(testFunc4.get());
 
-    testFunc4->set_arg(0, testVar1);
-    testFunc4->set_arg(1, testVar2);
-    testFunc4->set_arg(2, testVar2); // should equal 1/2=1 (int division)
-    testFunc4->set_next_func(nullptr);
+    testFunc4->arg(0, testVar1.get());
+    testFunc4->arg(1, testVar2.get());
+    testFunc4->arg(2, testVar2.get()); // should equal 1/2=1 (int division)
+    testFunc4->next_func_ptr(nullptr);
 
-    validateScripts(funcMap);
+    validate_scripts(funcMap);
 
-    varMap[testVar1] = std::move(testVar1);
-    varMap[testVar2] = std::move(testVar2);
-    varMap[testVar3] = std::move(testVar3);
-    varMap[testVar4] = std::move(testVar4);
+    varMap[testVar1.get()] = std::move(testVar1);
+    varMap[testVar2.get()] = std::move(testVar2);
+    varMap[testVar3.get()] = std::move(testVar3);
+    varMap[testVar4.get()] = std::move(testVar4);
 
-    funcMap[testFunc1] = std::move(testFunc1);
-    funcMap[testFunc2] = std::move(testFunc2);
-    funcMap[testFunc3] = std::move(testFunc3);
-    funcMap[testFunc4] = std::move(testFunc4);
-    funcMap[testEntry1] = std::move(testEntry1);
+    funcMap[testFunc1.get()] = std::move(testFunc1);
+    funcMap[testFunc2.get()] = std::move(testFunc2);
+    funcMap[testFunc3.get()] = std::move(testFunc3);
+    funcMap[testFunc4.get()] = std::move(testFunc4);
+    funcMap[testEntry1.get()] = std::move(testEntry1);
 }
+
+
 
 /*-----------------------------------------------------------------------------
  * Save the script maps
 -----------------------------------------------------------------------------*/
-void saveScripts(const VariableMap_t& varImporter, const FunctorMap_t& funcImporter) {
-    LS_ASSERT(ls::script::save_script_file(TEST_FILE, varImporter, funcImporter));
+void save_scripts(const VariableMap_t& varImporter, const FunctorMap_t& funcImporter)
+{
+    if (!ls::script::save_script_file(TEST_FILE, varImporter, funcImporter))
+    {
+        std::cerr << "Failed to save variable & functor scripts!" << std::endl;
+        assert(false);
+    }
 }
+
+
 
 /*-----------------------------------------------------------------------------
  * Save the script maps
 -----------------------------------------------------------------------------*/
-void loadScripts(VariableMap_t& varImporter, FunctorMap_t& funcImporter) {
-    LS_ASSERT(ls::script::load_script_file(TEST_FILE, varImporter, funcImporter));
+void load_scripts(VariableMap_t& varImporter, FunctorMap_t& funcImporter)
+{
+    if(!ls::script::load_script_file(TEST_FILE, varImporter, funcImporter))
+    {
+        std::cerr << "Failed to load variable & functor scripts!" << std::endl;
+        assert(false);
+    }
 
     ls::script::remap_script_keys(varImporter, funcImporter);
 }
 
+
+
 /*-----------------------------------------------------------------------------
  * Run the scripts
 -----------------------------------------------------------------------------*/
-bool runScripts(VariableMap_t& varMap, FunctorMap_t& funcMap) {
+bool run_scripts(VariableMap_t& varMap, FunctorMap_t& funcMap)
+{
     ScriptRunner runner {};
 
     ls::script::Functor* pEntryFunc = nullptr;
 
-    for (std::pair<lsFunctor * const, lsPointer < lsFunctor>>&funcIter : funcMap) {
+    for (std::pair<lsFunctor * const, lsPointer <lsFunctor>>&funcIter : funcMap)
+    {
         lsPointer<lsFunctor>& func = funcIter.second;
 
-        if (func->get_script_subtype() == ls::script::ScriptHash_Entry) {
+        if (func->sub_type() == ls::script::ScriptHash_Entry)
+        {
             pEntryFunc = func.get();
             break;
         }
     }
 
-    LS_ASSERT(pEntryFunc != nullptr);
+    assert(pEntryFunc != nullptr);
 
     runner.run(pEntryFunc);
 
     std::cout << "Successfully ran the script tests." << std::endl;
     std::cout << "The final variable values are:" << std::endl;
 
-    for (std::pair<lsVariable * const, lsPointer < lsVariable>>&varIter : varMap) {
+    for (std::pair<lsVariable * const, lsPointer <lsVariable>>&varIter : varMap)
+    {
         lsPointer<lsVariable>& pVar = varIter.second;
 
-        if (pVar->get_script_subtype() == ls::script::ScriptHash_int) {
+        if (pVar->sub_type() == ls::script::ScriptHash_int)
+        {
             std::cout << '\t' << LS_SCRIPT_VAR_DATA(pVar, int) << std::endl;
         }
-        else if (pVar->get_script_subtype() == ls::script::ScriptHash_string) {
+        else if (pVar->sub_type() == ls::script::ScriptHash_string)
+        {
             std::cout << '\t' << LS_SCRIPT_VAR_DATA(pVar, string) << std::endl;
         }
     }
@@ -166,24 +210,27 @@ bool runScripts(VariableMap_t& varMap, FunctorMap_t& funcMap) {
     return true;
 }
 
+
+
 /*-----------------------------------------------------------------------------
  * Main()
 -----------------------------------------------------------------------------*/
-int main() {
+int main()
+{
     VariableMap_t varMap {};
     FunctorMap_t funcMap {};
 
-    generateScripts(varMap, funcMap);
-    validateScripts(funcMap);
-    runScripts(varMap, funcMap);
-    saveScripts(varMap, funcMap);
+    generate_scripts(varMap, funcMap);
+    validate_scripts(funcMap);
+    run_scripts(varMap, funcMap);
+    save_scripts(varMap, funcMap);
 
     varMap.clear();
     funcMap.clear();
 
-    loadScripts(varMap, funcMap);
-    validateScripts(funcMap);
-    runScripts(varMap, funcMap);
+    load_scripts(varMap, funcMap);
+    validate_scripts(funcMap);
+    run_scripts(varMap, funcMap);
 
     return 0;
 }
