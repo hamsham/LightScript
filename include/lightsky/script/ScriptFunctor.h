@@ -1066,12 +1066,12 @@ class LS_API Functor_t<0, void> final : public Functor
     \
     typedef ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__> ScriptFunc_##funcName; \
     \
-    extern const ls::script::FuncFactory_t& ScriptFactory_##funcName; \
+    LS_API LS_EXTERN const ls::script::FuncFactory_t& ScriptFactory_##funcName; \
     \
     template <> \
-    ls::script::FuncRef_t ScriptFunc_##funcName::func_impl; \
+    LS_API ls::script::FuncRef_t ScriptFunc_##funcName::func_impl; \
     \
-    extern template class ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>
+    LS_EXTERN template class LS_API ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>
 
 /**
  *  @brief Function Definition for source files.

@@ -22,7 +22,7 @@ namespace script
     Basic Built-In types
 -----------------------------------------------------------------------------*/
 /*-------------------------------------
- * char, ScriptVar_char
+ * char, ScriptVar_byte
 -------------------------------------*/
 LS_SCRIPT_DECLARE_VAR(byte, uint8_t);
 

@@ -7,6 +7,7 @@ cmake_minimum_required(VERSION 3.18)
 project(LightScript CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 set(OUTPUT_NAME lsscript)
 
