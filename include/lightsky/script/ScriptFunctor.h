@@ -456,7 +456,7 @@ class LS_API Functor_t final : public Functor
      *  A pointer to an array of pointers to scriptable variables (this
      *  will actually be the 'parameters' member in *this).
      */
-    LS_API static const FuncRef_t func_impl;
+    static const FuncRef_t func_impl;
 
   public:
     /**
@@ -651,7 +651,7 @@ class LS_API Functor_t<hashId, void> final : public Functor
      *  A pointer to an array of pointers to scriptable variables (this
      *  will actually be the 'parameters' member in *this).
      */
-    LS_API static const FuncRef_t func_impl;
+    static const FuncRef_t func_impl;
 
   public:
     /**
@@ -847,7 +847,7 @@ class LS_API Functor_t<0, void> final : public Functor
      *  A pointer to an array of pointers to scriptable variables (this
      *  will actually be the 'parameters' member in *this).
      */
-    LS_API static const FuncRef_t func_impl;
+    static const FuncRef_t func_impl;
 
   public:
     /**
