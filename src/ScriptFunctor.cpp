@@ -128,7 +128,7 @@ bool Functor::save(std::ostream& ostr) const
 /*-----------------------------------------------------------------------------
     NULL Functor Template Type.
 -----------------------------------------------------------------------------*/
-FuncRef_t Functor_t<0, void>::func_impl = *[](Variable** const) -> void
+FuncRef_t Functor_t<0, void>::func_impl = [](Variable** const) -> void
 {
 };
 

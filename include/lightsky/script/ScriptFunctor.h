@@ -31,7 +31,7 @@ namespace script
  *  Use this typedef to instantiate a reference to a scripted function
  *  which takes an array of script variables as its parameters.
  */
-typedef void (& FuncRef_t)(Variable** const);
+typedef void (*const FuncRef_t)(Variable** const);
 
 
 
@@ -456,7 +456,7 @@ class LS_API Functor_t final : public Functor
      *  A pointer to an array of pointers to scriptable variables (this
      *  will actually be the 'parameters' member in *this).
      */
-    static FuncRef_t func_impl;
+    LS_API static const FuncRef_t func_impl;
 
   public:
     /**
@@ -651,7 +651,7 @@ class LS_API Functor_t<hashId, void> final : public Functor
      *  A pointer to an array of pointers to scriptable variables (this
      *  will actually be the 'parameters' member in *this).
      */
-    static FuncRef_t func_impl;
+    LS_API static const FuncRef_t func_impl;
 
   public:
     /**
@@ -847,7 +847,7 @@ class LS_API Functor_t<0, void> final : public Functor
      *  A pointer to an array of pointers to scriptable variables (this
      *  will actually be the 'parameters' member in *this).
      */
-    static FuncRef_t func_impl;
+    LS_API static const FuncRef_t func_impl;
 
   public:
     /**
@@ -1113,7 +1113,7 @@ class LS_API Functor_t<0, void> final : public Functor
     ); \
     \
     template <> \
-    LS_API ls::script::FuncRef_t ScriptFunc_##funcName::func_impl = *[](ls::script::Variable** const pArgs)->void
+    LS_API ls::script::FuncRef_t ScriptFunc_##funcName::func_impl = [](ls::script::Variable** const pArgs)->void
 
 /**
  *  @brief Function Argument Accessibility
