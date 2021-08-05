@@ -80,12 +80,12 @@ void native_bench()
  ******************************************************************************/
 void script_bench()
 {
-    lsPointer<lsFunctor>&& testFunc1 = create_functor(ls::script::ScriptHash_AddInts);
-    lsPointer<lsFunctor>&& testFunc2 = create_functor(ls::script::ScriptHash_SubInts);
+    lsPointer<lsFunctor>&& testFunc1 = create_functor(ScriptHash_AddInts);
+    lsPointer<lsFunctor>&& testFunc2 = create_functor(ScriptHash_SubInts);
 
-    lsPointer<lsVariable>&& testVar1 = create_variable(ls::script::ScriptHash_int);
-    lsPointer<lsVariable>&& testVar2 = create_variable(ls::script::ScriptHash_int);
-    lsPointer<lsVariable>&& testVar3 = create_variable(ls::script::ScriptHash_int);
+    lsPointer<lsVariable>&& testVar1 = create_variable(ScriptHash_int);
+    lsPointer<lsVariable>&& testVar2 = create_variable(ScriptHash_int);
+    lsPointer<lsVariable>&& testVar3 = create_variable(ScriptHash_int);
 
     LS_SCRIPT_VAR_DATA(testVar1, int) = 42;
     LS_SCRIPT_VAR_DATA(testVar2, int) = 77;

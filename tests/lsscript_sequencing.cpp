@@ -25,16 +25,16 @@ using ls::script::ScriptRunner;
 
 int main()
 {
-    lsPointer<lsFunctor> testFunc1 = create_functor(ls::script::ScriptHash_AddInts);
-    lsPointer<lsFunctor> testFunc2 = create_functor(ls::script::ScriptHash_SubInts);
-    lsPointer<lsFunctor> testFunc3 = create_functor(ls::script::ScriptHash_MulInts);
-    lsPointer<lsFunctor> testFunc4 = create_functor(ls::script::ScriptHash_DivInts);
+    lsPointer<lsFunctor> testFunc1 = create_functor(ScriptHash_AddInts);
+    lsPointer<lsFunctor> testFunc2 = create_functor(ScriptHash_SubInts);
+    lsPointer<lsFunctor> testFunc3 = create_functor(ScriptHash_MulInts);
+    lsPointer<lsFunctor> testFunc4 = create_functor(ScriptHash_DivInts);
 
-    lsPointer<lsVariable> testVar1 = create_variable(ls::script::ScriptHash_int);
-    lsPointer<lsVariable> testVar2 = create_variable(ls::script::ScriptHash_int);
-    lsPointer<lsVariable> testVar3 = create_variable(ls::script::ScriptHash_int);
+    lsPointer<lsVariable> testVar1 = create_variable(ScriptHash_int);
+    lsPointer<lsVariable> testVar2 = create_variable(ScriptHash_int);
+    lsPointer<lsVariable> testVar3 = create_variable(ScriptHash_int);
 
-    lsPointer<lsVariable> testVar5 = create_variable(ls::script::ScriptHash_string);
+    lsPointer<lsVariable> testVar5 = create_variable(ScriptHash_string);
     if (!testVar5)
     {
         std::cout << "Unable to create a string variable." << std::endl;

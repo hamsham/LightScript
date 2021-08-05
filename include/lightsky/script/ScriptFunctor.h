@@ -42,7 +42,8 @@ typedef void (*const FuncRef_t)(Variable** const);
     function. It contains methods to store and load its parameters from a
     script file, self-compile, and change its arguments at runtime.
 -----------------------------------------------------------------------------*/
-class LS_API Functor : public Scriptable {
+class LS_API Functor : public Scriptable
+{
   protected:
     /**
      *  @brief A verification method for single arguments.
@@ -95,8 +96,6 @@ class LS_API Functor : public Scriptable {
     template <typename arg_t, typename... args_t>
     static bool check_args(const Functor& f, unsigned i, arg_t* t, args_t*... ts);
 
-
-
     /**
      *  @brief A verification method for single arguments.
      *
@@ -121,8 +120,6 @@ class LS_API Functor : public Scriptable {
     template <typename arg_t>
     static bool check_args(const Functor& f, unsigned i, arg_t* t);
 
-
-
     /**
      *  @brief the 'nextFunc' member is a pointer to another function that
      *  can be run after *this.
@@ -131,8 +128,6 @@ class LS_API Functor : public Scriptable {
      *  creating a linked-list of functions.
      */
     Functor* pNextFunc = nullptr;
-
-
 
     /**
      *  @brief 'pFunction' is a reference to a native function wrapper.
@@ -144,8 +139,6 @@ class LS_API Functor : public Scriptable {
      */
     FuncRef_t pFunction;
 
-
-
     /**
      *  @brief An array of pointers to variables.
      *
@@ -153,8 +146,6 @@ class LS_API Functor : public Scriptable {
      *  mapped to functors at run-time.
      */
     Variable** const pArgs;
-
-
 
     /**
      *  @brief Protected Constructor
@@ -165,8 +156,6 @@ class LS_API Functor : public Scriptable {
      */
     Functor(Variable** const pArguments, FuncRef_t pFunc);
 
-
-
   public:
     /**
      *  @brief Functor Destructor
@@ -174,8 +163,6 @@ class LS_API Functor : public Scriptable {
      *  Frees all resources used by *this.
      */
     virtual ~Functor() = 0;
-
-
 
     /**
      *  @brief Basic constructor
@@ -185,8 +172,6 @@ class LS_API Functor : public Scriptable {
      */
     Functor() = delete;
 
-
-
     /**
      *  @brief Copy Constructor
      *
@@ -195,8 +180,6 @@ class LS_API Functor : public Scriptable {
      */
     Functor(const Functor& f) = delete;
 
-
-
     /**
      *  @brief Move Constructor
      *
@@ -204,8 +187,6 @@ class LS_API Functor : public Scriptable {
      *  construction of protected members by derived classes.
      */
     Functor(Functor&& f) = delete;
-
-
 
     /**
      *  @brief Copy Assignment
@@ -222,8 +203,6 @@ class LS_API Functor : public Scriptable {
      */
     Functor& operator=(const Functor& f);
 
-
-
     /**
      *  @brief Move Assignment
      *
@@ -239,8 +218,6 @@ class LS_API Functor : public Scriptable {
      */
     Functor& operator=(Functor && f);
 
-
-
     /**
      *  @brief Get the function that has been assigned to run after *this.
      *
@@ -252,8 +229,6 @@ class LS_API Functor : public Scriptable {
      *  run after *this.
      */
     Functor* next_func_ptr();
-
-
 
     /**
      *  @brief Assign a functor to run after *this.
@@ -269,16 +244,12 @@ class LS_API Functor : public Scriptable {
      */
     void next_func_ptr(Functor* const f);
 
-
-
     /**
      *  @brief Get *this object's scriptable type.
      *
      *  @return ScriptBaseType::SCRIPT_FUNC
      */
     ScriptBaseType base_type() const final;
-
-
 
     /**
      *  @brief Get the run-time-type information of *this functor.
@@ -292,8 +263,6 @@ class LS_API Functor : public Scriptable {
      *  A hash-code that will identify the RTTI information of *this.
      */
     virtual hash_t sub_type() const = 0;
-
-
 
     /**
      *  @brief Retrieve the number of arguments required to run *this.
@@ -309,8 +278,6 @@ class LS_API Functor : public Scriptable {
      */
     virtual unsigned num_args() const = 0;
 
-
-
     /**
      *  @brief Retrieve an arguments from *this.
      *
@@ -324,8 +291,6 @@ class LS_API Functor : public Scriptable {
      *  *this.
      */
     Variable* arg(unsigned index) const;
-
-
 
     /**
      *  @brief Assign a variable to be functor argument.
@@ -346,8 +311,6 @@ class LS_API Functor : public Scriptable {
      *  *this.
      */
     void arg(unsigned index, Variable* v);
-
-
 
     /**
      *  @brief Load functor data from an std::istream
@@ -374,8 +337,6 @@ class LS_API Functor : public Scriptable {
      */
     virtual bool load(std::istream& istr, VariableMap_t& vlm, FunctorMap_t& flm);
 
-
-
     /**
      *  @brief Save all data from *this into an std::ostream.
      *
@@ -391,8 +352,6 @@ class LS_API Functor : public Scriptable {
      * @return TRUE if the data was successfully saved, FALSE if not.
      */
     virtual bool save(std::ostream& ostr) const;
-
-
 
     /**
      *  @brief Compile/Verify function arguments
@@ -414,8 +373,6 @@ class LS_API Functor : public Scriptable {
      */
     virtual bool compile() = 0;
 
-
-
     /**
      *  @brief Run a functor at run-time.
      */
@@ -431,7 +388,7 @@ class LS_API Functor : public Scriptable {
     base class.
 -----------------------------------------------------------------------------*/
 template <hash_t hashId, typename... args_t>
-class LS_API Functor_t final : public Functor
+class Functor_t final : public Functor
 {
   private:
 
@@ -456,7 +413,7 @@ class LS_API Functor_t final : public Functor
      *  A pointer to an array of pointers to scriptable variables (this
      *  will actually be the 'parameters' member in *this).
      */
-    static const FuncRef_t func_impl;
+    static void func_impl(Variable** const);
 
   public:
     /**
@@ -466,16 +423,12 @@ class LS_API Functor_t final : public Functor
      */
     virtual ~Functor_t() override;
 
-
-
     /**
      *  @brief Constructor
      *
      *  Initializes *this and all base classes.
      */
     Functor_t();
-
-
 
     /**
      *  @brief Copy Constructor
@@ -486,8 +439,6 @@ class LS_API Functor_t final : public Functor
      *  A constant reference to another functor of the same template type.
      */
     Functor_t(const Functor_t& f);
-
-
 
     /**
      *  @brief Move Constructor
@@ -500,8 +451,6 @@ class LS_API Functor_t final : public Functor
      */
     Functor_t(Functor_t&& f);
 
-
-
     /**
      *  @brief Copy Assignment
      *
@@ -513,8 +462,6 @@ class LS_API Functor_t final : public Functor
      *  @return a reference to *this.
      */
     Functor_t& operator=(const Functor_t&);
-
-
 
     /**
      *  @brief Move Assignment
@@ -529,8 +476,6 @@ class LS_API Functor_t final : public Functor
      */
     Functor_t& operator=(Functor_t && );
 
-
-
     /**
      *  @brief Get the run-time-type information of *this functor.
      *
@@ -543,8 +488,6 @@ class LS_API Functor_t final : public Functor
      *  A hash-code that identifies the RTTI information of *this.
      */
     hash_t sub_type() const final;
-
-
 
     /**
      *  @brief Retrieve the number of arguments required to run *this.
@@ -559,8 +502,6 @@ class LS_API Functor_t final : public Functor
      *  *this functor needs to run.
      */
     virtual unsigned num_args() const final;
-
-
 
     /**
      *  @brief Load functor data from an std::istream
@@ -587,8 +528,6 @@ class LS_API Functor_t final : public Functor
      */
     bool load(std::istream& istr, VariableMap_t& vlm, FunctorMap_t& flm) final;
 
-
-
     /**
      *  @brief Save all data from *this into an std::ostream.
      *
@@ -604,8 +543,6 @@ class LS_API Functor_t final : public Functor
      * @return TRUE if the data was successfully saved, FALSE if not.
      */
     bool save(std::ostream& ostr) const final;
-
-
 
     /**
      *  @brief Compile/Verify function arguments
@@ -634,7 +571,7 @@ class LS_API Functor_t final : public Functor
     @brief Functor Template Type with Void Parameters
 -----------------------------------------------------------------------------*/
 template <hash_t hashId>
-class LS_API Functor_t<hashId, void> final : public Functor
+class Functor_t<hashId, void> final : public Functor
 {
   private:
 
@@ -651,7 +588,7 @@ class LS_API Functor_t<hashId, void> final : public Functor
      *  A pointer to an array of pointers to scriptable variables (this
      *  will actually be the 'parameters' member in *this).
      */
-    static const FuncRef_t func_impl;
+    static void func_impl(Variable** const);
 
   public:
     /**
@@ -661,16 +598,12 @@ class LS_API Functor_t<hashId, void> final : public Functor
      */
     virtual ~Functor_t() override;
 
-
-
     /**
      *  @brief Constructor
      *
      *  Initializes *this and all base classes.
      */
     Functor_t();
-
-
 
     /**
      *  @brief Copy Constructor
@@ -681,8 +614,6 @@ class LS_API Functor_t<hashId, void> final : public Functor
      *  A constant reference to another functor of the same template type.
      */
     Functor_t(const Functor_t& f);
-
-
 
     /**
      *  @brief Move Constructor
@@ -695,8 +626,6 @@ class LS_API Functor_t<hashId, void> final : public Functor
      */
     Functor_t(Functor_t&& f);
 
-
-
     /**
      *  @brief Copy Assignment
      *
@@ -708,8 +637,6 @@ class LS_API Functor_t<hashId, void> final : public Functor
      *  @return a reference to *this.
      */
     Functor_t& operator=(const Functor_t& f);
-
-
 
     /**
      *  @brief Move Assignment
@@ -724,8 +651,6 @@ class LS_API Functor_t<hashId, void> final : public Functor
      */
     Functor_t& operator=(Functor_t&& f);
 
-
-
     /**
      *  @brief Get the run-time-type information of *this functor.
      *
@@ -738,8 +663,6 @@ class LS_API Functor_t<hashId, void> final : public Functor
      *  A hash-code that identifies the RTTI information of *this.
      */
     hash_t sub_type() const final;
-
-
 
     /**
      *  @brief Retrieve the number of arguments required to run *this.
@@ -754,8 +677,6 @@ class LS_API Functor_t<hashId, void> final : public Functor
      *  *this functor needs to run.
      */
     virtual unsigned num_args() const final;
-
-
 
     /**
      *  @brief Load functor data from an std::istream
@@ -782,8 +703,6 @@ class LS_API Functor_t<hashId, void> final : public Functor
      */
     bool load(std::istream& istr, VariableMap_t& vlm, FunctorMap_t& flm) final;
 
-
-
     /**
      *  @brief Save all data from *this into an std::ostream.
      *
@@ -799,8 +718,6 @@ class LS_API Functor_t<hashId, void> final : public Functor
      * @return TRUE if the data was successfully saved, FALSE if not.
      */
     bool save(std::ostream& ostr) const final;
-
-
 
     /**
      *  @brief Compile/Verify function arguments
@@ -847,7 +764,7 @@ class LS_API Functor_t<0, void> final : public Functor
      *  A pointer to an array of pointers to scriptable variables (this
      *  will actually be the 'parameters' member in *this).
      */
-    static const FuncRef_t func_impl;
+    static void func_impl(Variable** const);
 
   public:
     /**
@@ -857,16 +774,12 @@ class LS_API Functor_t<0, void> final : public Functor
      */
     virtual ~Functor_t() override;
 
-
-
     /**
      *  @brief Constructor
      *
      *  Initializes *this and all base classes.
      */
     Functor_t();
-
-
 
     /**
      *  @brief Copy Constructor
@@ -877,8 +790,6 @@ class LS_API Functor_t<0, void> final : public Functor
      *  A constant reference to another functor of the same template type.
      */
     Functor_t(const Functor_t& f);
-
-
 
     /**
      *  @brief Move Constructor
@@ -891,8 +802,6 @@ class LS_API Functor_t<0, void> final : public Functor
      */
     Functor_t(Functor_t&& f);
 
-
-
     /**
      *  @brief Copy Assignment
      *
@@ -904,8 +813,6 @@ class LS_API Functor_t<0, void> final : public Functor
      *  @return a reference to *this.
      */
     Functor_t& operator=(const Functor_t& f);
-
-
 
     /**
      *  @brief Move Assignment
@@ -920,8 +827,6 @@ class LS_API Functor_t<0, void> final : public Functor
      */
     Functor_t& operator=(Functor_t && f);
 
-
-
     /**
      *  @brief Get the run-time-type information of *this functor.
      *
@@ -934,8 +839,6 @@ class LS_API Functor_t<0, void> final : public Functor
      *  A hash-code that identifies the RTTI information of *this.
      */
     hash_t sub_type() const final;
-
-
 
     /**
      *  @brief Retrieve the number of arguments required to run *this.
@@ -950,8 +853,6 @@ class LS_API Functor_t<0, void> final : public Functor
      *  *this functor needs to run.
      */
     virtual unsigned num_args() const final;
-
-
 
     /**
      *  @brief Load functor data from an std::istream
@@ -978,8 +879,6 @@ class LS_API Functor_t<0, void> final : public Functor
      */
     bool load(std::istream& istr, VariableMap_t& vlm, FunctorMap_t& flm) final;
 
-
-
     /**
      *  @brief Save all data from *this into an std::ostream.
      *
@@ -995,8 +894,6 @@ class LS_API Functor_t<0, void> final : public Functor
      * @return TRUE if the data was successfully saved, FALSE if not.
      */
     bool save(std::ostream& ostr) const final;
-
-
 
     /**
      *  @brief Compile/Verify function arguments
@@ -1023,6 +920,8 @@ class LS_API Functor_t<0, void> final : public Functor
 
 } // end script namespace
 } // end ls namespace
+
+
 
 #include "lightsky/script/generic/ScriptFunctor_impl.h"
 
@@ -1058,20 +957,32 @@ class LS_API Functor_t<0, void> final : public Functor
  *      ...
  *      delete pFunc;
  */
-#define LS_SCRIPT_DECLARE_FUNC(funcName, ...) \
-    \
-    enum : ls::script::hash_t { \
-        ScriptHash_##funcName = LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(funcName)) \
-    }; \
-    \
-    typedef ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__> ScriptFunc_##funcName; \
-    \
-    LS_API LS_EXTERN const ls::script::FuncFactory_t& ScriptFactory_##funcName; \
-    \
-    template <> \
-    LS_API ls::script::FuncRef_t ScriptFunc_##funcName::func_impl; \
-    \
-    LS_EXTERN template class LS_API ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>
+#ifndef _LS_SCRIPT_DECLARE_FUNC_IMPL
+    #define _LS_SCRIPT_DECLARE_FUNC_IMPL(LS_API_TYPE, funcName, ...) \
+        \
+        enum : ls::script::hash_t { \
+            ScriptHash_##funcName = LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(funcName)) \
+        }; \
+        \
+        typedef ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__> ScriptFunc_##funcName; \
+        \
+        LS_API_TYPE extern const ls::script::FuncFactory_t& ScriptFactory_##funcName; \
+        \
+        template <> \
+        LS_API_TYPE void ScriptFunc_##funcName::func_impl(ls::script::Variable** const); \
+        \
+        LS_EXTERN template class LS_API_TYPE ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>
+#endif /* _LS_SCRIPT_DECLARE_FUNC_IMPL */
+
+#ifndef LS_SCRIPT_DECLARE_FUNC
+    #define LS_SCRIPT_DECLARE_FUNC(funcName, ...) _LS_SCRIPT_DECLARE_FUNC_IMPL(LS_STATIC_API, funcName, __VA_ARGS__)
+#endif /* LS_SCRIPT_DECLARE_FUNC */
+
+#ifndef LS_SCRIPT_DECLARE_FUNC_SHARED
+    #define LS_SCRIPT_DECLARE_FUNC_SHARED(funcName, ...) _LS_SCRIPT_DECLARE_FUNC_IMPL(LS_API, funcName, __VA_ARGS__)
+#endif /* LS_SCRIPT_DECLARE_FUNC_SHARED */
+
+
 
 /**
  *  @brief Function Definition for source files.
@@ -1103,17 +1014,29 @@ class LS_API Functor_t<0, void> final : public Functor
  *      delete pFunc;
  *
  */
-#define LS_SCRIPT_DEFINE_FUNC(funcName, ...) \
-    template class LS_API ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>; \
-    \
-    LS_API const ls::script::FuncFactory_t& ScriptFactory_##funcName = register_func_factory( \
-        ScriptHash_##funcName, []()->ls::script::Pointer_t<Functor> { \
-            return ls::script::Pointer_t<Functor>{new ScriptFunc_##funcName{}}; \
-        } \
-    ); \
-    \
-    template <> \
-    LS_API ls::script::FuncRef_t ScriptFunc_##funcName::func_impl = [](ls::script::Variable** const pArgs)->void
+#ifndef _LS_SCRIPT_DEFINE_FUNC_IMPL
+    #define _LS_SCRIPT_DEFINE_FUNC_IMPL(LS_API_TYPE, funcName, ...) \
+        template class LS_API_TYPE ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>; \
+        \
+        LS_API_TYPE const ls::script::FuncFactory_t& ScriptFactory_##funcName = ls::script::register_func_factory( \
+            ScriptHash_##funcName, []()->ls::script::Pointer_t<ls::script::Functor> { \
+                return ls::script::Pointer_t<ls::script::Functor>{new ScriptFunc_##funcName{}}; \
+            } \
+        ); \
+        \
+        template <> \
+        LS_API_TYPE void ScriptFunc_##funcName::func_impl(ls::script::Variable** const pArgs)
+#endif /* _LS_SCRIPT_DEFINE_FUNC_IMPL */
+
+#ifndef LS_SCRIPT_DEFINE_FUNC
+    #define LS_SCRIPT_DEFINE_FUNC(funcName, ...) _LS_SCRIPT_DEFINE_FUNC_IMPL(LS_STATIC_API, funcName, __VA_ARGS__)
+#endif /* LS_SCRIPT_DEFINE_FUNC */
+
+#ifndef LS_SCRIPT_DEFINE_FUNC_SHARED
+    #define LS_SCRIPT_DEFINE_FUNC_SHARED(funcName, ...) _LS_SCRIPT_DEFINE_FUNC_IMPL(LS_EXPORT_API, funcName, __VA_ARGS__)
+#endif /* LS_SCRIPT_DEFINE_FUNC_SHARED */
+
+
 
 /**
  *  @brief Function Argument Accessibility
@@ -1129,26 +1052,18 @@ class LS_API Functor_t<0, void> final : public Functor
  *          LS_SCRIPT_PARAM(0, std::string) = LS_SCRIPT_PARAM(1, std::string) + LS_SCRIPT_PARAM(2, std::string);
  *      };
  */
-#define LS_SCRIPT_PARAM(index, varType) \
-    static_cast<ls::script::Variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>*>(pArgs[index])->data
+#ifndef LS_SCRIPT_PARAM
+    #define LS_SCRIPT_PARAM(index, varType) \
+        static_cast<ls::script::Variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>*>(pArgs[index])->data
+#endif /* LS_SCRIPT_PARAM */
 
 
 
 /*-----------------------------------------------------------------------------
     Built-In Types
 -----------------------------------------------------------------------------*/
-namespace ls
-{
-namespace script
-{
+LS_SCRIPT_DECLARE_FUNC_SHARED(empty, void);
 
 
-
-LS_SCRIPT_DECLARE_FUNC(empty, void);
-
-
-
-} // end script namespace
-} // end ls namespace
 
 #endif  /* __LS_SCRIPT_FUNCTOR_H__ */

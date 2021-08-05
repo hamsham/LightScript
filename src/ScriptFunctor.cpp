@@ -128,7 +128,7 @@ bool Functor::save(std::ostream& ostr) const
 /*-----------------------------------------------------------------------------
     NULL Functor Template Type.
 -----------------------------------------------------------------------------*/
-FuncRef_t Functor_t<0, void>::func_impl = [](Variable** const) -> void
+LS_API void Functor_t<0, void>::func_impl(Variable** const)
 {
 };
 
@@ -250,15 +250,17 @@ bool Functor_t<0, void>::compile()
     return true;
 }
 
-/*-----------------------------------------------------------------------------
-    Built-In Types
------------------------------------------------------------------------------*/
-LS_SCRIPT_DEFINE_FUNC(empty, void)
-{
-    (void)pArgs;
-};
-
 
 
 } // end script namespace
 } // end ls namespace
+
+
+
+/*-----------------------------------------------------------------------------
+    Built-In Types
+-----------------------------------------------------------------------------*/
+LS_SCRIPT_DEFINE_FUNC_SHARED(empty, void)
+{
+    (void)pArgs;
+}

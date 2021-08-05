@@ -10,34 +10,9 @@ namespace script
     Variable Base Type
 -----------------------------------------------------------------------------*/
 /*-------------------------------------
-    Variable Object Copy Assignment
--------------------------------------*/
-inline
-Variable& Variable::operator=(const Variable& v)
-{
-    Scriptable::operator=(v);
-    return *this;
-}
-
-
-
-/*-------------------------------------
-    Variable Object Move Assignment
--------------------------------------*/
-inline
-Variable& Variable::operator=(Variable&& v)
-{
-    Scriptable::operator=(std::move(v));
-    return *this;
-}
-
-
-
-/*-------------------------------------
     Variable Object Base Type Query
 -------------------------------------*/
-inline
-ScriptBaseType Variable::base_type() const
+inline ScriptBaseType Variable::base_type() const
 {
     return ScriptBaseType::VARIABLE;
 }
@@ -132,7 +107,7 @@ bool Variable_t<hashId, type>::load(std::istream& istr, VariableMap_t&, FunctorM
 /*-------------------------------------
     Variable Object Type Data Saving
 -------------------------------------*/
-template <hash_t hashId, typename type> inline
+template <hash_t hashId, typename type>
 bool Variable_t<hashId, type>::save(std::ostream& ostr) const
 {
     ostr << data;
@@ -144,8 +119,8 @@ bool Variable_t<hashId, type>::save(std::ostream& ostr) const
 /*-------------------------------------
     Variable Object Type RTTI
 -------------------------------------*/
-template <hash_t hashId, typename type> inline
-hash_t Variable_t<hashId, type>::sub_type() const
+template <hash_t hashId, typename type>
+inline hash_t Variable_t<hashId, type>::sub_type() const
 {
     return hashId;
 }

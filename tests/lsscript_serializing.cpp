@@ -5,6 +5,7 @@
  * Created on Mar 22, 2015, 8:03:41 PM
  */
 
+#include <cassert>
 #include <iostream>
 
 #include "lightsky/script/Script.h"
@@ -40,22 +41,64 @@ using ls::script::FunctorMap_t;
 /*-----------------------------------------------------------------------------
  * Function Entry Point
 -----------------------------------------------------------------------------*/
-namespace ls
-{
-namespace script
-{
 // dummy value to get the entry points
 LS_SCRIPT_DECLARE_FUNC(Entry, void);
 
 LS_SCRIPT_DEFINE_FUNC(Entry, void)
 {
     (void)pArgs;
+}
+
+
+
+/*-----------------------------------------------------------------------------
+ * Test Structure
+-----------------------------------------------------------------------------*/
+struct SampleStruct
+{
+    int i;
+    std::string msg;
 };
 
+LS_SCRIPT_OVERRIDE_VAR_LOAD(LS_EXPORT_API, SampleStruct);
+LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_STATIC_API, SampleStruct);
+LS_SCRIPT_DECLARE_VAR(sampleStruct, SampleStruct);
 
+// These overrides show that data can be written and read in a binary format.
+LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_STATIC_API, SampleStruct)
+{
+    const std::string::size_type msgLen = data.msg.size() * sizeof(std::string::value_type);
 
-} // end script namespace
-} // end ls namespace
+    ostr.write((const char*)&data.i, sizeof(int));
+    ostr.write((const char*)&msgLen, sizeof(std::string::size_type));
+    ostr.write(data.msg.data(), msgLen);
+
+    return ostr.good();
+}
+
+LS_SCRIPT_OVERRIDE_VAR_LOAD(LS_EXPORT_API, SampleStruct)
+{
+    (void)varImporter;
+    (void)funcImporter;
+
+    std::string::size_type len = 0;
+    istr.read((char*)&data.i, sizeof(int));
+    istr.read((char*)&len, sizeof(std::string::size_type));
+
+    data.msg.resize(len, '\0');
+    istr.read(&data.msg[0], len);
+
+    if (data.msg.size() != len)
+    {
+        data.i = 0;
+        data.msg.clear();
+        return false;
+    }
+
+    return istr.good() || istr.eof();
+}
+
+LS_SCRIPT_DEFINE_VAR(sampleStruct, SampleStruct);
 
 
 
@@ -82,21 +125,23 @@ void validate_scripts(FunctorMap_t& funcMap)
 -----------------------------------------------------------------------------*/
 void generate_scripts(VariableMap_t& varMap, FunctorMap_t& funcMap)
 {
-    lsPointer<lsFunctor> testFunc1 = create_functor(ls::script::ScriptHash_AddInts);
-    lsPointer<lsFunctor> testFunc2 = create_functor(ls::script::ScriptHash_SubInts);
-    lsPointer<lsFunctor> testFunc3 = create_functor(ls::script::ScriptHash_MulInts);
-    lsPointer<lsFunctor> testFunc4 = create_functor(ls::script::ScriptHash_DivInts);
-    lsPointer<lsFunctor> testEntry1 = create_functor(ls::script::ScriptHash_Entry);
+    lsPointer<lsFunctor> testFunc1 = create_functor(ScriptHash_AddInts);
+    lsPointer<lsFunctor> testFunc2 = create_functor(ScriptHash_SubInts);
+    lsPointer<lsFunctor> testFunc3 = create_functor(ScriptHash_MulInts);
+    lsPointer<lsFunctor> testFunc4 = create_functor(ScriptHash_DivInts);
+    lsPointer<lsFunctor> testEntry1 = create_functor(ScriptHash_Entry);
 
-    lsPointer<lsVariable> testVar1 = create_variable(ls::script::ScriptHash_int);
-    lsPointer<lsVariable> testVar2 = create_variable(ls::script::ScriptHash_int);
-    lsPointer<lsVariable> testVar3 = create_variable(ls::script::ScriptHash_int);
-    lsPointer<lsVariable> testVar4 = create_variable(ls::script::ScriptHash_string);
+    lsPointer<lsVariable> testVar1 = create_variable(ScriptHash_int);
+    lsPointer<lsVariable> testVar2 = create_variable(ScriptHash_int);
+    lsPointer<lsVariable> testVar3 = create_variable(ScriptHash_int);
+    lsPointer<lsVariable> testVar4 = create_variable(ScriptHash_string);
+    lsPointer<lsVariable> testVar5 = create_variable(ScriptHash_sampleStruct);
 
     LS_SCRIPT_VAR_DATA(testVar1, int) = 1;
     LS_SCRIPT_VAR_DATA(testVar2, int) = 2;
     LS_SCRIPT_VAR_DATA(testVar3, int) = 0; // dummy value
     LS_SCRIPT_VAR_DATA(testVar4, string) = "Hello World!";
+    LS_SCRIPT_VAR_DATA(testVar5, sampleStruct) = {42, "Test from LSScript!"};
 
     testEntry1->next_func_ptr(testFunc1.get());
 
@@ -126,6 +171,7 @@ void generate_scripts(VariableMap_t& varMap, FunctorMap_t& funcMap)
     varMap[testVar2.get()] = std::move(testVar2);
     varMap[testVar3.get()] = std::move(testVar3);
     varMap[testVar4.get()] = std::move(testVar4);
+    varMap[testVar5.get()] = std::move(testVar5);
 
     funcMap[testFunc1.get()] = std::move(testFunc1);
     funcMap[testFunc2.get()] = std::move(testFunc2);
@@ -179,7 +225,7 @@ bool run_scripts(VariableMap_t& varMap, FunctorMap_t& funcMap)
     {
         lsPointer<lsFunctor>& func = funcIter.second;
 
-        if (func->sub_type() == ls::script::ScriptHash_Entry)
+        if (func->sub_type() == ScriptHash_Entry)
         {
             pEntryFunc = func.get();
             break;
@@ -197,13 +243,17 @@ bool run_scripts(VariableMap_t& varMap, FunctorMap_t& funcMap)
     {
         lsPointer<lsVariable>& pVar = varIter.second;
 
-        if (pVar->sub_type() == ls::script::ScriptHash_int)
+        if (pVar->sub_type() == ScriptHash_int)
         {
             std::cout << '\t' << LS_SCRIPT_VAR_DATA(pVar, int) << std::endl;
         }
-        else if (pVar->sub_type() == ls::script::ScriptHash_string)
+        else if (pVar->sub_type() == ScriptHash_string)
         {
             std::cout << '\t' << LS_SCRIPT_VAR_DATA(pVar, string) << std::endl;
+        }
+        else if (pVar->sub_type() == ScriptHash_sampleStruct)
+        {
+            std::cout << '\t' << LS_SCRIPT_VAR_DATA(pVar, sampleStruct).i << ' ' << LS_SCRIPT_VAR_DATA(pVar, sampleStruct).msg << std::endl;
         }
     }
 

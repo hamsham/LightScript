@@ -15,6 +15,8 @@ namespace ls
 namespace script
 {
 
+
+
 /*-------------------------------------
     Variable Object Destructor
 -------------------------------------*/
@@ -50,6 +52,28 @@ Variable::Variable(const Variable& v) :
 Variable::Variable(Variable&& v) :
     Scriptable{std::move(v)}
 {
+}
+
+
+
+/*-------------------------------------
+    Variable Object Copy Assignment
+-------------------------------------*/
+Variable& Variable::operator=(const Variable& v)
+{
+    Scriptable::operator=(v);
+    return *this;
+}
+
+
+
+/*-------------------------------------
+    Variable Object Move Assignment
+-------------------------------------*/
+Variable& Variable::operator=(Variable&& v)
+{
+    Scriptable::operator=(std::move(v));
+    return *this;
 }
 
 

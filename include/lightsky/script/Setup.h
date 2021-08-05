@@ -28,23 +28,32 @@
 #if defined(_MSC_VER)
     #if defined(LS_BUILD_SHARED)
         #define LS_API __declspec(dllexport)
+        #define LS_EXPORT_API __declspec(dllexport)
         #define LS_EXTERN
     #else
         #define LS_API __declspec(dllimport)
+        #define LS_EXPORT_API
         #define LS_EXTERN extern
     #endif
+
+    #define LS_STATIC_API
 
 #elif defined(__GNUC__)
     #if defined(LS_BUILD_SHARED)
         #define LS_API __attribute__((__visibility__("default")))
+        #define LS_EXPORT_API __attribute__((__visibility__("default")))
     #else
         #define LS_API
+        #define LS_EXPORT_API
     #endif
 
+    #define LS_STATIC_API
     #define LS_EXTERN extern
 
 #else
     #define LS_API
+    #define LS_EXPORT_API
+    #define LS_STATIC_API
     #define LS_EXTERN extern
 #endif
 
