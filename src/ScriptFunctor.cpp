@@ -130,7 +130,7 @@ bool Functor::save(std::ostream& ostr) const
 -----------------------------------------------------------------------------*/
 LS_API void Functor_t<0, void>::func_impl(Variable** const)
 {
-};
+}
 
 
 
@@ -167,15 +167,10 @@ Functor_t<0, void>::Functor_t(const Functor_t& f) :
 /*-------------------------------------
     Move Constructor
 -------------------------------------*/
-Functor_t<0, void>::Functor_t(Functor_t && f)
-
-:
-Functor
+Functor_t<0, void>::Functor_t(Functor_t && f) :
+    Functor{nullptr, func_impl}
 {
-nullptr, func_impl
-}
-{
-Functor::operator=(std::move(f));
+    Functor::operator=(std::move(f));
 }
 
 
