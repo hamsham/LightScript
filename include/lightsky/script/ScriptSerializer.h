@@ -22,6 +22,39 @@ class Functor;
 
 
 
+/*-----------------------------------------------------------------------------
+ * Load Scripts
+-----------------------------------------------------------------------------*/
+/**
+ * @brief Error codes for loading.
+ */
+enum class ScriptLoadStatus
+{
+    SUCCESS,
+    ERROR_OPENING_FILE,
+    ERROR_UNKNOWN_TYPE_INFO,
+    ERROR_BAD_STREAM,
+    ERROR_RESERVING_VARIABLE,
+    ERROR_RESERVING_FUNCTION,
+    ERROR_ALLOCATING_VARIABLE,
+    ERROR_READING_VARIABLE_DATA,
+    ERROR_ALLOCATING_FUNCTION,
+    ERROR_READING_FUNCTION_DATA
+};
+
+
+
+/**
+ * @brief Descriptive information when loading.
+ */
+struct ScriptLoadInfo
+{
+    ScriptLoadStatus status;
+    std::string filename;
+};
+
+
+
 /**
  * @brief Load a file
  *
@@ -39,7 +72,7 @@ class Functor;
  *
  * @return true if the file was successfully loaded. False if not.
  */
-LS_API bool LS_CALL load_script_file(
+LS_API ScriptLoadInfo LS_CALL load_script_file(
     const std::string& filename,
     VariableMap_t& outVarMap,
     FunctorMap_t& outFuncMap
@@ -47,23 +80,27 @@ LS_API bool LS_CALL load_script_file(
 
 
 
-/**
- * @brief Remap the keys of a variable and functor map which had recently been
- * loaded.
- *
- * It is recommended to use this function after loading data from a file in
- * order to directly map all key values in the input maps to the pointers which
- * store their data.
- *
- * @param outVarMap
- * A reference to an iteratable container object which will hold a set of
- * scriptable variable objects.
- *
- * @param outFuncMap
- * A reference to an iteratable container object which will hold a set of
- * scriptable functor objects.
- */
-LS_API void LS_CALL remap_script_keys(VariableMap_t& outVarMap, FunctorMap_t& outFuncMap);
+/*-----------------------------------------------------------------------------
+ * Save Scripts
+-----------------------------------------------------------------------------*/
+enum class ScriptSaveStatus
+{
+    SUCCESS,
+    ERROR_CREATING_STREAM,
+    ERROR_BAD_STREAM,
+    ERROR_NULL_VARIABLE,
+    ERROR_NULL_FUNCTION,
+    ERROR_SAVING_VARIABLE,
+    ERROR_SAVING_FUNCTION
+};
+
+
+
+struct ScriptSaveInfo
+{
+    ScriptSaveStatus status;
+    std::string fileName;
+};
 
 
 
@@ -87,7 +124,7 @@ LS_API void LS_CALL remap_script_keys(VariableMap_t& outVarMap, FunctorMap_t& ou
  *
  * @return true if the file was successfully saved. False if not.
  */
-LS_API bool LS_CALL save_script_file(
+LS_API ScriptSaveInfo LS_CALL save_script_file(
     const std::string& filename,
     const VariableMap_t& inVarList,
     const FunctorMap_t& inFuncList

@@ -14,6 +14,8 @@
 #include "lightsky/script/ScriptFunctor.h"
 #include "lightsky/script/ScriptBasicVar.h"
 
+
+
 /*-----------------------------------------------------------------------------
  Data Input/Output
 -----------------------------------------------------------------------------*/
@@ -22,14 +24,16 @@ namespace ls
 namespace script
 {
 
-/*-------------------------------------
- * Standard Output
--------------------------------------*/
-LS_SCRIPT_DECLARE_VAR(StdPrint, void*);
+
 
 /*-----------------------------------------------------------------------------
- * Print functions for basic data types
+ * Standard Output
 -----------------------------------------------------------------------------*/
+LS_SCRIPT_DECLARE_VAR(StdPrint, void*);
+
+/*-------------------------------------
+ * Print functions for basic data types
+-------------------------------------*/
 LS_SCRIPT_DECLARE_FUNC(StdPrintByte, ScriptVar_StdPrint, ScriptVar_byte);
 
 LS_SCRIPT_DECLARE_FUNC(StdPrintShort, ScriptVar_StdPrint, ScriptVar_short);

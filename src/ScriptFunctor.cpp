@@ -88,9 +88,14 @@ Functor& Functor::operator=(Functor&& f)
 bool Functor::load(std::istream& istr, VariableMap_t&, FunctorMap_t& flm)
 {
     hash_t nextType = 0;
-    Functor * ptr = nullptr;
+    Functor* ptr = nullptr;
 
     istr >> nextType >> (void*&)ptr;
+    if ((nextType && !ptr) || (!nextType && ptr))
+    {
+        pNextFunc = nullptr;
+        return false;
+    }
 
     pNextFunc = flm.count(ptr) ? flm[ptr].get() : nullptr;
 
@@ -101,7 +106,7 @@ bool Functor::load(std::istream& istr, VariableMap_t&, FunctorMap_t& flm)
         return false;
     }
 
-    return true;
+    return istr.good() || istr.eof();
 }
 
 
@@ -240,9 +245,13 @@ bool Functor_t<0, void>::save(std::ostream& ostr) const
 /*-------------------------------------
     Argument Verification/Compilation
 -------------------------------------*/
-bool Functor_t<0, void>::compile()
+CompileInfo Functor_t<0, void>::compile()
 {
-    return true;
+    CompileInfo info;
+    info.status = CompileStatus::SUCCESS;
+    info.argIndex = 0;
+    info.pArgVal = nullptr;
+    return info;
 }
 
 

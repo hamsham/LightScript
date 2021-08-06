@@ -109,11 +109,18 @@ void validate_scripts(FunctorMap_t& funcMap)
 {
     for (std::pair<lsFunctor * const, lsPointer <lsFunctor>>&funcIter : funcMap)
     {
-        bool result = funcIter.second->compile();
-        assert(result == true);
-        if (!result)
+        ls::script::CompileInfo&& info = funcIter.second->compile();
+        assert(info.status == ls::script::CompileStatus::SUCCESS);
+        if (info.status != ls::script::CompileStatus::SUCCESS)
         {
-            std::cerr << "Failed to compile script!" << std::endl;
+            std::cerr
+                << "Failed to compile script:"
+                << "\tFunction:  " << (const void*)funcIter.second.get()
+                << "\tType:      " << funcIter.second->sub_type()
+                << "\tStatus:    " << static_cast<std::underlying_type<ls::script::CompileStatus>::type>(info.status)
+                << "\tArg Index: " << info.argIndex
+                << "\tArg Value: " << info.pArgVal
+                << std::endl;
         }
     }
 }
@@ -187,7 +194,8 @@ void generate_scripts(VariableMap_t& varMap, FunctorMap_t& funcMap)
 -----------------------------------------------------------------------------*/
 void save_scripts(const VariableMap_t& varImporter, const FunctorMap_t& funcImporter)
 {
-    if (!ls::script::save_script_file(TEST_FILE, varImporter, funcImporter))
+    ls::script::ScriptSaveInfo&& result = ls::script::save_script_file(TEST_FILE, varImporter, funcImporter);
+    if (result.status != ls::script::ScriptSaveStatus::SUCCESS)
     {
         std::cerr << "Failed to save variable & functor scripts!" << std::endl;
         assert(false);
@@ -201,13 +209,12 @@ void save_scripts(const VariableMap_t& varImporter, const FunctorMap_t& funcImpo
 -----------------------------------------------------------------------------*/
 void load_scripts(VariableMap_t& varImporter, FunctorMap_t& funcImporter)
 {
-    if(!ls::script::load_script_file(TEST_FILE, varImporter, funcImporter))
+    ls::script::ScriptLoadInfo&& loadStatus = ls::script::load_script_file(TEST_FILE, varImporter, funcImporter);
+    if(loadStatus.status != ls::script::ScriptLoadStatus::SUCCESS)
     {
         std::cerr << "Failed to load variable & functor scripts!" << std::endl;
         assert(false);
     }
-
-    ls::script::remap_script_keys(varImporter, funcImporter);
 }
 
 

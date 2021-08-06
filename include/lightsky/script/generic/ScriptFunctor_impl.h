@@ -67,8 +67,13 @@ inline void Functor::arg(unsigned index, Variable* v)
     Functor parameter type-checking for a single argument.
 -------------------------------------*/
 template <typename arg_t>
-bool Functor::check_single_arg(const Functor& f, unsigned i, arg_t* t)
+CompileInfo Functor::check_single_arg(const Functor& f, unsigned i, arg_t* t)
 {
+    CompileInfo info;
+    info.status = CompileStatus::SUCCESS;
+    info.argIndex = i;
+    info.pArgVal = t;
+
     if (i >= f.num_args())
     {
         std::cerr
@@ -76,7 +81,8 @@ bool Functor::check_single_arg(const Functor& f, unsigned i, arg_t* t)
             << "\n\tFunction:   " << (void*)&f << '-' << f.sub_type()
             << "\n\tParameter:  " << i << '/' << f.num_args()
             << std::endl;
-        return false;
+        info.status = CompileStatus::ERROR_INVALID_ARG_COUNT;
+        return info;
     }
 
     if (f.arg(i) == nullptr)
@@ -86,7 +92,8 @@ bool Functor::check_single_arg(const Functor& f, unsigned i, arg_t* t)
             << "\n\tFunction:    " << (void*)&f << '-' << f.sub_type()
             << "\n\tParameter:   " << i << '/' << f.num_args()
             << std::endl;
-        return false;
+        info.status = CompileStatus::ERROR_NULL_ARG;
+        return info;
     }
 
     if (dynamic_cast<const arg_t*> (f.arg(i)) == nullptr)
@@ -97,9 +104,11 @@ bool Functor::check_single_arg(const Functor& f, unsigned i, arg_t* t)
             << "\n\tInput type:  " << typeid(f.arg(i)).name()
             << "\n\tActual type: " << typeid(t).name()
             << std::endl;
-        return false;
+        info.status = CompileStatus::ERROR_INVALID_ARG_TYPE;
+        return info;
     }
-    return true;
+
+    return info;
 }
 
 
@@ -118,9 +127,15 @@ inline void Functor::run()
     Functor parameter type-checking (Recursive)
 -------------------------------------*/
 template <typename arg_t, typename... args_t>
-bool Functor::check_args(const Functor& f, unsigned i, arg_t* t, args_t* ...)
+CompileInfo Functor::check_args(const Functor& f, unsigned i, arg_t* t, args_t* ...)
 {
-    return check_single_arg<arg_t>(f, i, t) && check_args<args_t...>(f, i + 1, ((args_t*)nullptr)...);
+    CompileInfo&& info = check_single_arg<arg_t>(f, i, t);
+    if (info.status != CompileStatus::SUCCESS)
+    {
+        return info;
+    }
+
+    return check_args<args_t...>(f, i + 1, ((args_t*)nullptr)...);
 }
 
 
@@ -129,10 +144,12 @@ bool Functor::check_args(const Functor& f, unsigned i, arg_t* t, args_t* ...)
     Functor parameter type-checking (Sentinel)
 -------------------------------------*/
 template <typename arg_t>
-bool Functor::check_args(const Functor& f, unsigned i, arg_t* t)
+CompileInfo Functor::check_args(const Functor& f, unsigned i, arg_t* t)
 {
     return check_single_arg<arg_t>(f, i, t);
 }
+
+
 
 /*-----------------------------------------------------------------------------
     Functor Derived Template Types
@@ -269,7 +286,7 @@ bool Functor_t<hashId, args_t...>::save(std::ostream& ostr) const
     Argument Verification/Compilation
 -------------------------------------*/
 template <hash_t hashId, typename... args_t>
-bool Functor_t<hashId, args_t...>::compile()
+CompileInfo Functor_t<hashId, args_t...>::compile()
 {
     return Functor::check_args(*this, 0, ((args_t*)nullptr)...);
 }
@@ -394,9 +411,13 @@ bool Functor_t<hashId, void>::save(std::ostream& ostr) const
     Argument Verification/Compilation
 -------------------------------------*/
 template <hash_t hashId>
-inline bool Functor_t<hashId, void>::compile()
+inline CompileInfo Functor_t<hashId, void>::compile()
 {
-    return true;
+    CompileInfo info;
+    info.status = CompileStatus::SUCCESS;
+    info.argIndex = 0;
+    info.pArgVal = nullptr;
+    return info;
 }
 
 

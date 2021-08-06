@@ -102,7 +102,8 @@ void script_bench()
     testFunc1->next_func_ptr(testFunc2.get());
     testFunc2->next_func_ptr(testFunc1.get());
 
-    if (!testFunc1->compile() || !testFunc2->compile())
+    if (testFunc1->compile().status != ls::script::CompileStatus::SUCCESS
+    || testFunc2->compile().status != ls::script::CompileStatus::SUCCESS)
     {
         std::cerr << "Error: Unable to compile the test functions." << std::endl;
         return;

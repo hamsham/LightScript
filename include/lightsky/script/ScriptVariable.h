@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <memory> // std::nothrow
 
 #include "lightsky/script/Setup.h"
 #include "lightsky/script/Scriptable.h"
@@ -21,11 +22,11 @@ namespace ls
 namespace script
 {
 
-/**----------------------------------------------------------------------------
- * Variable Base Type
+/**
+ * @brief Variable Base Type
  * 
  * The Variable base object is used as an interface for scriptable data types.
------------------------------------------------------------------------------*/
+ */
 class LS_API Variable : public Scriptable
 {
   public:
@@ -100,9 +101,9 @@ class LS_API Variable : public Scriptable
 
 
 
-/**----------------------------------------------------------------------------
-    Extended Variable Template Type
------------------------------------------------------------------------------*/
+/**
+ * @brief Extended Variable Template Type
+ */
 template <hash_t hashId, typename type>
 class Variable_t final : public Variable
 {
@@ -263,6 +264,8 @@ class Variable_t final : public Variable
             ls::script::Variable_t<LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(varType)), varType>
 #endif /* LS_SCRIPT_VAR_TYPE */
 
+
+
 /**
  *  @brief Script Variable Data Access
  *
@@ -365,7 +368,7 @@ class Variable_t final : public Variable
         \
         LS_API_TYPE const ls::script::VarFactory_t& ScriptFactory_##varName = ls::script::register_var_factory( \
             ScriptHash_##varName, []()->ls::script::Pointer_t<ls::script::Variable> { \
-                return ls::script::Pointer_t<ls::script::Variable>{new ScriptVar_##varName{}}; \
+                return ls::script::Pointer_t<ls::script::Variable>{new(std::nothrow) ScriptVar_##varName{}}; \
             } \
         )
 #endif /* _LS_SCRIPT_DEFINE_VAR_IMPL */

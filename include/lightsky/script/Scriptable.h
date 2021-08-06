@@ -19,11 +19,11 @@ namespace script
 
 
 
-/**----------------------------------------------------------------------------
-    @brief Script Object Base Class
-
-    Defines all common interfaces for derived types.
------------------------------------------------------------------------------*/
+/**
+ * @brief Script Object Base Class
+ *
+ * Defines all common interfaces for derived types.
+ */
 class LS_API Scriptable{
     public:
     /**
@@ -121,6 +121,9 @@ class LS_API Scriptable{
      */
     virtual bool save(std::ostream& ostr) const = 0;
 };
+
+
+
 } // end script namespace
 } // end ls namespace
 

@@ -81,7 +81,7 @@ namespace ls
 /*-------------------------------------
  * Variable Factory Registration
 -------------------------------------*/
-const VarFactory_t& script::register_var_factory(hash_t factoryId, const VarFactory_t& pFactory)
+LS_API const VarFactory_t& LS_CALL script::register_var_factory(hash_t factoryId, const VarFactory_t& pFactory)
 {
     if (_get_var_factory().count(factoryId))
     {
@@ -97,7 +97,7 @@ const VarFactory_t& script::register_var_factory(hash_t factoryId, const VarFact
 /*-------------------------------------
  * Functor Factory Registration
 -------------------------------------*/
-const FuncFactory_t& script::register_func_factory(hash_t factoryId, const FuncFactory_t& pFactory)
+LS_API const FuncFactory_t& LS_CALL script::register_func_factory(hash_t factoryId, const FuncFactory_t& pFactory)
 {
     if (_get_func_factory().count(factoryId))
     {
@@ -117,11 +117,10 @@ const FuncFactory_t& script::register_func_factory(hash_t factoryId, const FuncF
  * If the pointer isn't NULL, run the function in order to return a
  * new instance of the requested object
 -----------------------------------------------------------------------------*/
-
 /*-------------------------------------
  * Variable Creation
 -------------------------------------*/
-Pointer_t<script::Variable> script::create_variable(hash_t factoryId)
+LS_API Pointer_t<script::Variable> LS_CALL script::create_variable(hash_t factoryId)
 {
     const std::unordered_map<hash_t, VarFactory_t>& varFactory = _get_var_factory();
 
@@ -141,7 +140,7 @@ Pointer_t<script::Variable> script::create_variable(hash_t factoryId)
 /*-------------------------------------
  * Variable Deletion
 -------------------------------------*/
-void script::destroy_variable(Pointer_t<Variable>& pVariable)
+LS_API void LS_CALL script::destroy_variable(Pointer_t<Variable>& pVariable)
 {
     pVariable.reset();
 }
@@ -151,7 +150,7 @@ void script::destroy_variable(Pointer_t<Variable>& pVariable)
 /*-------------------------------------
  * Functor Creation
 -------------------------------------*/
-Pointer_t<script::Functor> script::create_functor(hash_t factoryId)
+LS_API Pointer_t<script::Functor> LS_CALL script::create_functor(hash_t factoryId)
 {
     const std::unordered_map<hash_t, FuncFactory_t>& funcFactory = _get_func_factory();
 
@@ -171,7 +170,7 @@ Pointer_t<script::Functor> script::create_functor(hash_t factoryId)
 /*-------------------------------------
  * Functor Deletion
 -------------------------------------*/
-void script::destroy_functor(Pointer_t<Functor>& pFunc)
+LS_API void LS_CALL script::destroy_functor(Pointer_t<Functor>& pFunc)
 {
     pFunc.reset();
 }

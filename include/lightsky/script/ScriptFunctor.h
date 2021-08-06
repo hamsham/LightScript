@@ -9,6 +9,7 @@
 #define __LS_SCRIPT_FUNCTOR_H__
 
 #include <iostream> // std::cout, std::cin, std::cerr
+#include <memory> // std::nothrow
 #include <typeinfo> // typeid(x)
 #include <utility> // std::move()
 
@@ -35,13 +36,41 @@ typedef void (*const FuncRef_t)(Variable** const);
 
 
 
-/**----------------------------------------------------------------------------
-    @brief Functor Base Class
+/**
+ * @brief Status of a functor compilation.
+ */
+enum class CompileStatus
+{
+    SUCCESS,
+    ERROR_INVALID_ARG_COUNT,
+    ERROR_NULL_ARG,
+    ERROR_INVALID_ARG_TYPE,
+};
 
-    The functor base class is constructed with a reference to a native C/C++
-    function. It contains methods to store and load its parameters from a
-    script file, self-compile, and change its arguments at runtime.
------------------------------------------------------------------------------*/
+
+
+/**
+ * @brief Return structure from a call to "Functor::compile()".
+ *
+ * This struct contains all information readily available about the functor's
+ * compilation.
+ */
+struct CompileInfo
+{
+    CompileStatus status;
+    unsigned argIndex;
+    void* pArgVal;
+};
+
+
+
+/**
+ * @brief Functor Base Class
+ *
+ * The functor base class is constructed with a reference to a native C/C++
+ * function. It contains methods to store and load its parameters from a
+ * script file, self-compile, and change its arguments at runtime.
+ */
 class LS_API Functor : public Scriptable
 {
   protected:
@@ -67,7 +96,7 @@ class LS_API Functor : public Scriptable
      *  to be used, FALSE if not.
      */
     template <typename arg_t>
-    static bool check_single_arg(const Functor& f, unsigned i, arg_t* t);
+    static CompileInfo check_single_arg(const Functor& f, unsigned i, arg_t* t);
 
     /**
      *  @brief A verification method for single arguments.
@@ -94,7 +123,7 @@ class LS_API Functor : public Scriptable
      *  to be used, FALSE if not.
      */
     template <typename arg_t, typename... args_t>
-    static bool check_args(const Functor& f, unsigned i, arg_t* t, args_t*... ts);
+    static CompileInfo check_args(const Functor& f, unsigned i, arg_t* t, args_t*... ts);
 
     /**
      *  @brief A verification method for single arguments.
@@ -118,7 +147,7 @@ class LS_API Functor : public Scriptable
      *  to be used, FALSE if not.
      */
     template <typename arg_t>
-    static bool check_args(const Functor& f, unsigned i, arg_t* t);
+    static CompileInfo check_args(const Functor& f, unsigned i, arg_t* t);
 
     /**
      *  @brief the 'nextFunc' member is a pointer to another function that
@@ -359,19 +388,19 @@ class LS_API Functor : public Scriptable
      *  This method ensures that a functor is safe to operate at run-time.
      *  It uses custom RTTI information, combined with derived-type's
      *  template parameters to ensure that the proper arguments are placed
-     *  in the correct order at run-time.
+     *  in the correct order at run-time, before execution.
      *
      *  @note Because the scripting system does not manage the order in
      *  which you actually use arguments, please ensure that your
      *  functor-mapping code is consistent with the derived functor's
      *  template parameters.
      *
-     *  @return TRUE if a functor managed to compile correctly, FALSE if
-     *  not. If this function returns false, please check std::cerr for
-     *  information on what went wrong. This will be changed in the future
-     *  in order to provide more convenient error tracking.
+     *  @return A CompileInfo structure, containing the status code, argument
+     *  index, and argument pointer of the last argument checked before this
+     *  function returned. A successful compilation will have the returned
+     *  CompileInfo structure's status set as CompileStatus::SUCCESS.
      */
-    virtual bool compile() = 0;
+    virtual CompileInfo compile() = 0;
 
     /**
      *  @brief Run a functor at run-time.
@@ -381,12 +410,12 @@ class LS_API Functor : public Scriptable
 
 
 
-/**----------------------------------------------------------------------------
-    @brief Functor Class Template Type
-
-    The template functor type inherits all members and data from the functor
-    base class.
------------------------------------------------------------------------------*/
+/**
+ * @brief Functor Class Template Type
+ *
+ * The template functor type inherits all members and data from the functor
+ * base class.
+ */
 template <hash_t hashId, typename... args_t>
 class Functor_t final : public Functor
 {
@@ -562,14 +591,14 @@ class Functor_t final : public Functor
      *  information on what went wrong. This will be changed in the future
      *  in order to provide more convenient error tracking.
      */
-    bool compile() final;
+    CompileInfo compile() final;
 };
 
 
 
-/**----------------------------------------------------------------------------
-    @brief Functor Template Type with Void Parameters
------------------------------------------------------------------------------*/
+/**
+ * @brief Functor Template Type with void parameters
+ */
 template <hash_t hashId>
 class Functor_t<hashId, void> final : public Functor
 {
@@ -725,27 +754,27 @@ class Functor_t<hashId, void> final : public Functor
      *  This method ensures that a functor is safe to operate at run-time.
      *  It uses custom RTTI information, combined with derived-type's
      *  template parameters to ensure that the proper arguments are placed
-     *  in the correct order at run-time.
+     *  in the correct order at run-time, before execution.
      *
      *  @note Because the scripting system does not manage the order in
      *  which you actually use arguments, please ensure that your
      *  functor-mapping code is consistent with the derived functor's
      *  template parameters.
      *
-     *  @return TRUE if a functor managed to compile correctly, FALSE if
-     *  not. If this function returns false, please check std::cerr for
-     *  information on what went wrong. This will be changed in the future
-     *  in order to provide more convenient error tracking.
+     *  @return A CompileInfo structure, containing the status code, argument
+     *  index, and argument pointer of the last argument checked before this
+     *  function returned. A successful compilation will have the returned
+     *  CompileInfo structure's status set as CompileStatus::SUCCESS.
      */
-    bool compile() final;
+    CompileInfo compile() final;
 
 };
 
 
 
-/**----------------------------------------------------------------------------
-    @brief Null Functor Template Type
------------------------------------------------------------------------------*/
+/**
+ * @brief Null Functor Template Type (no parameters)
+ */
 template <>
 class LS_API Functor_t<0, void> final : public Functor
 {
@@ -901,19 +930,19 @@ class LS_API Functor_t<0, void> final : public Functor
      *  This method ensures that a functor is safe to operate at run-time.
      *  It uses custom RTTI information, combined with derived-type's
      *  template parameters to ensure that the proper arguments are placed
-     *  in the correct order at run-time.
+     *  in the correct order at run-time, before execution.
      *
      *  @note Because the scripting system does not manage the order in
      *  which you actually use arguments, please ensure that your
      *  functor-mapping code is consistent with the derived functor's
      *  template parameters.
      *
-     *  @return TRUE if a functor managed to compile correctly, FALSE if
-     *  not. If this function returns false, please check std::cerr for
-     *  information on what went wrong. This will be changed in the future
-     *  in order to provide more convenient error tracking.
+     *  @return A CompileInfo structure, containing the status code, argument
+     *  index, and argument pointer of the last argument checked before this
+     *  function returned. A successful compilation will have the returned
+     *  CompileInfo structure's status set as CompileStatus::SUCCESS.
      */
-    bool compile() final;
+    CompileInfo compile() final;
 };
 
 
@@ -1020,7 +1049,7 @@ class LS_API Functor_t<0, void> final : public Functor
         \
         LS_API_TYPE const ls::script::FuncFactory_t& ScriptFactory_##funcName = ls::script::register_func_factory( \
             ScriptHash_##funcName, []()->ls::script::Pointer_t<ls::script::Functor> { \
-                return ls::script::Pointer_t<ls::script::Functor>{new ScriptFunc_##funcName{}}; \
+                return ls::script::Pointer_t<ls::script::Functor>{new(std::nothrow) ScriptFunc_##funcName{}}; \
             } \
         ); \
         \

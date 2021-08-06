@@ -5,7 +5,6 @@
  * Created on March 13, 2015, 9:26 PM
  */
 
-#include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <type_traits>
@@ -15,23 +14,6 @@
 #include "lightsky/script/ScriptFunctor.h"
 #include "lightsky/script/ScriptFactory.h"
 #include "lightsky/script/ScriptSerializer.h"
-
-
-
-#ifndef LS_LOG_ERR
-    #define LS_LOG_ERR(...)
-#endif
-
-
-
-/*
- * The LS_ENUM_VAL macro will extract the numerical value of any type declared
- * using "enum class." A compiler error will be thrown if the input argument is
- * not an enumeration.
- */
-#ifndef LS_ENUM_VAL
-    #define LS_ENUM_VAL( x ) static_cast<std::underlying_type<decltype(x)>::type>(x)
-#endif
 
 
 
@@ -45,10 +27,10 @@ namespace
 /*-------------------------------------
  * Perform an initial read to populate all script types.
 -------------------------------------*/
-bool _initial_read(
-    VariableMap_t & varList,
-    FunctorMap_t & funcList,
-    std::istream & fin,
+ScriptLoadStatus _load_initializer_info(
+    VariableMap_t& varList,
+    FunctorMap_t& funcList,
+    std::istream& fin,
     const ScriptBaseType baseType)
 {
     std::underlying_type<ScriptBaseType>::type scriptBaseType; // int?
@@ -56,42 +38,43 @@ bool _initial_read(
     void* pScript = nullptr;
 
     fin >> scriptBaseType >> scriptDataType >> pScript;
+    if (!fin.good())
+    {
+        return ScriptLoadStatus::ERROR_BAD_STREAM;
+    }
 
-    assert(scriptBaseType == LS_ENUM_VAL(baseType));
+    auto expectedType = static_cast<std::underlying_type<decltype(baseType)>::type>(baseType);
+    if (scriptBaseType != expectedType)
+    {
+        std::cerr << "Unknown script base type " << expectedType << std::endl;
+        assert(false);
+        return ScriptLoadStatus::ERROR_UNKNOWN_TYPE_INFO;
+    }
 
     if (baseType == ScriptBaseType::VARIABLE)
     {
         Pointer_t<Variable>&& pVar = create_variable(scriptDataType);
 
-        if (pVar)
+        if (!pVar)
         {
-            varList.emplace((Variable*)pScript, std::move(pVar));
-            return true;
+            return ScriptLoadStatus::ERROR_RESERVING_VARIABLE;
         }
+
+        varList.emplace((Variable*)pScript, std::move(pVar));
     }
     else if (baseType == ScriptBaseType::FUNCTOR)
     {
         Pointer_t<Functor>&& pFunc = create_functor(scriptDataType);
 
-        if (pFunc)
+        if (!pFunc)
         {
-            funcList.emplace((Functor*)pScript, std::move(pFunc));
-            return true;
+            return ScriptLoadStatus::ERROR_RESERVING_FUNCTION;
         }
+
+        funcList.emplace((Functor*)pScript, std::move(pFunc));
     }
 
-    LS_LOG_ERR(
-        "Unable to instantiate a script of type ",
-        scriptBaseType, '-', scriptDataType,
-        " with requested type ",
-
-        LS_ENUM_VAL(baseType),
-
-        '-', scriptDataType,
-        " during a load operation."
-    );
-
-    return false;
+    return ScriptLoadStatus::SUCCESS;
 }
 
 
@@ -99,7 +82,7 @@ bool _initial_read(
 /*-------------------------------------
  * Load a specific type of script
 -------------------------------------*/
-bool _data_read(
+ScriptLoadStatus _load_single_element(
     VariableMap_t& varList,
     FunctorMap_t& funcList,
     std::istream& istr,
@@ -107,32 +90,75 @@ bool _data_read(
 {
     void* inAddr = nullptr;
     istr >> inAddr; // import the scriptable's address
-    istr.get(); // discard extra whitespace inserted by the save() method
+
+    if (istr.get() == std::char_traits<char>::eof() || !istr.good())
+    {
+        return ScriptLoadStatus::ERROR_BAD_STREAM;
+    }
 
     if (baseType == ScriptBaseType::VARIABLE)
     {
         Pointer_t<Variable>& pScript = varList.at((Variable*)inAddr);
-        if (pScript && pScript->load(istr, varList, funcList))
+        if (!pScript)
         {
-            return true;
+            std::cerr << "Failed to allocate variable " << (const void*)inAddr << std::endl;
+            return ScriptLoadStatus::ERROR_ALLOCATING_VARIABLE;
+        }
+
+        if (!pScript->load(istr, varList, funcList))
+        {
+            std::cerr << "Failed to read variable " << (const void*)inAddr << std::endl;
+            return ScriptLoadStatus::ERROR_READING_VARIABLE_DATA;
         }
     }
     else if (baseType == ScriptBaseType::FUNCTOR)
     {
         Pointer_t<Functor> &pScript = funcList.at((Functor*)inAddr);
-        if (pScript && pScript->load(istr, varList, funcList))
+        if (!pScript)
         {
-            return true;
+            std::cerr << "Failed to allocate function " << (const void*)inAddr << std::endl;
+            return ScriptLoadStatus::ERROR_ALLOCATING_FUNCTION;
+        }
+
+        if (!pScript->load(istr, varList, funcList))
+        {
+            std::cerr << "Failed to read function " << (const void*)inAddr << std::endl;
+            return ScriptLoadStatus::ERROR_READING_FUNCTION_DATA;
         }
     }
 
-    LS_LOG_ERR(
-        "Unable to read a script of type ",
-        LS_ENUM_VAL(baseType),
-        " during a load operation."
-    );
+    return ScriptLoadStatus::SUCCESS;
+}
 
-    return false;
+
+
+/*-------------------------------------
+ * Write an initial set of data for a script type
+-------------------------------------*/
+template <typename data_t>
+ScriptSaveStatus _save_initializer_info(std::ostream& ostr, const Pointer_t<data_t>& pScript)
+{
+    if (!ostr.good())
+    {
+        return ScriptSaveStatus::ERROR_BAD_STREAM;
+    }
+
+    if (!pScript)
+    {
+        return pScript->base_type() == ScriptBaseType::VARIABLE
+            ? ScriptSaveStatus::ERROR_NULL_VARIABLE
+            : ScriptSaveStatus::ERROR_NULL_FUNCTION;
+    }
+
+    const ScriptBaseType baseType = pScript->base_type();
+    const hash_t hashType = pScript->sub_type();
+
+    ostr
+        << '\n' << static_cast<typename std::underlying_type<decltype(baseType)>::type>(baseType)
+        << ' ' << hashType
+        << ' ' << (const void*)pScript.get();
+
+    return ScriptSaveStatus::SUCCESS;
 }
 
 
@@ -144,10 +170,12 @@ bool _data_read(
 /*-------------------------------------
  * Load a list of variables.
 -------------------------------------*/
-bool load_script_file(const std::string& filename, VariableMap_t& varList, FunctorMap_t& funcList)
+LS_API ScriptLoadInfo LS_CALL load_script_file(const std::string& filename, VariableMap_t& varList, FunctorMap_t& funcList)
 {
     varList.clear();
     funcList.clear();
+
+    ScriptLoadInfo info = {ScriptLoadStatus::SUCCESS, filename};
 
     unsigned numVars = 0;
     unsigned numFuncs = 0;
@@ -155,104 +183,67 @@ bool load_script_file(const std::string& filename, VariableMap_t& varList, Funct
 
     if (!fin.good())
     {
-        LS_LOG_ERR("Unable to open a script file for reading: ", filename, '.');
-        return false;
+        std::cerr << "Unable to open a script file for reading: " << filename << '.' << std::endl;
+        info.status = ScriptLoadStatus::ERROR_OPENING_FILE;
+        return info;
     }
 
     fin >> numVars >> numFuncs;
+    varList.reserve(numVars);
+    funcList.reserve(numVars);
 
     for (unsigned v = 0; v < numVars; ++v)
     {
-        if (!_initial_read(varList, funcList, fin, ScriptBaseType::VARIABLE))
+        ScriptLoadStatus result = _load_initializer_info(varList, funcList, fin, ScriptBaseType::VARIABLE);
+        if (result != ScriptLoadStatus::SUCCESS)
         {
             fin.close();
-            LS_LOG_ERR("Failed to initialize a variable object from ", filename, '.');
-            return false;
+            std::cerr << "Failed to initialize a variable object from " << filename << '.' << std::endl;
+            info.status = result;
+            return info;
         }
     }
 
     for (unsigned f = 0; f < numFuncs; ++f)
     {
-        if (!_initial_read(varList, funcList, fin, ScriptBaseType::FUNCTOR))
+        ScriptLoadStatus result = _load_initializer_info(varList, funcList, fin, ScriptBaseType::FUNCTOR);
+        if (result != ScriptLoadStatus::SUCCESS)
         {
             fin.close();
-            LS_LOG_ERR("Failed to initialize a functor object from ", filename, '.');
-            return false;
+            std::cerr << "Failed to initialize a functor object from " << filename << '.' << std::endl;
+            info.status = result;
+            return info;
         }
     }
 
     // all variables and functors have been initialized, now load their data.
-    while (numVars-- > 0)
+    while (numVars--)
     {
-        if (!_data_read(varList, funcList, fin, ScriptBaseType::VARIABLE))
+        ScriptLoadStatus result = _load_single_element(varList, funcList, fin, ScriptBaseType::VARIABLE);
+        if (result != ScriptLoadStatus::SUCCESS)
         {
             fin.close();
-            LS_LOG_ERR("Failed to read a variable object from ", filename, '.');
-            return false;
+            std::cerr << "Failed to read a variable object from " << filename << '.' << std::endl;
+            info.status = result;
+            return info;
         }
     }
 
-    while (numFuncs-- > 0)
+    while (numFuncs--)
     {
-        if (!_data_read(varList, funcList, fin, ScriptBaseType::FUNCTOR))
+        ScriptLoadStatus result = _load_single_element(varList, funcList, fin, ScriptBaseType::FUNCTOR);
+        if (result != ScriptLoadStatus::SUCCESS)
         {
             fin.close();
-            LS_LOG_ERR("Failed to read a functor object from ", filename, '.');
-            return false;
+            std::cerr << "Failed to read a functor object from " << filename << '.' << std::endl;
+            info.status = result;
+            return info;
         }
     }
 
     fin.close();
 
-    return true;
-}
-
-
-
-/*-------------------------------------
- * Ensure all mapped script keys actually point to valid data.
--------------------------------------*/
-void remap_script_keys(VariableMap_t& inVarMap, FunctorMap_t& inFuncMap)
-{
-    VariableMap_t tempVarMap{};
-    for (VariableMap_t::value_type& inVar : inVarMap)
-    {
-        tempVarMap[inVar.second.get()] = std::move(inVar.second);
-    }
-
-    inVarMap = std::move(tempVarMap);
-
-    FunctorMap_t tempFuncMap{};
-    for (FunctorMap_t::value_type& inFunc : inFuncMap)
-    {
-        tempFuncMap[inFunc.second.get()] = std::move(inFunc.second);
-    }
-
-    inFuncMap = std::move(tempFuncMap);
-}
-
-
-
-/*-------------------------------------
- * Write an initial set of data for a script type
--------------------------------------*/
-template <typename data_t>
-bool initialWrite(std::ostream& ostr, const Pointer_t <data_t>& pScript)
-{
-    if (!pScript)
-    {
-        return false;
-    }
-
-    const ScriptBaseType baseType = pScript->base_type();
-    const hash_t hashType = pScript->sub_type();
-
-    ostr
-        << '\n' << static_cast<typename std::underlying_type<decltype(baseType)>::type>(baseType)
-        << ' ' << hashType
-        << ' ' << (const void*)pScript.get();
-
-    return true;
+    return info;
 }
 
 
@@ -260,18 +251,20 @@ bool initialWrite(std::ostream& ostr, const Pointer_t <data_t>& pScript)
 /*-------------------------------------
  * Save a list of variables and functors.
 -------------------------------------*/
-bool save_script_file(
+LS_API ScriptSaveInfo LS_CALL save_script_file(
     const std::string& filename,
     const VariableMap_t& inVarList,
     const FunctorMap_t& inFuncList
 )
 {
+    ScriptSaveInfo info = {ScriptSaveStatus::SUCCESS, filename};
     std::ofstream fout{filename, std::ios_base::binary | std::ios_base::out};
 
     if (!fout.good())
     {
-        LS_LOG_ERR("Unable to open a script file for saving: ", filename, '.');
-        return false;
+        std::cerr << "Unable to open a script file for saving: " << filename << '.' << std::endl;
+        info.status = ScriptSaveStatus::ERROR_CREATING_STREAM;
+        return info;
     }
 
     // output the number of all variables and functors.
@@ -280,29 +273,42 @@ bool save_script_file(
     // write function to save all "scriptable" addresses
     for (const VariableMap_t::value_type& scriptIter : inVarList)
     {
-        if (!initialWrite<Variable>(fout, scriptIter.second))
+        ScriptSaveStatus status = _save_initializer_info<Variable>(fout, scriptIter.second);
+        if (status != ScriptSaveStatus::SUCCESS)
         {
             fout.close();
-            LS_LOG_ERR("Failed to save variable initialization data to : ", filename, '.');
-            return false;
+            std::cerr
+                << "Failed to save variable initialization data of "
+                << (const void*)scriptIter.second.get()
+                << " to : " << filename << '.'
+                << std::endl;
+            info.status = status;
+            return info;
         }
     };
 
     for (const FunctorMap_t::value_type& scriptIter : inFuncList)
     {
-        if (!initialWrite<Functor>(fout, scriptIter.second))
+        ScriptSaveStatus status = _save_initializer_info<Functor>(fout, scriptIter.second);
+        if (status != ScriptSaveStatus::SUCCESS)
         {
             fout.close();
-            LS_LOG_ERR("Failed to save functor initialization data to : ", filename, '.');
-            return false;
+            std::cerr
+            << "Failed to save functor initialization data of "
+            << (const void*)scriptIter.second.get()
+            << " to : " << filename << '.'
+            << std::endl;
+            info.status = status;
+            return info;
         }
     };
 
     if (!fout.good())
     {
-        LS_LOG_ERR("A stream error occurred while saving the script file: ", filename, '.');
+        std::cerr << "A stream error occurred while saving the script file: " << filename << '.' << std::endl;
         fout.close();
-        return false;
+        info.status = ScriptSaveStatus::ERROR_BAD_STREAM;
+        return info;
     }
 
     // all initial data has been saved, now serialize all scripts
@@ -310,19 +316,39 @@ bool save_script_file(
     {
         const Pointer_t <Variable>& pVar = pScript.second;
         fout << '\n' << (const void*)pVar.get() << ' ';
-        pVar->save(fout);
+        if (!pVar->save(fout))
+        {
+            std::cerr
+                << "Unable to save script variable " << (const void*)pVar.get()
+                << " to " << filename
+                << std::endl;
+            info.status = ScriptSaveStatus::ERROR_SAVING_VARIABLE;
+            return info;
+        }
     }
 
     for (const FunctorMap_t::value_type& pScript : inFuncList)
     {
         const Pointer_t <Functor>& pFunc = pScript.second;
         fout << '\n' << (const void*)pFunc.get() << ' ';
-        pFunc->save(fout);
+        if (!pFunc->save(fout))
+        {
+            std::cerr
+                << "Unable to save script function " << (const void*)pFunc.get()
+                << " to " << filename
+                << std::endl;
+            info.status = ScriptSaveStatus::ERROR_SAVING_FUNCTION;
+            return info;
+        }
     }
 
-    const bool ret = fout.good();
+    if (!fout.good())
+    {
+        info.status = ScriptSaveStatus::ERROR_BAD_STREAM;
+    }
+
     fout.close();
-    return ret;
+    return info;
 }
 
 
