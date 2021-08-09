@@ -20,6 +20,12 @@
     Basic Built-In types
 -----------------------------------------------------------------------------*/
 /*-------------------------------------
+ * bool, ScriptVar_bool
+-------------------------------------*/
+LS_SCRIPT_DECLARE_VAR_SHARED(bool, bool);
+LS_SCRIPT_DECLARE_FUNC_SHARED(AssignBool, ScriptVar_bool, ScriptVar_bool);
+
+/*-------------------------------------
  * char, ScriptVar_byte
 -------------------------------------*/
 LS_SCRIPT_DECLARE_VAR_SHARED(byte, uint8_t);

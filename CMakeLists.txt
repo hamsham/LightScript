@@ -31,6 +31,7 @@ set(LS_SCRIPT_HEADERS
     include/lightsky/script/Scriptable.h
     include/lightsky/script/ScriptBasicVar.h
     include/lightsky/script/ScriptBitUtil.h
+    include/lightsky/script/ScriptCompare.h
     include/lightsky/script/ScriptFactory.h
     include/lightsky/script/ScriptFunctor.h
     include/lightsky/script/ScriptIO.h
@@ -45,6 +46,7 @@ set(LS_SCRIPT_SOURCES
     src/Scriptable.cpp
     src/ScriptBasicVar.cpp
     src/ScriptBitUtil.cpp
+    src/ScriptCompare.cpp
     src/ScriptFactory.cpp
     src/ScriptFunctor.cpp
     src/ScriptIO.cpp

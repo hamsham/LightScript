@@ -13,6 +13,14 @@
 /*-----------------------------------------------------------------------------
     Basic Built-In types
 -----------------------------------------------------------------------------*/
+LS_SCRIPT_DEFINE_VAR_SHARED(bool, bool);
+LS_SCRIPT_DEFINE_FUNC_SHARED(AssignBool, ScriptVar_bool, ScriptVar_bool)
+{
+    LS_SCRIPT_PARAM(0, bool) = LS_SCRIPT_PARAM(1, bool);
+}
+
+
+
 LS_SCRIPT_DEFINE_VAR_SHARED(byte, uint8_t);
 LS_SCRIPT_DEFINE_FUNC_SHARED(AssignByte, ScriptVar_byte, ScriptVar_byte)
 {
