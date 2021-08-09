@@ -98,6 +98,10 @@ _LS_SCRIPT_DEFINE_CMP_FUNC(Double, double, double)
 
 
 
+#undef _LS_SCRIPT_DEFINE_CMP_FUNC
+
+
+
 /*-----------------------------------------------------------------------------
  * String Comparison Definitions
 -----------------------------------------------------------------------------*/
@@ -112,7 +116,3 @@ LS_SCRIPT_DEFINE_FUNC_SHARED(CompareNeStrings, ScriptVar_bool, ScriptVar_string,
 {
     LS_SCRIPT_PARAM(0, bool) = LS_SCRIPT_PARAM(1, std::string) != LS_SCRIPT_PARAM(2, std::string);
 }
-
-
-
-#undef _LS_SCRIPT_DEFINE_CMP_FUNC
