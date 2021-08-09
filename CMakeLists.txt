@@ -2,7 +2,7 @@
 # #####################################
 # Project Setup
 # #####################################
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.10)
 
 project(LightScript CXX)
 set(CMAKE_CXX_STANDARD 11)
@@ -30,6 +30,7 @@ set(LS_SCRIPT_HEADERS
     include/lightsky/script/Script.h
     include/lightsky/script/Scriptable.h
     include/lightsky/script/ScriptBasicVar.h
+    include/lightsky/script/ScriptBitUtil.h
     include/lightsky/script/ScriptFactory.h
     include/lightsky/script/ScriptFunctor.h
     include/lightsky/script/ScriptIO.h
@@ -41,7 +42,9 @@ set(LS_SCRIPT_HEADERS
 )
 
 set(LS_SCRIPT_SOURCES
+    src/Scriptable.cpp
     src/ScriptBasicVar.cpp
+    src/ScriptBitUtil.cpp
     src/ScriptFactory.cpp
     src/ScriptFunctor.cpp
     src/ScriptIO.cpp
@@ -49,7 +52,6 @@ set(LS_SCRIPT_SOURCES
     src/ScriptRunner.cpp
     src/ScriptSerializer.cpp
     src/ScriptVariable.cpp
-    src/Scriptable.cpp
     src/Setup.cpp
 )
 
