@@ -6,10 +6,14 @@
 
 #if !defined(_MSC_VER)
 
-//template class ls::utils::Pointer<ls::script::Variable>;
-//template class ls::utils::Pointer<ls::script::Functor>;
+    #ifdef LS_HAVE_LS_POINTERS
+        template class ls::utils::Pointer<ls::script::Variable, ls::utils::PointerDeleter<ls::script::Variable>>;
+        template class ls::utils::Pointer<ls::script::Functor, ls::utils::PointerDeleter<ls::script::Functor>>;
 
-template class std::unique_ptr<ls::script::Variable, std::default_delete<ls::script::Variable>>;
-template class std::unique_ptr<ls::script::Functor, std::default_delete<ls::script::Functor>>;
+    #else
+        template class std::unique_ptr<ls::script::Variable, std::default_delete<ls::script::Variable>>;
+        template class std::unique_ptr<ls::script::Functor, std::default_delete<ls::script::Functor>>;
 
-#endif
+    #endif /* LS_HAVE_LS_POINTERS */
+
+#endif /* _MSC_VER */

@@ -12,10 +12,10 @@
 #include <algorithm>
 #include <unordered_map>
 
-/*
-#include "lightsky/utils/Hash.h"
-#include "lightsky/utils/Pointer.h"
-*/
+#ifdef LS_HAVE_LS_POINTERS
+    #include "lightsky/utils/Hash.h"
+    #include "lightsky/utils/Pointer.h"
+#endif
 
 
 
@@ -96,8 +96,19 @@ namespace script
 /**
  * @brief Hash type used to associate script types to a serializable ID.
  */
-//using ls::utils::hash_t;
-typedef std::size_t hash_t;
+#ifdef LS_HAVE_LS_POINTERS
+    using ls::utils::hash_t;
+
+    #ifndef LS_SCRIPT_HASH_FUNC
+        #define LS_SCRIPT_HASH_FUNC ls::utils::hash_fnv1
+    #endif
+
+#else
+    typedef std::size_t hash_t;
+
+#endif /* LS_HAVE_LS_POINTERS */
+
+
 
 /**
  * @brief Scripting function used internally for generating script IDs.
@@ -119,7 +130,7 @@ constexpr hash_t hash_fnv1(const char* str) noexcept
     return (!str) ? 0 : hashFNV1_impl(str, 2166136261);
 }
 
-    #define LS_SCRIPT_HASH_FUNC(str) ls::script::hash_fnv1(str)
+#define LS_SCRIPT_HASH_FUNC(str) ls::script::hash_fnv1(str)
 
 #endif
 
@@ -151,8 +162,11 @@ class Functor;
 /**------------------------------------
  * Dynamic Memory Management for script objects.
 ------------------------------------*/
-//template <class data_t> using Pointer_t = ls::utils::Pointer<data_t>;
-template <class data_t> using Pointer_t = std::unique_ptr<data_t, std::default_delete<data_t>>;
+#ifdef LS_HAVE_LS_POINTERS
+    template <class data_t> using Pointer_t = ls::utils::Pointer<data_t, ls::utils::PointerDeleter<data_t>>;
+#else
+    template <class data_t> using Pointer_t = std::unique_ptr<data_t, std::default_delete<data_t>>;
+#endif /* LS_HAVE_LS_POINTERS */
 
 
 
@@ -166,13 +180,17 @@ template <class data_t> using Pointer_t = std::unique_ptr<data_t, std::default_d
  */
 #if !defined(_MSC_VER)
 
-//LS_EXTERN template class LS_API ls::utils::Pointer<ls::script::Variable>;
-//LS_EXTERN template class LS_API ls::utils::Pointer<ls::script::Functor>;
+    #ifdef LS_HAVE_LS_POINTERS
+        LS_EXTERN template class LS_API ls::utils::Pointer<ls::script::Variable, ls::utils::PointerDeleter<ls::script::Variable>>;
+        LS_EXTERN template class LS_API ls::utils::Pointer<ls::script::Functor, ls::utils::PointerDeleter<ls::script::Functor>>;
 
-LS_EXTERN template class LS_API std::unique_ptr<ls::script::Variable, std::default_delete<ls::script::Variable>>;
-LS_EXTERN template class LS_API std::unique_ptr<ls::script::Functor, std::default_delete<ls::script::Functor>>;
+    #else
+        LS_EXTERN template class LS_API std::unique_ptr<ls::script::Variable, std::default_delete<ls::script::Variable>>;
+        LS_EXTERN template class LS_API std::unique_ptr<ls::script::Functor, std::default_delete<ls::script::Functor>>;
 
-#endif
+    #endif /* LS_HAVE_LS_POINTERS */
+
+#endif /* _MSC_VER */
 
 
 
