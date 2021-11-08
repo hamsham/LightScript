@@ -72,7 +72,7 @@ struct ScriptLoadInfo
  *
  * @return true if the file was successfully loaded. False if not.
  */
-LS_API ScriptLoadInfo LS_CALL load_script_file(
+LS_SCRIPT_API ScriptLoadInfo LS_SCRIPT_CALL load_script_file(
     const std::string& filename,
     VariableMap_t& outVarMap,
     FunctorMap_t& outFuncMap
@@ -124,7 +124,7 @@ struct ScriptSaveInfo
  *
  * @return true if the file was successfully saved. False if not.
  */
-LS_API ScriptSaveInfo LS_CALL save_script_file(
+LS_SCRIPT_API ScriptSaveInfo LS_SCRIPT_CALL save_script_file(
     const std::string& filename,
     const VariableMap_t& inVarList,
     const FunctorMap_t& inFuncList

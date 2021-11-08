@@ -133,7 +133,7 @@ bool Functor::save(std::ostream& ostr) const
 /*-----------------------------------------------------------------------------
     NULL Functor Template Type.
 -----------------------------------------------------------------------------*/
-LS_API void Functor_t<0, void>::func_impl(Variable** const)
+LS_SCRIPT_API void Functor_t<0, void>::func_impl(Variable** const)
 {
 }
 

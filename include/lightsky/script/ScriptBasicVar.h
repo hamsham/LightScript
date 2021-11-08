@@ -82,9 +82,9 @@ LS_SCRIPT_DECLARE_FUNC_SHARED(AssignDouble, ScriptVar_double, ScriptVar_double);
 /*-------------------------------------
  * std::string, ScriptVar_string
 -------------------------------------*/
-LS_SCRIPT_OVERRIDE_VAR_LOAD(LS_API, std::string);
+LS_SCRIPT_OVERRIDE_VAR_LOAD(LS_SCRIPT_API, std::string);
 
-LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_API, std::string);
+LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_SCRIPT_API, std::string);
 
 LS_SCRIPT_DECLARE_VAR_SHARED(string, std::string); // ScriptVar_string
 LS_SCRIPT_DECLARE_FUNC_SHARED(AssignString, ScriptVar_string, ScriptVar_string);

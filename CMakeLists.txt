@@ -25,7 +25,7 @@ find_package(Threads REQUIRED)
 # Dependency Setup
 # -------------------------------------
 if (EXISTS "${LightUtils_SOURCE_DIR}/include/lightsky/utils/Pointer.h")
-    get_target_property(LSSCRIPT_UTILS_INCLUDE_DIR LightSky::Utils INCLUDE_DIRECTORIES)
+    get_target_property(LS_SCRIPT_UTILS_INCLUDE_DIR LightSky::Utils INCLUDE_DIRECTORIES)
     message("-- Found LightSky::Utils: ${LightUtils_SOURCE_DIR}")
 endif()
 
@@ -81,7 +81,7 @@ target_compile_definitions(${OUTPUT_NAME} PRIVATE -DLS_BUILD_SHARED -DLS_SHARED)
 # If LightSky::Utils is available, we can use it's pointer classes
 if (HAVE_LIGHTSKY_SUPPORT)
     message("-- Found LightSky::Utils: ${HAVE_LIGHTSKY_SUPPORT}")
-    target_include_directories(${OUTPUT_NAME} PUBLIC -D${LSSCRIPT_UTILS_INCLUDE_DIR})
+    target_include_directories(${OUTPUT_NAME} PUBLIC -D${LS_SCRIPT_UTILS_INCLUDE_DIR})
     target_compile_definitions(${OUTPUT_NAME} PUBLIC -DLS_HAVE_LS_POINTERS=1)
 endif()
 

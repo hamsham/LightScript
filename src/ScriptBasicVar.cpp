@@ -107,7 +107,7 @@ LS_SCRIPT_DEFINE_FUNC_SHARED(AssignString, ScriptVar_string, ScriptVar_string)
 /*-------------------------------------
  * String Serialization
 -------------------------------------*/
-LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_EXPORT_API, std::string)
+LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_SCRIPT_EXPORT_API, std::string)
 {
     const std::string::size_type len = data.size() * sizeof(std::string::value_type);
     ostr << len;
@@ -118,7 +118,7 @@ LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_EXPORT_API, std::string)
 /*-------------------------------------
  * String Deserialization
 -------------------------------------*/
-LS_SCRIPT_OVERRIDE_VAR_LOAD(LS_EXPORT_API, std::string)
+LS_SCRIPT_OVERRIDE_VAR_LOAD(LS_SCRIPT_EXPORT_API, std::string)
 {
     (void)varImporter;
     (void)funcImporter;

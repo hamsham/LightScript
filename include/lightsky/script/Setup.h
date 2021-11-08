@@ -27,34 +27,34 @@
  */
 #if defined(_MSC_VER)
     #if defined(LS_BUILD_SHARED)
-        #define LS_API __declspec(dllexport)
-        #define LS_EXPORT_API __declspec(dllexport)
-        #define LS_EXTERN
+        #define LS_SCRIPT_API __declspec(dllexport)
+        #define LS_SCRIPT_EXPORT_API __declspec(dllexport)
+        #define LS_SCRIPT_EXTERN
     #else
-        #define LS_API __declspec(dllimport)
-        #define LS_EXPORT_API
-        #define LS_EXTERN extern
+        #define LS_SCRIPT_API __declspec(dllimport)
+        #define LS_SCRIPT_EXPORT_API
+        #define LS_SCRIPT_EXTERN extern
     #endif
 
-    #define LS_STATIC_API
+    #define LS_SCRIPT_STATIC_API
 
 #elif defined(__GNUC__)
     #if defined(LS_BUILD_SHARED)
-        #define LS_API __attribute__((__visibility__("default")))
-        #define LS_EXPORT_API __attribute__((__visibility__("default")))
+        #define LS_SCRIPT_API __attribute__((__visibility__("default")))
+        #define LS_SCRIPT_EXPORT_API __attribute__((__visibility__("default")))
     #else
-        #define LS_API
-        #define LS_EXPORT_API
+        #define LS_SCRIPT_API
+        #define LS_SCRIPT_EXPORT_API
     #endif
 
-    #define LS_STATIC_API
-    #define LS_EXTERN extern
+    #define LS_SCRIPT_STATIC_API
+    #define LS_SCRIPT_EXTERN extern
 
 #else
-    #define LS_API
-    #define LS_EXPORT_API
-    #define LS_STATIC_API
-    #define LS_EXTERN extern
+    #define LS_SCRIPT_API
+    #define LS_SCRIPT_EXPORT_API
+    #define LS_SCRIPT_STATIC_API
+    #define LS_SCRIPT_EXTERN extern
 #endif
 
 
@@ -64,12 +64,12 @@
  */
 #if !(defined (_WIN64) || defined (__amd64__) || defined (_M_X64)) && (defined (__i386__) || defined (_M_IX86_) || defined (__THW_INTEL__))
     #if defined(_MSC_VER)
-        #define LS_CALL __stdcall
+        #define LS_SCRIPT_CALL __stdcall
     #elif defined __GNUC__
-        #define LS_CALL __attribute__((stdcall))
+        #define LS_SCRIPT_CALL __attribute__((stdcall))
     #endif
 #else
-    #define LS_CALL
+    #define LS_SCRIPT_CALL
 #endif
 
 
@@ -181,12 +181,12 @@ class Functor;
 #if !defined(_MSC_VER)
 
     #ifdef LS_HAVE_LS_POINTERS
-        LS_EXTERN template class LS_API ls::utils::Pointer<ls::script::Variable, ls::utils::PointerDeleter<ls::script::Variable>>;
-        LS_EXTERN template class LS_API ls::utils::Pointer<ls::script::Functor, ls::utils::PointerDeleter<ls::script::Functor>>;
+        LS_SCRIPT_EXTERN template class LS_SCRIPT_API ls::utils::Pointer<ls::script::Variable, ls::utils::PointerDeleter<ls::script::Variable>>;
+        LS_SCRIPT_EXTERN template class LS_SCRIPT_API ls::utils::Pointer<ls::script::Functor, ls::utils::PointerDeleter<ls::script::Functor>>;
 
     #else
-        LS_EXTERN template class LS_API std::unique_ptr<ls::script::Variable, std::default_delete<ls::script::Variable>>;
-        LS_EXTERN template class LS_API std::unique_ptr<ls::script::Functor, std::default_delete<ls::script::Functor>>;
+        LS_SCRIPT_EXTERN template class LS_SCRIPT_API std::unique_ptr<ls::script::Variable, std::default_delete<ls::script::Variable>>;
+        LS_SCRIPT_EXTERN template class LS_SCRIPT_API std::unique_ptr<ls::script::Functor, std::default_delete<ls::script::Functor>>;
 
     #endif /* LS_HAVE_LS_POINTERS */
 

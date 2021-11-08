@@ -13,7 +13,7 @@ namespace script
 /*-------------------------------------
     Destructor
 -------------------------------------*/
-LS_API Scriptable::~Scriptable()
+LS_SCRIPT_API Scriptable::~Scriptable()
 {
 }
 
@@ -22,7 +22,7 @@ LS_API Scriptable::~Scriptable()
 /*-------------------------------------
     Constructor
 -------------------------------------*/
-LS_API Scriptable::Scriptable()
+LS_SCRIPT_API Scriptable::Scriptable()
 {
 }
 
@@ -31,7 +31,7 @@ LS_API Scriptable::Scriptable()
 /*-------------------------------------
     Copy Constructor
 -------------------------------------*/
-LS_API Scriptable::Scriptable(const Scriptable&)
+LS_SCRIPT_API Scriptable::Scriptable(const Scriptable&)
 {
 }
 
@@ -40,7 +40,7 @@ LS_API Scriptable::Scriptable(const Scriptable&)
 /*-------------------------------------
     Move Constructor
 -------------------------------------*/
-LS_API Scriptable::Scriptable(Scriptable&&)
+LS_SCRIPT_API Scriptable::Scriptable(Scriptable&&)
 {
 }
 
@@ -49,7 +49,7 @@ LS_API Scriptable::Scriptable(Scriptable&&)
 /*-------------------------------------
     Copy Operator
 -------------------------------------*/
-LS_API Scriptable& Scriptable::operator=(const Scriptable&)
+LS_SCRIPT_API Scriptable& Scriptable::operator=(const Scriptable&)
 {
     return *this;
 }
@@ -59,7 +59,7 @@ LS_API Scriptable& Scriptable::operator=(const Scriptable&)
 /*-------------------------------------
     Move Operator
 -------------------------------------*/
-LS_API Scriptable& Scriptable::operator=(Scriptable&&)
+LS_SCRIPT_API Scriptable& Scriptable::operator=(Scriptable&&)
 {
     return *this;
 }

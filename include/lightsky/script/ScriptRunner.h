@@ -37,7 +37,7 @@ class Functor;
  * running them through a scriptRunner in order to catch any potential errors
  * which may cause the program to crash.
  */
-class LS_API ScriptRunner{
+class LS_SCRIPT_API ScriptRunner{
     public:
     /**
      * @brief Destructor

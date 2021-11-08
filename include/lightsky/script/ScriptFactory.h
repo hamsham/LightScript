@@ -87,7 +87,7 @@ typedef std::unordered_map<hash_t, FuncFactory_t> FuncFactoryMap_t;
  * @return A constant reference to the global factory method responsible for
  * creating a variable object using the hash provided.
  */
-LS_API const VarFactory_t& LS_CALL register_var_factory(hash_t factoryId, const VarFactory_t& pFactory);
+LS_SCRIPT_API const VarFactory_t& LS_SCRIPT_CALL register_var_factory(hash_t factoryId, const VarFactory_t& pFactory);
 
 
 
@@ -110,7 +110,7 @@ LS_API const VarFactory_t& LS_CALL register_var_factory(hash_t factoryId, const 
  * @return A constant reference to the global factory method responsible for
  * creating a function object using the hash provided.
  */
-LS_API const FuncFactory_t& LS_CALL register_func_factory(hash_t factoryId, const FuncFactory_t& pFactory);
+LS_SCRIPT_API const FuncFactory_t& LS_SCRIPT_CALL register_func_factory(hash_t factoryId, const FuncFactory_t& pFactory);
 
 
 
@@ -128,7 +128,7 @@ LS_API const FuncFactory_t& LS_CALL register_func_factory(hash_t factoryId, cons
  * This function will return NULL if the variable requested could not be
  * instantiated.
  */
-LS_API Pointer_t<Variable> LS_CALL create_variable(hash_t factoryId);
+LS_SCRIPT_API Pointer_t<Variable> LS_SCRIPT_CALL create_variable(hash_t factoryId);
 
 
 
@@ -139,7 +139,7 @@ LS_API Pointer_t<Variable> LS_CALL create_variable(hash_t factoryId);
  * A reference to a pointer_t<> object which points to an instance of a
  * variable created using the "createVariable(...)" function.
  */
-LS_API void LS_CALL destroy_variable(Pointer_t<Variable>& pVariable);
+LS_SCRIPT_API void LS_SCRIPT_CALL destroy_variable(Pointer_t<Variable>& pVariable);
 
 
 
@@ -154,7 +154,7 @@ LS_API void LS_CALL destroy_variable(Pointer_t<Variable>& pVariable);
  * This function will return NULL if the functor requested could not be
  * instantiated.
  */
-LS_API Pointer_t<Functor> LS_CALL create_functor(hash_t factoryId);
+LS_SCRIPT_API Pointer_t<Functor> LS_SCRIPT_CALL create_functor(hash_t factoryId);
 
 
 
@@ -165,7 +165,7 @@ LS_API Pointer_t<Functor> LS_CALL create_functor(hash_t factoryId);
  * A reference to a pointer_t<> object which points to an instance of a
  * functor created using the "createVariable(...)" function.
  */
-LS_API void LS_CALL destroy_functor(Pointer_t<Functor>& pFunc);
+LS_SCRIPT_API void LS_SCRIPT_CALL destroy_functor(Pointer_t<Functor>& pFunc);
 
 
 

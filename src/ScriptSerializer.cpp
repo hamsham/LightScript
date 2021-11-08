@@ -170,7 +170,7 @@ ScriptSaveStatus _save_initializer_info(std::ostream& ostr, const Pointer_t<data
 /*-------------------------------------
  * Load a list of variables.
 -------------------------------------*/
-LS_API ScriptLoadInfo LS_CALL load_script_file(const std::string& filename, VariableMap_t& varList, FunctorMap_t& funcList)
+LS_SCRIPT_API ScriptLoadInfo LS_SCRIPT_CALL load_script_file(const std::string& filename, VariableMap_t& varList, FunctorMap_t& funcList)
 {
     varList.clear();
     funcList.clear();
@@ -251,7 +251,7 @@ LS_API ScriptLoadInfo LS_CALL load_script_file(const std::string& filename, Vari
 /*-------------------------------------
  * Save a list of variables and functors.
 -------------------------------------*/
-LS_API ScriptSaveInfo LS_CALL save_script_file(
+LS_SCRIPT_API ScriptSaveInfo LS_SCRIPT_CALL save_script_file(
     const std::string& filename,
     const VariableMap_t& inVarList,
     const FunctorMap_t& inFuncList

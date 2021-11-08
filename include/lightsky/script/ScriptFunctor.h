@@ -71,7 +71,7 @@ struct CompileInfo
  * function. It contains methods to store and load its parameters from a
  * script file, self-compile, and change its arguments at runtime.
  */
-class LS_API Functor : public Scriptable
+class LS_SCRIPT_API Functor : public Scriptable
 {
   protected:
     /**
@@ -776,7 +776,7 @@ class Functor_t<hashId, void> final : public Functor
  * @brief Null Functor Template Type (no parameters)
  */
 template <>
-class LS_API Functor_t<0, void> final : public Functor
+class LS_SCRIPT_API Functor_t<0, void> final : public Functor
 {
   private:
 
@@ -987,7 +987,7 @@ class LS_API Functor_t<0, void> final : public Functor
  *      delete pFunc;
  */
 #ifndef _LS_SCRIPT_DECLARE_FUNC_IMPL
-    #define _LS_SCRIPT_DECLARE_FUNC_IMPL(LS_API_TYPE, funcName, ...) \
+    #define _LS_SCRIPT_DECLARE_FUNC_IMPL(LS_SCRIPT_API_TYPE, funcName, ...) \
         \
         enum : ls::script::hash_t { \
             ScriptHash_##funcName = LS_SCRIPT_HASH_FUNC(LS_STRINGIFY(funcName)) \
@@ -995,20 +995,20 @@ class LS_API Functor_t<0, void> final : public Functor
         \
         typedef ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__> ScriptFunc_##funcName; \
         \
-        LS_API_TYPE extern const ls::script::FuncFactory_t& ScriptFactory_##funcName; \
+        LS_SCRIPT_API_TYPE extern const ls::script::FuncFactory_t& ScriptFactory_##funcName; \
         \
         template <> \
-        LS_API_TYPE void ScriptFunc_##funcName::func_impl(ls::script::Variable** const); \
+        LS_SCRIPT_API_TYPE void ScriptFunc_##funcName::func_impl(ls::script::Variable** const); \
         \
-        LS_EXTERN template class LS_API_TYPE ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>
+        LS_SCRIPT_EXTERN template class LS_SCRIPT_API_TYPE ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>
 #endif /* _LS_SCRIPT_DECLARE_FUNC_IMPL */
 
 #ifndef LS_SCRIPT_DECLARE_FUNC
-    #define LS_SCRIPT_DECLARE_FUNC(funcName, ...) _LS_SCRIPT_DECLARE_FUNC_IMPL(LS_STATIC_API, funcName, __VA_ARGS__)
+    #define LS_SCRIPT_DECLARE_FUNC(funcName, ...) _LS_SCRIPT_DECLARE_FUNC_IMPL(LS_SCRIPT_STATIC_API, funcName, __VA_ARGS__)
 #endif /* LS_SCRIPT_DECLARE_FUNC */
 
 #ifndef LS_SCRIPT_DECLARE_FUNC_SHARED
-    #define LS_SCRIPT_DECLARE_FUNC_SHARED(funcName, ...) _LS_SCRIPT_DECLARE_FUNC_IMPL(LS_API, funcName, __VA_ARGS__)
+    #define LS_SCRIPT_DECLARE_FUNC_SHARED(funcName, ...) _LS_SCRIPT_DECLARE_FUNC_IMPL(LS_SCRIPT_API, funcName, __VA_ARGS__)
 #endif /* LS_SCRIPT_DECLARE_FUNC_SHARED */
 
 
@@ -1044,25 +1044,25 @@ class LS_API Functor_t<0, void> final : public Functor
  *
  */
 #ifndef _LS_SCRIPT_DEFINE_FUNC_IMPL
-    #define _LS_SCRIPT_DEFINE_FUNC_IMPL(LS_API_TYPE, funcName, ...) \
-        template class LS_API_TYPE ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>; \
+    #define _LS_SCRIPT_DEFINE_FUNC_IMPL(LS_SCRIPT_API_TYPE, funcName, ...) \
+        template class LS_SCRIPT_API_TYPE ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>; \
         \
-        LS_API_TYPE const ls::script::FuncFactory_t& ScriptFactory_##funcName = ls::script::register_func_factory( \
+        LS_SCRIPT_API_TYPE const ls::script::FuncFactory_t& ScriptFactory_##funcName = ls::script::register_func_factory( \
             ScriptHash_##funcName, []()->ls::script::Pointer_t<ls::script::Functor> { \
                 return ls::script::Pointer_t<ls::script::Functor>{new(std::nothrow) ScriptFunc_##funcName{}}; \
             } \
         ); \
         \
         template <> \
-        LS_API_TYPE void ScriptFunc_##funcName::func_impl(ls::script::Variable** const pArgs)
+        LS_SCRIPT_API_TYPE void ScriptFunc_##funcName::func_impl(ls::script::Variable** const pArgs)
 #endif /* _LS_SCRIPT_DEFINE_FUNC_IMPL */
 
 #ifndef LS_SCRIPT_DEFINE_FUNC
-    #define LS_SCRIPT_DEFINE_FUNC(funcName, ...) _LS_SCRIPT_DEFINE_FUNC_IMPL(LS_STATIC_API, funcName, __VA_ARGS__)
+    #define LS_SCRIPT_DEFINE_FUNC(funcName, ...) _LS_SCRIPT_DEFINE_FUNC_IMPL(LS_SCRIPT_STATIC_API, funcName, __VA_ARGS__)
 #endif /* LS_SCRIPT_DEFINE_FUNC */
 
 #ifndef LS_SCRIPT_DEFINE_FUNC_SHARED
-    #define LS_SCRIPT_DEFINE_FUNC_SHARED(funcName, ...) _LS_SCRIPT_DEFINE_FUNC_IMPL(LS_EXPORT_API, funcName, __VA_ARGS__)
+    #define LS_SCRIPT_DEFINE_FUNC_SHARED(funcName, ...) _LS_SCRIPT_DEFINE_FUNC_IMPL(LS_SCRIPT_EXPORT_API, funcName, __VA_ARGS__)
 #endif /* LS_SCRIPT_DEFINE_FUNC_SHARED */
 
 

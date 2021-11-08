@@ -24,7 +24,7 @@ namespace script
  *
  * Defines all common interfaces for derived types.
  */
-class LS_API Scriptable{
+class LS_SCRIPT_API Scriptable{
     public:
     /**
      *  @brief

@@ -60,12 +60,12 @@ struct SampleStruct
     std::string msg;
 };
 
-LS_SCRIPT_OVERRIDE_VAR_LOAD(LS_EXPORT_API, SampleStruct);
-LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_STATIC_API, SampleStruct);
+LS_SCRIPT_OVERRIDE_VAR_LOAD(LS_SCRIPT_EXPORT_API, SampleStruct);
+LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_SCRIPT_STATIC_API, SampleStruct);
 LS_SCRIPT_DECLARE_VAR(sampleStruct, SampleStruct);
 
 // These overrides show that data can be written and read in a binary format.
-LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_STATIC_API, SampleStruct)
+LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_SCRIPT_STATIC_API, SampleStruct)
 {
     const std::string::size_type msgLen = data.msg.size() * sizeof(std::string::value_type);
 
@@ -76,7 +76,7 @@ LS_SCRIPT_OVERRIDE_VAR_SAVE(LS_STATIC_API, SampleStruct)
     return ostr.good();
 }
 
-LS_SCRIPT_OVERRIDE_VAR_LOAD(LS_EXPORT_API, SampleStruct)
+LS_SCRIPT_OVERRIDE_VAR_LOAD(LS_SCRIPT_EXPORT_API, SampleStruct)
 {
     (void)varImporter;
     (void)funcImporter;
