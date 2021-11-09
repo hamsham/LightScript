@@ -76,7 +76,8 @@ add_library(${OUTPUT_NAME} SHARED ${LS_SCRIPT_HEADERS} ${LS_SCRIPT_SOURCES})
 
 # LS Script must be built as a shared library to support
 # global variables across multiple libraries and processes.
-target_compile_definitions(${OUTPUT_NAME} PRIVATE -DLS_BUILD_SHARED -DLS_SHARED)
+target_compile_definitions(${OUTPUT_NAME} PRIVATE -DLS_SCRIPT_BUILD_SHARED)
+target_compile_definitions(${OUTPUT_NAME} PUBLIC -DLS_SCRIPT_SHARED)
 
 # If LightSky::Utils is available, we can use it's pointer classes
 if (HAVE_LIGHTSKY_SUPPORT)

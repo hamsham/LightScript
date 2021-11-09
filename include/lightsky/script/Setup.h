@@ -26,7 +26,7 @@
  * Dynamic Library Setup
  */
 #if defined(_MSC_VER)
-    #if defined(LS_BUILD_SHARED)
+    #if defined(LS_SCRIPT_BUILD_SHARED)
         #define LS_SCRIPT_API __declspec(dllexport)
         #define LS_SCRIPT_EXPORT_API __declspec(dllexport)
         #define LS_SCRIPT_EXTERN
@@ -39,7 +39,7 @@
     #define LS_SCRIPT_STATIC_API
 
 #elif defined(__GNUC__)
-    #if defined(LS_BUILD_SHARED)
+    #if defined(LS_SCRIPT_SHARED)
         #define LS_SCRIPT_API __attribute__((__visibility__("default")))
         #define LS_SCRIPT_EXPORT_API __attribute__((__visibility__("default")))
     #else
