@@ -101,15 +101,15 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     # Some attributes get incorrectly parsed during macro expansion of templates
     if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
         target_compile_options(${OUTPUT_NAME}
-            PRIVATE
+            PUBLIC
                 -Wno-attributes
         )
     endif()
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-        target_compile_options(${OUTPUT_NAME}
-            PRIVATE
-                /MT
-        )
+    target_compile_options(${OUTPUT_NAME}
+        PUBLIC
+            /wd4251 # classes with STL containers need dll-interfaces to be used by external libraries
+    )
 endif()
 
 target_include_directories(${OUTPUT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
