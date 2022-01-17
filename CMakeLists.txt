@@ -141,8 +141,8 @@ add_library(LightSky::Script ALIAS lsscript)
 # -------------------------------------
 # Unit Tests
 # -------------------------------------
-option(LS_BUILD_SCRIPT_TESTS "Build tests for the LightScript library." ON)
+option(LS_SCRIPT_BUILD_TESTS "Build tests for the LightScript library." ON)
 
-if(LS_BUILD_SCRIPT_TESTS)
+if(LS_SCRIPT_BUILD_TESTS)
     add_subdirectory(tests)
 endif()
