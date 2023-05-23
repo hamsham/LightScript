@@ -995,7 +995,7 @@ class LS_SCRIPT_API Functor_t<0, void> final : public Functor
         \
         typedef ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__> ScriptFunc_##funcName; \
         \
-        LS_SCRIPT_API_TYPE extern const ls::script::FuncFactory_t& ScriptFactory_##funcName; \
+        LS_SCRIPT_API_TYPE extern const ls::script::FuncFactory_t ScriptFactory_##funcName; \
         \
         template <> \
         LS_SCRIPT_API_TYPE void ScriptFunc_##funcName::func_impl(ls::script::Variable** const); \
@@ -1047,7 +1047,7 @@ class LS_SCRIPT_API Functor_t<0, void> final : public Functor
     #define _LS_SCRIPT_DEFINE_FUNC_IMPL(LS_SCRIPT_API_TYPE, funcName, ...) \
         template class LS_SCRIPT_API_TYPE ls::script::Functor_t<ScriptHash_##funcName, __VA_ARGS__>; \
         \
-        LS_SCRIPT_API_TYPE const ls::script::FuncFactory_t& ScriptFactory_##funcName = ls::script::register_func_factory( \
+        LS_SCRIPT_API_TYPE const ls::script::FuncFactory_t ScriptFactory_##funcName = ls::script::register_func_factory( \
             ScriptHash_##funcName, []()->ls::script::Pointer_t<ls::script::Functor> { \
                 return ls::script::Pointer_t<ls::script::Functor>{new(std::nothrow) ScriptFunc_##funcName{}}; \
             } \
